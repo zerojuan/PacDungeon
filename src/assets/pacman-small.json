@@ -1,0 +1,41 @@
+{ "height":10,
+ "layers":[
+        {
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 10, 6, 7, 7, 7, 7, 7, 7, 7, 7, 10, 6, 7, 7, 7, 7, 7, 7, 7, 7, 10, 6, 7, 7, 11, 12, 13, 7, 7, 7, 10, 6, 7, 7, 15, 16, 17, 7, 7, 7, 10, 6, 7, 7, 7, 7, 7, 7, 7, 7, 10, 6, 7, 7, 7, 7, 7, 7, 7, 7, 10, 20, 21, 21, 21, 21, 21, 21, 21, 21, 24],
+         "height":10,
+         "name":"Pacman",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":10,
+         "x":0,
+         "y":0
+        }],
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
+ "renderorder":"right-down",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"pacman-tiles.png",
+         "imageheight":48,
+         "imagewidth":256,
+         "margin":0,
+         "name":"pacman-tiles",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":16,
+         "tilewidth":16
+        }],
+ "tilewidth":16,
+ "version":1,
+ "width":10
+}
