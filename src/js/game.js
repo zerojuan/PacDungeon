@@ -29,7 +29,7 @@
     this.pacman = null;
 
     this.safetile = 14;
-    this.gridsize = 10;
+    this.gridsize = 16;
 
     this.speed = 100;
     this.threshold = 10;
@@ -218,7 +218,7 @@
 
         this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
         this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
-                
+
         //  Update our grid sensors
         this.directions[1] = this.map.getTileLeft(this.layer.index, this.marker.x, this.marker.y);
         this.directions[2] = this.map.getTileRight(this.layer.index, this.marker.x, this.marker.y);
@@ -232,7 +232,36 @@
             this.turn();
         }
 
-    }
+    },
+    render: function () {
+
+            //  Un-comment this to see the debug drawing
+
+            for (var t = 1; t < 5; t++)
+            {
+                if (this.directions[t] === null)
+                {
+                    continue;
+                }
+
+                var color = 'rgba(0,255,0,0.3)';
+
+                if (this.directions[t].index !== this.safetile)
+                {
+                    color = 'rgba(255,0,0,0.3)';
+                }
+
+                if (t === this.current)
+                {
+                    color = 'rgba(255,255,255,0.3)';
+                }
+
+                this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, 16, 16), color, true);
+            }
+
+            this.game.debug.geom(this.turnPoint, '#ffff00');
+
+        }
 
   };
 
