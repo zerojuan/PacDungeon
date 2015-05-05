@@ -22,6 +22,7 @@
    'x':0,
    'y':0
  };
+  var ns = window['pacdungeon'];
 
   function Game() {
     this.map = null;
@@ -33,6 +34,10 @@
 
     this.speed = 100;
     this.threshold = 10;
+
+    this.size = 10;
+
+    this.DungeonGenerator = new ns.DungeonGenerator(this.size);
 
     this.marker = new Phaser.Point();
     this.turnPoint = new Phaser.Point();
@@ -55,9 +60,10 @@
       this.layer = this.map.create('test', size, size, 16, 16);
       this.layer.opacity = 1;
       this.layer.visible = true;
+      var level = this.DungeonGenerator.createSquare();
       for(var i =0; i < size; i++){
         for(var j =0; j < size; j++){
-          this.map.putTile(level.data[i][j], j, i, this.layer);
+          this.map.putTile(level[i][j], j, i, this.layer);
         }
       }
 
@@ -256,10 +262,10 @@
                     color = 'rgba(255,255,255,0.3)';
                 }
 
-                this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, 16, 16), color, true);
+                this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
             }
 
-            this.game.debug.geom(this.turnPoint, '#ffff00');
+          //  this.game.debug.geom(this.turnPoint, '#ffff00');
 
         }
 
