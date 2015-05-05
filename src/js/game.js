@@ -1,31 +1,11 @@
 (function() {
   'use strict';
 
-  var level = {
-   'data':[
-     [1, 2, 2, 2, 2, 2, 2, 2, 2, 5],
-     [6, 7, 7, 7, 7, 7, 7, 7, 7, 10],
-     [6, 7, 7, 7, 7, 7, 7, 7, 7, 10],
-     [6, 7, 7, 7, 7, 7, 7, 7, 7, 10],
-     [6, 7, 7, 11, 12, 13, 7, 7, 7, 10],
-     [6, 7, 7, 15, 16, 17, 7, 7, 7, 10],
-     [6, 7, 7, 7, 7, 7, 7, 7, 7, 10],
-     [6, 7, 7, 7, 7, 7, 7, 7, 7, 10],
-     [6, 7, 7, 7, 7, 7, 7, 7, 7, 10],
-     [20, 21, 21, 21, 21, 21, 21, 21, 21, 24]],
-   'height':10,
-   'name':'Pacman',
-   'opacity':1,
-   'type':'tilelayer',
-   'visible':true,
-   'width':10,
-   'x':0,
-   'y':0
- };
   var ns = window['pacdungeon'];
 
   function Game() {
     this.map = null;
+    this.layers = [];
     this.layer = null;
     this.pacman = null;
 
@@ -55,17 +35,21 @@
       this.stage.backgroundColor = '#2d2d2d';
       this.map = this.add.tilemap();
       this.map.addTilesetImage('tiles', 'tiles', 16, 16, 0, 0, 1);
-
-      var size = 10;
-      this.layer = this.map.create('test', size, size, 16, 16);
-      this.layer.opacity = 1;
-      this.layer.visible = true;
-      var level = this.DungeonGenerator.createSquare();
-      for(var i =0; i < size; i++){
-        for(var j =0; j < size; j++){
-          this.map.putTile(level[i][j], j, i, this.layer);
+      this.map.create('main', this.size, this.size, 16, 16);
+      //
+      //create layers
+      for(var i = 0; i < 4; i++){
+        this.layers.push([]);
+        for(var j = 0; j < 4; j++){
+          var layer = this.createSquare(i, j);
+          //put layer into different position
+          this.layers[i].push(layer);
         }
       }
+
+      this.layer = this.layers[0][0];
+
+
 
       this.dots = this.add.physicsGroup();
 
@@ -90,6 +74,22 @@
 
       this.pacman.play('munch');
       this.move(Phaser.LEFT);
+    },
+
+    createSquare: function(row, col){
+      var layer = this.map.createBlankLayer('test ' + row + ''+ col, this.size, this.size, 16, 16);
+      layer.opacity = 1;
+      layer.visible = true;
+      layer.x = row * 16*10;
+      layer.y = col * 16*10;
+      layer.fixedToCamera = false;
+      var level = this.DungeonGenerator.createSquare();
+      for(var i =0; i < this.size; i++){
+        for(var j =0; j < this.size; j++){
+          this.map.putTile(level[i][j], j, i, layer);
+        }
+      }
+      return layer;
     },
 
     checkKeys: function () {
