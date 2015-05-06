@@ -53,19 +53,9 @@
 
       this.dots = this.add.physicsGroup();
 
-      this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
+      this.moveToSquare(2,2);
 
-      //  The dots will need to be offset by 6px to put them back in the middle of the grid
-      this.dots.setAll('x', 6, false, false, 1);
-      this.dots.setAll('y', 6, false, false, 1);
 
-      //  Pacman should collide with everything except the safe tile
-      this.map.setCollisionByExclusion([this.safetile], true, this.layer);
-
-      //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
-      this.pacman = this.add.sprite((4 * 16) + 8, (4 * 16) + 8, 'pacman', 0);
-      this.pacman.anchor.set(0.5);
-      this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
@@ -90,6 +80,30 @@
         }
       }
       return layer;
+    },
+
+    moveToSquare: function(row, col){
+      this.layer = this.layers[row][col];
+      console.log('Layer position: ', this.layer.x + '', this.layer.y);
+      this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
+
+      //  The dots will need to be offset by 6px to put them back in the middle of the grid
+      // this.dots.setAll('x', 6, false, false, 1);
+      // this.dots.setAll('y', 6, false, false, 1);
+
+      //  Pacman should collide with everything except the safe tile
+      this.map.setCollisionByExclusion([this.safetile], true, this.layer);
+
+      //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
+      if(!this.pacman){
+        this.pacman = this.add.sprite((4 * 16) + 8 + this.layer.x, (4 * 16) + 8 + this.layer.y, 'pacman', 0);
+      }else{
+        this.pacman.x = (4 * 16) + 8 + this.layer.x;
+        this.pacman.y = (4 * 16) + 8 + this.layer.y;
+      }
+
+      this.pacman.anchor.set(0.5);
+      this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
     },
 
     checkKeys: function () {
@@ -209,9 +223,10 @@
     eatDot: function (pacman, dot) {
 
         dot.kill();
-
+        //this.moveToSquare(2,2);
         if (this.dots.total === 0)
         {
+
             this.dots.callAll('revive');
         }
 
@@ -222,9 +237,9 @@
         this.physics.arcade.collide(this.pacman, this.layer);
         this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
 
-        this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
-        this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
-
+        this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x - this.layer.x), this.gridsize) / this.gridsize;
+        this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y - this.layer.y), this.gridsize) / this.gridsize;
+        console.log(this.marker.x, this.marker.y);
         //  Update our grid sensors
         this.directions[1] = this.map.getTileLeft(this.layer.index, this.marker.x, this.marker.y);
         this.directions[2] = this.map.getTileRight(this.layer.index, this.marker.x, this.marker.y);
