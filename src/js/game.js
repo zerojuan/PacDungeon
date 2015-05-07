@@ -27,6 +27,8 @@
 
     this.current = Phaser.NONE;
     this.turning = Phaser.NONE;
+
+    this.score = 0;
   }
 
   Game.prototype = {
@@ -35,23 +37,26 @@
       this.stage.backgroundColor = '#2d2d2d';
       this.map = this.add.tilemap();
       this.map.addTilesetImage('tiles', 'tiles', 16, 16, 0, 0, 1);
-      this.map.create('main', this.size, this.size, 16, 16);
-      //
-      //create layers
+      this.layer = this.map.create('main', this.size * 4, this.size * 4, 16, 16);
+
       for(var i = 0; i < 4; i++){
-        this.layers.push([]);
         for(var j = 0; j < 4; j++){
-          var layer = this.createSquare(i, j);
-          //put layer into different position
-          this.layers[i].push(layer);
+          this.createSquare(i, j);
         }
       }
-
-      this.layer = this.layers[0][0];
 
 
 
       this.dots = this.add.physicsGroup();
+      this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
+
+      //  The dots will need to be offset by 6px to put them back in the middle of the grid
+      this.dots.setAll('x', 6, false, false, 1);
+      this.dots.setAll('y', 6, false, false, 1);
+
+      //  Pacman should collide with everything except the safe tile
+      this.map.setCollisionByExclusion([this.safetile], true, this.layer);
+
 
       this.moveToSquare(2,2);
 
@@ -62,48 +67,37 @@
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
+      this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
       this.pacman.play('munch');
       this.move(Phaser.LEFT);
+
     },
 
     createSquare: function(row, col){
-      var layer = this.map.createBlankLayer('test ' + row + ''+ col, this.size, this.size, 16, 16);
-      layer.opacity = 1;
-      layer.visible = true;
-      layer.x = row * 16*10;
-      layer.y = col * 16*10;
-      layer.fixedToCamera = false;
       var level = this.DungeonGenerator.createSquare();
       for(var i =0; i < this.size; i++){
         for(var j =0; j < this.size; j++){
-          this.map.putTile(level[i][j], j, i, layer);
+          this.map.putTile(level[i][j], (row * this.size) + j, (col * this.size) + i, this.layer);
         }
       }
-      return layer;
     },
 
     moveToSquare: function(row, col){
-      this.layer = this.layers[row][col];
       console.log('Layer position: ', this.layer.x + '', this.layer.y);
-      this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
-
-      //  The dots will need to be offset by 6px to put them back in the middle of the grid
-      // this.dots.setAll('x', 6, false, false, 1);
-      // this.dots.setAll('y', 6, false, false, 1);
-
-      //  Pacman should collide with everything except the safe tile
-      this.map.setCollisionByExclusion([this.safetile], true, this.layer);
 
       //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
+
       if(!this.pacman){
-        this.pacman = this.add.sprite((4 * 16) + 8 + this.layer.x, (4 * 16) + 8 + this.layer.y, 'pacman', 0);
+        this.pacman = this.add.sprite((4 * 16) + 8 + (row * this.size * this.gridsize), (4 * 16) + 8 + (col * this.size * this.gridsize), 'pacman', 0);
       }else{
-        this.pacman.x = (4 * 16) + 8 + this.layer.x;
-        this.pacman.y = (4 * 16) + 8 + this.layer.y;
+        this.pacman.x = (4 * 16) + 8 + (row * this.size * this.gridsize);//+ this.layer.x;
+        this.pacman.y = (4 * 16) + 8 + (col * this.size * this.gridsize);// + this.layer.y;
       }
 
+      console.log('Pac Position:', this.pacman.x, this.pacman.y);
+
       this.pacman.anchor.set(0.5);
-      this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
+
     },
 
     checkKeys: function () {
@@ -168,6 +162,7 @@
         }
 
         //  Grid align before turning
+        console.log('Turnin point: ', this.turnPoint);
         this.pacman.x = this.turnPoint.x;
         this.pacman.y = this.turnPoint.y;
 
@@ -223,7 +218,11 @@
     eatDot: function (pacman, dot) {
 
         dot.kill();
-        //this.moveToSquare(2,2);
+        this.score++;
+        if(this.score % 5 === 0){
+          this.moveToSquare(Math.floor(Math.random()*3),Math.floor(Math.random()*3));
+        }
+
         if (this.dots.total === 0)
         {
 
@@ -237,9 +236,12 @@
         this.physics.arcade.collide(this.pacman, this.layer);
         this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
 
-        this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x - this.layer.x), this.gridsize) / this.gridsize;
-        this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y - this.layer.y), this.gridsize) / this.gridsize;
-        console.log(this.marker.x, this.marker.y);
+        this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
+        this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
+        console.log('Position:', this.marker.x, this.marker.y);
+        if(this.marker.x < 0 || this.marker.y < 0){
+          return;
+        }
         //  Update our grid sensors
         this.directions[1] = this.map.getTileLeft(this.layer.index, this.marker.x, this.marker.y);
         this.directions[2] = this.map.getTileRight(this.layer.index, this.marker.x, this.marker.y);
