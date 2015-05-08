@@ -2,8 +2,9 @@
   'use strict';
 
   var ns = window['pacdungeon'];
-
+  var that;
   function Game() {
+    that = this;
     this.map = null;
     this.layers = [];
     this.layer = null;
@@ -29,6 +30,7 @@
     this.turning = Phaser.NONE;
 
     this.score = 0;
+    this.teleportZone = new Phaser.Point(0,0);
   }
 
   Game.prototype = {
@@ -67,6 +69,12 @@
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
+      this.input.keyboard.onUpCallback = function(event){
+        if(event.keyCode === Phaser.Keyboard.SPACEBAR){
+          that.teleport();
+        }
+      };
+
       this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
       this.pacman.play('munch');
       this.move(Phaser.LEFT);
@@ -80,6 +88,10 @@
           this.map.putTile(level[i][j], (row * this.size) + j, (col * this.size) + i, this.layer);
         }
       }
+    },
+
+    teleport: function(){
+      this.moveToSquare(Math.floor(Math.random()*3),Math.floor(Math.random()*3));
     },
 
     moveToSquare: function(row, col){
@@ -220,7 +232,7 @@
         dot.kill();
         this.score++;
         if(this.score % 5 === 0){
-          this.moveToSquare(Math.floor(Math.random()*3),Math.floor(Math.random()*3));
+
         }
 
         if (this.dots.total === 0)
