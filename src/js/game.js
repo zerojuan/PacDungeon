@@ -91,7 +91,7 @@
     },
 
     teleport: function(){
-      this.moveToSquare(Math.floor(Math.random()*3),Math.floor(Math.random()*3));
+      this.moveToSquare(this.teleportZone.x,this.teleportZone.y);
     },
 
     moveToSquare: function(row, col){
@@ -116,18 +116,22 @@
 
       if (this.cursors.left.isDown && this.current !== Phaser.LEFT)
       {
+          this.updateTeleportZone(Phaser.LEFT);
           this.checkDirection(Phaser.LEFT);
       }
       else if (this.cursors.right.isDown && this.current !== Phaser.RIGHT)
       {
+          this.updateTeleportZone(Phaser.RIGHT);
           this.checkDirection(Phaser.RIGHT);
       }
       else if (this.cursors.up.isDown && this.current !== Phaser.UP)
       {
+          this.updateTeleportZone(Phaser.UP);
           this.checkDirection(Phaser.UP);
       }
       else if (this.cursors.down.isDown && this.current !== Phaser.DOWN)
       {
+          this.updateTeleportZone(Phaser.DOWN);
           this.checkDirection(Phaser.DOWN);
       }
       else
@@ -138,8 +142,32 @@
 
     },
 
+    updateTeleportZone: function(direction){
+      if(direction === Phaser.LEFT){
+        this.teleportZone.x--;
+      }else if(direction === Phaser.RIGHT){
+        this.teleportZone.x++;
+      }else if(direction === Phaser.DOWN){
+        this.teleportZone.y++;
+      }else if(direction === Phaser.UP){
+        this.teleportZone.y--;
+      }
+
+      if(this.teleportZone.x < 0){
+        this.teleportZone.x = 3;
+      }else if(this.teleportZone.x > 3){
+        this.teleportZone.x = 0;
+      }
+      if(this.teleportZone.y < 0){
+        this.teleportZone.y = 3;
+      }else if(this.teleportZone.y > 3){
+        this.teleportZone.y = 0;
+      }
+
+      console.log(this.teleportZone.x + ',' + this.teleportZone.y);
+    },
+
     checkDirection: function (turnTo) {
-        console.log(this.directions);
         if (this.turning === turnTo || this.directions[turnTo] === null || this.directions[turnTo].index !== this.safetile)
         {
             //  Invalid direction if they're already set to turn that way
@@ -174,7 +202,6 @@
         }
 
         //  Grid align before turning
-        console.log('Turnin point: ', this.turnPoint);
         this.pacman.x = this.turnPoint.x;
         this.pacman.y = this.turnPoint.y;
 
@@ -272,29 +299,31 @@
 
             //  Un-comment this to see the debug drawing
 
-            for (var t = 1; t < 5; t++)
-            {
-                if (this.directions[t] === null)
-                {
-                    continue;
-                }
+            // for (var t = 1; t < 5; t++)
+            // {
+            //     if (this.directions[t] === null)
+            //     {
+            //         continue;
+            //     }
+            //
+            //     var color = 'rgba(0,255,0,0.3)';
+            //
+            //     if (this.directions[t].index !== this.safetile)
+            //     {
+            //         color = 'rgba(255,0,0,0.3)';
+            //     }
+            //
+            //     if (t === this.current)
+            //     {
+            //         color = 'rgba(255,255,255,0.3)';
+            //     }
+            //
+            //     this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
+            // }
 
-                var color = 'rgba(0,255,0,0.3)';
-
-                if (this.directions[t].index !== this.safetile)
-                {
-                    color = 'rgba(255,0,0,0.3)';
-                }
-
-                if (t === this.current)
-                {
-                    color = 'rgba(255,255,255,0.3)';
-                }
-
-                this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
-            }
-
-          //  this.game.debug.geom(this.turnPoint, '#ffff00');
+            this.game.debug.geom(new Phaser.Rectangle(this.teleportZone.x * this.gridsize * this.size,
+              this.teleportZone.y * this.gridsize * this.size, this.gridsize * this.size, this.gridsize * this.size), 'rgba(255,255,255,0.3)', true);
+          // this.game.debug.geom(this.teleportZone, '#ffff00');
 
         }
 
