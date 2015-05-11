@@ -31,6 +31,7 @@
 
     this.score = 0;
     this.teleportZone = new Phaser.Point(0,0);
+    this.activeZone = new Phaser.Point(0,0);
   }
 
   Game.prototype = {
@@ -70,8 +71,17 @@
       this.cursors = this.input.keyboard.createCursorKeys();
 
       this.input.keyboard.onUpCallback = function(event){
+        console.log('OnUp: ', event.keyCode, 'Key:', Phaser.Keyboard.UP);
         if(event.keyCode === Phaser.Keyboard.SPACEBAR){
           that.teleport();
+        }else if(event.keyCode === Phaser.Keyboard.UP){
+          that.updateTeleportZone(Phaser.UP);
+        }else if(event.keyCode === Phaser.Keyboard.DOWN){
+          that.updateTeleportZone(Phaser.DOWN);
+        }else if(event.keyCode === Phaser.Keyboard.LEFT){
+          that.updateTeleportZone(Phaser.LEFT);
+        }else if(event.keyCode === Phaser.Keyboard.RIGHT){
+          that.updateTeleportZone(Phaser.RIGHT);
         }
       };
 
@@ -107,6 +117,8 @@
       }
 
       console.log('Pac Position:', this.pacman.x, this.pacman.y);
+      this.activeZone.x = row;
+      this.activeZone.y = col;
 
       this.pacman.anchor.set(0.5);
 
@@ -116,22 +128,18 @@
 
       if (this.cursors.left.isDown && this.current !== Phaser.LEFT)
       {
-          this.updateTeleportZone(Phaser.LEFT);
           this.checkDirection(Phaser.LEFT);
       }
       else if (this.cursors.right.isDown && this.current !== Phaser.RIGHT)
       {
-          this.updateTeleportZone(Phaser.RIGHT);
           this.checkDirection(Phaser.RIGHT);
       }
       else if (this.cursors.up.isDown && this.current !== Phaser.UP)
       {
-          this.updateTeleportZone(Phaser.UP);
           this.checkDirection(Phaser.UP);
       }
       else if (this.cursors.down.isDown && this.current !== Phaser.DOWN)
       {
-          this.updateTeleportZone(Phaser.DOWN);
           this.checkDirection(Phaser.DOWN);
       }
       else
@@ -143,28 +151,54 @@
     },
 
     updateTeleportZone: function(direction){
+      var next = new Phaser.Point(0,0);
       if(direction === Phaser.LEFT){
-        this.teleportZone.x--;
+        next.x--;
       }else if(direction === Phaser.RIGHT){
-        this.teleportZone.x++;
+        next.x++;
       }else if(direction === Phaser.DOWN){
-        this.teleportZone.y++;
+        next.y++;
       }else if(direction === Phaser.UP){
-        this.teleportZone.y--;
+        next.y--;
       }
 
+      this.teleportZone.x += next.x;
+      this.teleportZone.y += next.y;
+
+      this.clipTeleportZone();
+
+      if(this.teleportZone.x === this.activeZone.x &&
+        this.teleportZone.y === this.activeZone.y){
+        if(next.x > 0){
+          this.teleportZone.x++;
+        }else if(next.x < 0){
+          this.teleportZone.x--;
+        }
+        if(next.y > 0){
+          this.teleportZone.y++;
+        }else if(next.y < 0){
+          this.teleportZone.y--;
+        }
+      }
+
+      this.clipTeleportZone();
+
+
+      console.log('Teleport Zone:',this.teleportZone.x + ',' + this.teleportZone.y);
+    },
+
+    clipTeleportZone: function(){
       if(this.teleportZone.x < 0){
         this.teleportZone.x = 3;
       }else if(this.teleportZone.x > 3){
         this.teleportZone.x = 0;
       }
+
       if(this.teleportZone.y < 0){
-        this.teleportZone.y = 3;
-      }else if(this.teleportZone.y > 3){
+        this.teleportZone.y = 2;
+      }else if(this.teleportZone.y > 2){
         this.teleportZone.y = 0;
       }
-
-      console.log(this.teleportZone.x + ',' + this.teleportZone.y);
     },
 
     checkDirection: function (turnTo) {
