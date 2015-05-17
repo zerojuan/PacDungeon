@@ -17,6 +17,7 @@
     this.threshold = 10;
 
     this.size = 10;
+    this.squareSize = 3;
 
     this.DungeonGenerator = new ns.DungeonGenerator(this.size);
 
@@ -42,8 +43,8 @@
       this.map.addTilesetImage('tiles', 'tiles', 16, 16, 0, 0, 1);
       this.layer = this.map.create('main', this.size * 4, this.size * 4, 16, 16);
 
-      for(var i = 0; i < 4; i++){
-        for(var j = 0; j < 4; j++){
+      for(var i = 0; i < this.squareSize; i++){
+        for(var j = 0; j < this.squareSize; j++){
           this.createSquare(i, j);
         }
       }
@@ -110,10 +111,10 @@
       //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
 
       if(!this.pacman){
-        this.pacman = this.add.sprite((4 * 16) + 8 + (row * this.size * this.gridsize), (4 * 16) + 8 + (col * this.size * this.gridsize), 'pacman', 0);
+        this.pacman = this.add.sprite((this.squareSize * 16) + 8 + (row * this.size * this.gridsize), (this.squareSize * 16) + 8 + (col * this.size * this.gridsize), 'pacman', 0);
       }else{
-        this.pacman.x = (4 * 16) + 8 + (row * this.size * this.gridsize);//+ this.layer.x;
-        this.pacman.y = (4 * 16) + 8 + (col * this.size * this.gridsize);// + this.layer.y;
+        this.pacman.x = (this.squareSize * 16) + 8 + (row * this.size * this.gridsize);//+ this.layer.x;
+        this.pacman.y = (this.squareSize * 16) + 8 + (col * this.size * this.gridsize);// + this.layer.y;
       }
 
       console.log('Pac Position:', this.pacman.x, this.pacman.y);
@@ -189,14 +190,14 @@
 
     clipTeleportZone: function(){
       if(this.teleportZone.x < 0){
-        this.teleportZone.x = 3;
-      }else if(this.teleportZone.x > 3){
+        this.teleportZone.x = this.squareSize-1;
+      }else if(this.teleportZone.x > this.squareSize-1){
         this.teleportZone.x = 0;
       }
 
       if(this.teleportZone.y < 0){
-        this.teleportZone.y = 2;
-      }else if(this.teleportZone.y > 2){
+        this.teleportZone.y = this.squareSize-1;
+      }else if(this.teleportZone.y > this.squareSize-1){
         this.teleportZone.y = 0;
       }
     },
@@ -355,8 +356,8 @@
             //     this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
             // }
 
-            this.game.debug.geom(new Phaser.Rectangle(this.teleportZone.x * this.gridsize * this.size,
-              this.teleportZone.y * this.gridsize * this.size, this.gridsize * this.size, this.gridsize * this.size), 'rgba(255,255,255,0.3)', true);
+            // this.game.debug.geom(new Phaser.Rectangle(this.teleportZone.x * this.gridsize * this.size,
+              // this.teleportZone.y * this.gridsize * this.size, this.gridsize * this.size, this.gridsize * this.size), 'rgba(255,255,255,0.3)', true);
           // this.game.debug.geom(this.teleportZone, '#ffff00');
 
         }
