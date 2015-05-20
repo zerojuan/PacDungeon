@@ -9,6 +9,7 @@
     this.layers = [];
     this.layer = null;
     this.pacman = null;
+    this.monsters = null;
 
     this.safetile = 14;
     this.gridsize = 16;
@@ -49,8 +50,6 @@
         }
       }
 
-
-
       this.dots = this.add.physicsGroup();
       this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
 
@@ -64,9 +63,14 @@
       this.createPacman((this.squareSize * 16) + 8,
                         (this.squareSize * 16) + 8);
 
+      this.monsters = this.add.group();
+      var monster = new ns.MonsterAI(this.game, 40, 40);
+
+      this.monsters.add(monster);
+      monster.animations.add('munch', [0, 1, 2, 1], 20, true);
+      monster.animations.play('munch');
+      this.physics.arcade.enable(monster);
       this.moveToSquare(2,2);
-
-
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
@@ -109,6 +113,11 @@
 
     createPacman: function(x,y){
       this.pacman = this.add.sprite(x,y,'pacman',0);
+    },
+
+    createMonster: function(x,y){
+
+
     },
 
     moveToSquare: function(row, col){
@@ -306,7 +315,7 @@
     },
 
     update: function () {
-
+        this.physics.arcade.collide(this.monsters, this.layer);
         this.physics.arcade.collide(this.pacman, this.layer);
         this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
 
