@@ -46,10 +46,14 @@
                 }else{
                   data[i][j] = this.SAFE;
                 }
-              }              
+              }
             }
           }
           return data;
+      },
+      createCross: function(){
+        var data = this.createSquare();
+        
       }
   };
 

@@ -61,6 +61,8 @@
       //  Pacman should collide with everything except the safe tile
       this.map.setCollisionByExclusion([this.safetile], true, this.layer);
 
+      this.createPacman((this.squareSize * 16) + 8,
+                        (this.squareSize * 16) + 8);
 
       this.moveToSquare(2,2);
 
@@ -105,19 +107,17 @@
       this.moveToSquare(this.teleportZone.x,this.teleportZone.y);
     },
 
+    createPacman: function(x,y){
+      this.pacman = this.add.sprite(x,y,'pacman',0);
+    },
+
     moveToSquare: function(row, col){
       console.log('Layer position: ', this.layer.x + '', this.layer.y);
 
       //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
+      this.pacman.x = (this.squareSize * 16) + 8 + (row * this.size * this.gridsize);//+ this.layer.x;
+      this.pacman.y = (this.squareSize * 16) + 8 + (col * this.size * this.gridsize);// + this.layer.y;
 
-      if(!this.pacman){
-        this.pacman = this.add.sprite((this.squareSize * 16) + 8 + (row * this.size * this.gridsize), (this.squareSize * 16) + 8 + (col * this.size * this.gridsize), 'pacman', 0);
-      }else{
-        this.pacman.x = (this.squareSize * 16) + 8 + (row * this.size * this.gridsize);//+ this.layer.x;
-        this.pacman.y = (this.squareSize * 16) + 8 + (col * this.size * this.gridsize);// + this.layer.y;
-      }
-
-      console.log('Pac Position:', this.pacman.x, this.pacman.y);
       this.activeZone.x = row;
       this.activeZone.y = col;
 
