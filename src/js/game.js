@@ -65,10 +65,10 @@
 
       this.monsters = this.add.group();
       var monster = new ns.MonsterAI(this.game, 40, 40);
+      monster.player = this.pacman;
 
       this.monsters.add(monster);
-      monster.animations.add('munch', [0, 1, 2, 1], 20, true);
-      monster.animations.play('munch');
+      
       this.physics.arcade.enable(monster);
       this.moveToSquare(2,2);
 

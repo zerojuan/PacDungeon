@@ -3,7 +3,8 @@
 
   function MonsterAI(game, x, y){
     Phaser.Sprite.call(this, game, x, y, 'ghost');
-    //
+    this.animations.add('munch', [0, 1, 2, 1], 20, true);
+    this.animations.play('munch');
   }
 
   MonsterAI.prototype = Object.create(Phaser.Sprite.prototype);
