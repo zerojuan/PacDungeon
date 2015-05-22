@@ -64,12 +64,10 @@
                         (this.squareSize * 16) + 8);
 
       this.monsters = this.add.group();
-      var monster = new ns.MonsterAI(this.game, 40, 40);
-      monster.player = this.pacman;
 
-      this.monsters.add(monster);
-      
-      this.physics.arcade.enable(monster);
+      //spawn 4 monsters
+      this.spawnMonsters(4);
+
       this.moveToSquare(2,2);
 
       this.physics.arcade.enable(this.pacman);
@@ -107,6 +105,15 @@
       }
     },
 
+    pickRandomSquare: function(){
+      var row = Math.floor(Math.random() * (this.squareSize));
+      var col = Math.floor(Math.random() * (this.squareSize));
+      return {
+        row: row,
+        col: col
+      };
+    },
+
     teleport: function(){
       this.moveToSquare(this.teleportZone.x,this.teleportZone.y);
     },
@@ -115,17 +122,39 @@
       this.pacman = this.add.sprite(x,y,'pacman',0);
     },
 
+    spawnMonsters: function(num){
+      for(var i = 0; i < num; i++){
+        //pick random col and row
+
+        var pos = this.pickRandomSquare();
+        var p = this.toWorldPosition(pos.row, pos.col);
+        console.log('Spawning ...' , pos);
+        this.createMonster(p.x, p.y);
+      }
+    },
+
     createMonster: function(x,y){
+      var monster = new ns.MonsterAI(this.game, x, y);
+      monster.player = this.pacman;
+      this.physics.arcade.enable(monster);
+      //add it to the group immediately
+      this.monsters.add(monster);
 
+      return monster;
+    },
 
+    toWorldPosition: function(row, col){
+      return new Phaser.Point(
+        (this.squareSize * 16) + 8 + (row * this.size * this.gridsize),
+        (this.squareSize * 16) + 8 + (col * this.size * this.gridsize)
+      );
     },
 
     moveToSquare: function(row, col){
-      console.log('Layer position: ', this.layer.x + '', this.layer.y);
-
       //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
-      this.pacman.x = (this.squareSize * 16) + 8 + (row * this.size * this.gridsize);//+ this.layer.x;
-      this.pacman.y = (this.squareSize * 16) + 8 + (col * this.size * this.gridsize);// + this.layer.y;
+      var p = this.toWorldPosition(row, col);
+      this.pacman.x = p.x;
+      this.pacman.y = p.y;
 
       this.activeZone.x = row;
       this.activeZone.y = col;
