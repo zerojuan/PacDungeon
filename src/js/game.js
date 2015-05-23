@@ -39,6 +39,9 @@
 
     this.teleportEmitter = null;
     this.appearEmitter = null;
+
+    this.c1 = new Phaser.Point();
+    this.c2 = new Phaser.Point();
   }
 
   Game.prototype = {
@@ -398,7 +401,20 @@
       // draw a second shape
       var targetPosition = this.getJumpTargetPosition();
       this.graphics.moveTo(this.pacman.x,this.pacman.y);
-      this.graphics.lineTo(targetPosition.x,targetPosition.y);
+      //calculate control points
+      this.c1.x = this.pacman.x;
+      this.c1.y = this.pacman.y-15;
+      this.c2.x = targetPosition.x;
+      this.c2.y = targetPosition.y-15;
+
+      if(this.pacman.y > targetPosition.y){
+        this.c1.y = targetPosition.y;
+      }else if(this.pacman.y === targetPosition.y){
+
+      }else{
+        this.c2.y = this.pacman.y;
+      }
+      this.graphics.bezierCurveTo(this.c1.x, this.c1.y, this.c2.x, this.c2.y, targetPosition.x, targetPosition.y);
     },
 
     update: function () {
@@ -433,32 +449,33 @@
 
             //  Un-comment this to see the debug drawing
 
-            for (var t = 1; t < 5; t++)
-            {
-                if (this.directions[t] === null)
-                {
-                    continue;
-                }
-
-                var color = 'rgba(0,255,0,0.3)';
-
-                if (this.directions[t].index !== this.safetile)
-                {
-                    color = 'rgba(255,0,0,0.3)';
-                }
-
-                if (t === this.current)
-                {
-                    color = 'rgba(255,255,255,0.3)';
-                }
-
-                this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
-            }
+            // for (var t = 1; t < 5; t++)
+            // {
+            //     if (this.directions[t] === null)
+            //     {
+            //         continue;
+            //     }
+            //
+            //     var color = 'rgba(0,255,0,0.3)';
+            //
+            //     if (this.directions[t].index !== this.safetile)
+            //     {
+            //         color = 'rgba(255,0,0,0.3)';
+            //     }
+            //
+            //     if (t === this.current)
+            //     {
+            //         color = 'rgba(255,255,255,0.3)';
+            //     }
+            //
+            //     this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
+            // }
 
             // this.game.debug.geom(new Phaser.Rectangle(this.teleportZone.x * this.gridsize * this.size,
               // this.teleportZone.y * this.gridsize * this.size, this.gridsize * this.size, this.gridsize * this.size), 'rgba(255,255,255,0.3)', true);
           // this.game.debug.geom(this.teleportZone, '#ffff00');
-
+          this.game.debug.geom(new Phaser.Circle(this.c1.x, this.c1.y, 10), 'rgba(255,0,0,1)', true);
+          this.game.debug.geom(new Phaser.Circle(this.c2.x, this.c2.y, 10), 'rgba(0,255,0,1)', true);
         }
 
   };
