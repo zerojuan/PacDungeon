@@ -24,25 +24,25 @@
               //TOP WALL
               if(i === 0){
                 if(j === 0){
-                  data[i][j] = this.TOPLEFTCORNER;
+                  data[j][i] = this.TOPLEFTCORNER;
                 }else if(j === this.size -1){
-                  data[i][j] = this.TOPRIGHTCORNER;
+                  data[i][j] = this.BOTTOMLEFTCORNER;
                 }else{
-                  data[i][j] = this.TOPWALL;
+                  data[i][j] = this.LEFTWALL;
                 }
               }else if(i === this.size -1){
                 if(j === 0){
-                  data[i][j] = this.BOTTOMLEFTCORNER;
+                  data[i][j] = this.TOPRIGHTCORNER;
                 }else if(j === this.size -1){
                   data[i][j] = this.BOTTOMRIGHTCORNER;
                 }else{
-                  data[i][j] = this.BOTTOMWALL;
+                  data[i][j] = this.RIGHTWALL;
                 }
               }else{
                 if(j === 0){
-                  data[i][j] = this.LEFTWALL;
+                  data[i][j] = this.TOPWALL;
                 }else if(j === this.size -1){
-                  data[i][j] = this.RIGHTWALL;
+                  data[i][j] = this.BOTTOMWALL;
                 }else{
                   data[i][j] = this.SAFE;
                 }
@@ -53,7 +53,23 @@
       },
       createCross: function(){
         var data = this.createSquare();
-        
+        data[4][3] = 10+1;
+        data[5][3] = 12+1;
+        data[5][4] = 8+1;
+        data[5][5] = 21+1;
+        data[6][5] = 12+1;
+        data[6][6] = 16+1;
+        data[5][6] = 18+1;
+        data[5][7] = 16+1;
+        data[4][7] = 14+1;
+        data[4][6] = 17+1;
+        data[3][6] = 14+1;
+        data[3][5] = 10+1;
+        data[4][5] = 22+1;
+        data[4][4] = 7+1;
+        data[4][3] = 10+1;
+
+        return data;
       }
   };
 

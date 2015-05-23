@@ -126,10 +126,10 @@
     },
 
     createSquare: function(row, col){
-      var level = this.DungeonGenerator.createSquare();
+      var level = this.DungeonGenerator.createCross();
       for(var i =0; i < this.size; i++){
         for(var j =0; j < this.size; j++){
-          this.map.putTile(level[i][j], (row * this.size) + j, (col * this.size) + i, this.layer);
+          this.map.putTile(level[j][i], (row * this.size) + j, (col * this.size) + i, this.layer);
         }
       }
     },
@@ -202,7 +202,7 @@
       // this.move(this.turning);
       //move to square based on angle
       this.current = Phaser.NONE;
-      
+
     },
 
     checkKeys: function () {
