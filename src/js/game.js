@@ -83,7 +83,7 @@
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
-      this.moveToSquare(2,2);
+      this.moveToSquare(0,1);
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -162,7 +162,7 @@
         //pick random col and row
 
         var pos = this.pickRandomSquare();
-        var p = this.toWorldPosition(pos.row, pos.col);
+        var p = this.toWorldPosition(pos.row, pos.col, 1, 1);
         console.log('Spawning ...' , pos);
         this.createMonster(p.x, p.y);
       }
@@ -178,20 +178,28 @@
       return monster;
     },
 
-    toWorldPosition: function(row, col){
+    toWorldPosition: function(squareRow, squareCol, row, col){
+      //+8 is the offset
       return new Phaser.Point(
-        (this.squareSize * 16) + 8 + (row * this.size * this.gridsize),
-        (this.squareSize * 16) + 8 + (col * this.size * this.gridsize)
+        (16 * (row)) + 8 + (squareRow * this.size * this.gridsize),
+        (16 * (col)) + 8 + (squareCol* this.size * this.gridsize)
       );
     },
 
     getJumpTargetPosition: function(){
-      return this.toWorldPosition(this.teleportZone.x, this.teleportZone.y);
+      var marker = new Phaser.Point();
+      marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
+      marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
+      return this.toWorldPosition(this.teleportZone.x, this.teleportZone.y, marker.x % 10, marker.y % 10);
     },
 
     moveToSquare: function(row, col){
       //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
-      var p = this.toWorldPosition(row, col);
+      var marker = new Phaser.Point();
+      marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
+      marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
+      console.log('Marker: ', marker);
+      var p = this.toWorldPosition(row, col, marker.x % 10, marker.y % 10);
       this.pacman.x = p.x;
       this.pacman.y = p.y;
 
