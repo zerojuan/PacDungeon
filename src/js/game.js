@@ -34,12 +34,21 @@
     this.score = 0;
     this.teleportZone = new Phaser.Point(0,0);
     this.activeZone = new Phaser.Point(0,0);
+
+    this.graphics = null;
+
+    this.teleportEmitter = null;
+    this.appearEmitter = null;
   }
 
   Game.prototype = {
 
     create: function () {
       this.stage.backgroundColor = '#2d2d2d';
+
+
+
+
       this.map = this.add.tilemap();
       this.map.addTilesetImage('tiles', 'tiles', 16, 16, 0, 0, 1);
       this.layer = this.map.create('main', this.size * 4, this.size * 4, 16, 16);
@@ -60,6 +69,8 @@
       //  Pacman should collide with everything except the safe tile
       this.map.setCollisionByExclusion([this.safetile], true, this.layer);
 
+      this.graphics = this.add.graphics(0, 0);
+
       this.createPacman((this.squareSize * 16) + 8,
                         (this.squareSize * 16) + 8);
 
@@ -68,10 +79,11 @@
       //spawn 4 monsters
       this.spawnMonsters(4);
 
-      this.moveToSquare(2,2);
+
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
+      this.moveToSquare(2,2);
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -94,6 +106,23 @@
       this.pacman.play('munch');
       this.move(Phaser.LEFT);
 
+      this.teleportEmitter = this.add.emitter();
+      this.appearEmitter = this.add.emitter();
+      var initEmitter = function(emitter){
+        emitter.makeParticles('pacman', [0,1,2]);
+        emitter.maxParticleScale = 0.1;
+        emitter.minParticleScale = 0.01;
+        emitter.width = 20;
+        emitter.setYSpeed(-20, -100);
+        emitter.setXSpeed(-5,5);
+        emitter.gravity = -200;
+      };
+
+      initEmitter(this.teleportEmitter);
+      initEmitter(this.appearEmitter);
+      this.appearEmitter.setYSpeed(100, -20);
+      this.appearEmitter.gravity = 200;
+
     },
 
     createSquare: function(row, col){
@@ -115,7 +144,13 @@
     },
 
     teleport: function(){
+      this.teleportEmitter.x = this.pacman.x;
+      this.teleportEmitter.y = this.pacman.y;
+      this.teleportEmitter.start(true, 250, null, 20);
       this.moveToSquare(this.teleportZone.x,this.teleportZone.y);
+      this.appearEmitter.x = this.pacman.x;
+      this.appearEmitter.y = this.pacman.y - 15;
+      this.appearEmitter.start(true, 250, null, 20);
     },
 
     createPacman: function(x,y){
@@ -150,6 +185,10 @@
       );
     },
 
+    getJumpTargetPosition: function(){
+      return this.toWorldPosition(this.teleportZone.x, this.teleportZone.y);
+    },
+
     moveToSquare: function(row, col){
       //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
       var p = this.toWorldPosition(row, col);
@@ -160,7 +199,10 @@
       this.activeZone.y = col;
 
       this.pacman.anchor.set(0.5);
-
+      // this.move(this.turning);
+      //move to square based on angle
+      this.current = Phaser.NONE;
+      
     },
 
     checkKeys: function () {
@@ -331,9 +373,6 @@
 
         dot.kill();
         this.score++;
-        if(this.score % 5 === 0){
-
-        }
 
         if (this.dots.total === 0)
         {
@@ -341,6 +380,17 @@
             this.dots.callAll('revive');
         }
 
+    },
+
+    drawTeleportPath: function(){
+      // set a fill and line style again
+      this.graphics.clear();
+      this.graphics.lineStyle(1, 0xFF0000, 0.8);
+
+      // draw a second shape
+      var targetPosition = this.getJumpTargetPosition();
+      this.graphics.moveTo(this.pacman.x,this.pacman.y);
+      this.graphics.lineTo(targetPosition.x,targetPosition.y);
     },
 
     update: function () {
@@ -367,32 +417,35 @@
             this.turn();
         }
 
+        //update graphics
+        this.drawTeleportPath();
+
     },
     render: function () {
 
             //  Un-comment this to see the debug drawing
 
-            // for (var t = 1; t < 5; t++)
-            // {
-            //     if (this.directions[t] === null)
-            //     {
-            //         continue;
-            //     }
-            //
-            //     var color = 'rgba(0,255,0,0.3)';
-            //
-            //     if (this.directions[t].index !== this.safetile)
-            //     {
-            //         color = 'rgba(255,0,0,0.3)';
-            //     }
-            //
-            //     if (t === this.current)
-            //     {
-            //         color = 'rgba(255,255,255,0.3)';
-            //     }
-            //
-            //     this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
-            // }
+            for (var t = 1; t < 5; t++)
+            {
+                if (this.directions[t] === null)
+                {
+                    continue;
+                }
+
+                var color = 'rgba(0,255,0,0.3)';
+
+                if (this.directions[t].index !== this.safetile)
+                {
+                    color = 'rgba(255,0,0,0.3)';
+                }
+
+                if (t === this.current)
+                {
+                    color = 'rgba(255,255,255,0.3)';
+                }
+
+                this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
+            }
 
             // this.game.debug.geom(new Phaser.Rectangle(this.teleportZone.x * this.gridsize * this.size,
               // this.teleportZone.y * this.gridsize * this.size, this.gridsize * this.size, this.gridsize * this.size), 'rgba(255,255,255,0.3)', true);
