@@ -18,6 +18,7 @@
     },
 
     loadResources: function () {
+      this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
       this.load.spritesheet('ghost', 'assets/ghost.png', 32, 32);
       this.load.image('dot', 'assets/dot.png');
       this.load.image('tiles', 'assets/pacman-tiles.png');
