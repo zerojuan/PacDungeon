@@ -176,6 +176,7 @@
       monster.player = this.pacman;
       this.physics.arcade.enable(monster);
       //add it to the group immediately
+      monster.body.setSize(16,16,0,0);
       this.monsters.add(monster);
 
       return monster;
@@ -410,7 +411,8 @@
       if(this.pacman.y > targetPosition.y){
         this.c1.y = targetPosition.y;
       }else if(this.pacman.y === targetPosition.y){
-
+        this.c1.y -= 30;
+        this.c2.y -=30;
       }else{
         this.c2.y = this.pacman.y;
       }
@@ -474,8 +476,8 @@
             // this.game.debug.geom(new Phaser.Rectangle(this.teleportZone.x * this.gridsize * this.size,
               // this.teleportZone.y * this.gridsize * this.size, this.gridsize * this.size, this.gridsize * this.size), 'rgba(255,255,255,0.3)', true);
           // this.game.debug.geom(this.teleportZone, '#ffff00');
-          this.game.debug.geom(new Phaser.Circle(this.c1.x, this.c1.y, 10), 'rgba(255,0,0,1)', true);
-          this.game.debug.geom(new Phaser.Circle(this.c2.x, this.c2.y, 10), 'rgba(0,255,0,1)', true);
+          //this.game.debug.geom(new Phaser.Circle(this.c1.x, this.c1.y, 10), 'rgba(255,0,0,1)', true);
+          //this.game.debug.geom(new Phaser.Circle(this.c2.x, this.c2.y, 10), 'rgba(0,255,0,1)', true);
         }
 
   };
