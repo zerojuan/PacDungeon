@@ -177,6 +177,7 @@
       this.physics.arcade.enable(monster);
       //add it to the group immediately
       monster.body.setSize(16,16,0,0);
+      monster.anchor.set(0.5);
       this.monsters.add(monster);
 
       return monster;

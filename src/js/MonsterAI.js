@@ -18,6 +18,7 @@
 
     this.ghostEyes = new Phaser.Sprite(game, 0,0,'ghost-eyes');
     this.ghostEyes.frame = UP;
+    this.ghostEyes.anchor.set(0.5);
     this.addChild(this.ghostEyes);
 
     console.log('Monster');
