@@ -41,6 +41,7 @@
 
     this.teleportEmitter = null;
     this.appearEmitter = null;
+    this.shakeWorld = 0;
 
     this.c1 = new Phaser.Point();
     this.c2 = new Phaser.Point();
@@ -214,6 +215,7 @@
       this.isFreshJump = true;
 
       this.pacman.anchor.set(0.5);
+            
       // this.move(this.turning);
       //move to square based on angle
       this.current = Phaser.NONE;
@@ -396,6 +398,18 @@
 
     },
 
+    shakeScreen: function(){
+      if (this.shakeWorld > 0) {
+         var rand1 = this.rnd.integerInRange(-5,5);
+         var rand2 = this.rnd.integerInRange(-5,5);
+          this.game.world.setBounds(rand1, rand2, this.game.width + rand1, this.game.height + rand2);
+          this.shakeWorld--;
+          if (this.shakeWorld === 0) {
+              this.game.world.setBounds(0, 0, this.game.width,this.game.height); // normalize after shake?
+          }
+      }
+    },
+
     drawTeleportPath: function(){
       // set a fill and line style again
       this.graphics.clear();
@@ -447,6 +461,8 @@
 
         //update graphics
         this.drawTeleportPath();
+
+        this.shakeScreen();
 
     },
     render: function () {
