@@ -258,6 +258,7 @@
         next.y--;
       }
 
+      var prevZone = new Phaser.Point(this.teleportZone.x, this.teleportZone.y);
       if(this.isFreshJump){
         this.teleportZone.x = this.activeZone.x;
         this.teleportZone.y = this.activeZone.y;
@@ -271,16 +272,8 @@
 
       if(this.teleportZone.x === this.activeZone.x &&
         this.teleportZone.y === this.activeZone.y){
-        if(next.x > 0){
-          this.teleportZone.x++;
-        }else if(next.x < 0){
-          this.teleportZone.x--;
-        }
-        if(next.y > 0){
-          this.teleportZone.y++;
-        }else if(next.y < 0){
-          this.teleportZone.y--;
-        }
+        this.teleportZone.x = prevZone.x;
+        this.teleportZone.y = prevZone.y;
       }
 
       this.clipTeleportZone();
