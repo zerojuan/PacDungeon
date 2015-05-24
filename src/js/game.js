@@ -34,6 +34,8 @@
     this.score = 0;
     this.teleportZone = new Phaser.Point(0,0);
     this.activeZone = new Phaser.Point(0,0);
+    //flag if pacman jumped and hasn't moved yet
+    this.isFreshJump = false;
 
     this.graphics = null;
 
@@ -48,9 +50,6 @@
 
     create: function () {
       this.stage.backgroundColor = '#2d2d2d';
-
-
-
 
       this.map = this.add.tilemap();
       this.map.addTilesetImage('tiles', 'tiles', 16, 16, 0, 0, 1);
@@ -208,8 +207,11 @@
       this.pacman.x = p.x;
       this.pacman.y = p.y;
 
+      this.teleportZone.x = this.activeZone.x;
+      this.teleportZone.y = this.activeZone.y;
       this.activeZone.x = row;
       this.activeZone.y = col;
+      this.isFreshJump = true;
 
       this.pacman.anchor.set(0.5);
       // this.move(this.turning);
@@ -256,6 +258,12 @@
         next.y--;
       }
 
+      if(this.isFreshJump){
+        this.teleportZone.x = this.activeZone.x;
+        this.teleportZone.y = this.activeZone.y;
+        this.isFreshJump = false;
+      }
+
       this.teleportZone.x += next.x;
       this.teleportZone.y += next.y;
 
@@ -283,15 +291,15 @@
 
     clipTeleportZone: function(){
       if(this.teleportZone.x < 0){
-        this.teleportZone.x = this.squareSize-1;
-      }else if(this.teleportZone.x > this.squareSize-1){
         this.teleportZone.x = 0;
+      }else if(this.teleportZone.x > this.squareSize-1){
+        this.teleportZone.x = this.squareSize-1;
       }
 
       if(this.teleportZone.y < 0){
-        this.teleportZone.y = this.squareSize-1;
-      }else if(this.teleportZone.y > this.squareSize-1){
         this.teleportZone.y = 0;
+      }else if(this.teleportZone.y > this.squareSize-1){
+        this.teleportZone.y = this.squareSize-1;
       }
     },
 
