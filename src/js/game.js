@@ -215,7 +215,7 @@
       this.isFreshJump = true;
 
       this.pacman.anchor.set(0.5);
-            
+
       // this.move(this.turning);
       //move to square based on angle
       this.current = Phaser.NONE;
