@@ -129,7 +129,7 @@
     },
 
     createSquare: function(row, col){
-      var level = this.DungeonGenerator.createCross();
+      var level = this.DungeonGenerator.createSquare();
       for(var i =0; i < this.size; i++){
         for(var j =0; j < this.size; j++){
           this.map.putTile(level[j][i], (row * this.size) + j, (col * this.size) + i, this.layer);
