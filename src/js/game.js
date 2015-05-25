@@ -165,15 +165,18 @@
         //pick random col and row
 
         var pos = this.pickRandomSquare();
-        var p = this.toWorldPosition(pos.row, pos.col, 1, 1);
+        var p = this.toWorldPosition(pos.row, pos.col, 2, 2);
         console.log('Spawning ...' , pos);
         this.createMonster(p.x, p.y);
       }
     },
 
     createMonster: function(x,y){
-      var monster = new ns.MonsterAI(this.game, x, y);
+      var monster = new ns.MonsterAI(this, x, y);
       monster.player = this.pacman;
+      monster.layer = this.layer;
+      monster.gridsize = this.gridsize;
+      monster.map = this.map;
       this.physics.arcade.enable(monster);
       //add it to the group immediately
       monster.body.setSize(16,16,0,0);
@@ -466,30 +469,30 @@
 
     },
     render: function () {
-
+            this.monsters.callAll('render');
             //  Un-comment this to see the debug drawing
 
-            // for (var t = 1; t < 5; t++)
-            // {
-            //     if (this.directions[t] === null)
-            //     {
-            //         continue;
-            //     }
-            //
-            //     var color = 'rgba(0,255,0,0.3)';
-            //
-            //     if (this.directions[t].index !== this.safetile)
-            //     {
-            //         color = 'rgba(255,0,0,0.3)';
-            //     }
-            //
-            //     if (t === this.current)
-            //     {
-            //         color = 'rgba(255,255,255,0.3)';
-            //     }
-            //
-            //     this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
-            // }
+            for (var t = 1; t < 5; t++)
+            {
+                if (this.directions[t] === null)
+                {
+                    continue;
+                }
+
+                var color = 'rgba(0,255,0,0.3)';
+
+                if (this.directions[t].index !== this.safetile)
+                {
+                    color = 'rgba(255,0,0,0.3)';
+                }
+
+                if (t === this.current)
+                {
+                    color = 'rgba(255,255,255,0.3)';
+                }
+
+                this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
+            }
 
             // this.game.debug.geom(new Phaser.Rectangle(this.teleportZone.x * this.gridsize * this.size,
               // this.teleportZone.y * this.gridsize * this.size, this.gridsize * this.size, this.gridsize * this.size), 'rgba(255,255,255,0.3)', true);
