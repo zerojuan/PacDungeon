@@ -80,7 +80,7 @@
       this.monsters = this.add.group();
 
       //spawn 4 monsters
-      this.spawnMonsters(4);
+      this.spawnMonsters(1);
 
 
 
@@ -165,7 +165,7 @@
         //pick random col and row
 
         var pos = this.pickRandomSquare();
-        var p = this.toWorldPosition(pos.row, pos.col, 2, 2);
+        var p = this.toWorldPosition(pos.row, pos.col, 5, 5);
         console.log('Spawning ...' , pos);
         this.createMonster(p.x, p.y);
       }
@@ -181,6 +181,7 @@
       //add it to the group immediately
       monster.body.setSize(16,16,0,0);
       monster.anchor.set(0.5);
+      monster.move(Phaser.DOWN);
       this.monsters.add(monster);
 
       return monster;
@@ -445,7 +446,7 @@
 
         this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
         this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
-        console.log('Position:', this.marker.x, this.marker.y);
+
         if(this.marker.x < 0 || this.marker.y < 0){
           return;
         }

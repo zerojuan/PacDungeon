@@ -56,7 +56,11 @@
     this.forwardMarker = new Phaser.Point(0,0);
 
     this.current = Phaser.DOWN;
-    this.nextDirection = this.current;
+    this.nextDirection = Phaser.NONE;
+    this.turning = Phaser.NONE;
+    this.turnPoint = new Phaser.Point();
+    this.futurePoint = new Phaser.Point();
+    this.threshold = 3;
 
     //override move function
     this.move = function(direction){
@@ -100,20 +104,25 @@
   };
 
   MonsterAI.prototype.getNextDirection = function(){
-    // for(var t = 1; t < 5; t++){
-    //   if(!this.directions[t]){
-    //     continue;
-    //   }
-    //   // if(t !== this.main.opposites[this.current]){
-    //   //   continue;
-    //   // }
-    //   if(this.directions[t].index === this.main.safeTile){
-    //     t = Phaser.RIGHT;
-    //     break;
-    //   }
-    // }
-    return Phaser.RIGHT;
+    for(var t = 1; t < 5; t++){
+      if(!this.directions[t]){
+        continue;
+      }
+      if(t === this.main.opposites[this.current]){
+        console.log('This is opposite', t);
+        continue;
+      }
+
+      if(this.directions[t].index === this.main.safetile){
+        console.log('T is found!', t);
+        break;
+      }
+    }
+    console.log('T is: ' + t);
+    return t;
   };
+
+
 
   MonsterAI.prototype.feelForward = function(){
     this.changeDirection = false;
@@ -121,22 +130,21 @@
     this.marker.y = this.main.game.math.snapToFloor(Math.floor(this.y), this.main.gridsize) / this.main.gridsize;
 
     //move marker forward (see forward)
-    this.prevMarker = new Phaser.Point(this.forwardMarker.x, this.forwardMarker.y);
-    this.forwardMarker = this.getForward(new Phaser.Point(this.marker.x, this.marker.y));
 
-    //if my position matches the previous position, move to next direction
-    if(this.prevMarker.x > 0 || this.prevMarker > 0){
-      if(this.marker.x === this.prevMarker.x &&
-        this.marker.y === this.prevMarker.y){
-          //wait till almost at the center before deciding to change direction
-          this.changeDirection = true;
-        }
-    }
-
+    var futurePoint = this.getForward(new Phaser.Point(this.marker.x, this.marker.y));
+    if(futurePoint.x !== this.forwardMarker.x ||
+      futurePoint.y !== this.forwardMarker.y){
+        this.prevMarker = new Phaser.Point(this.forwardMarker.x, this.forwardMarker.y);
+      }
+    this.forwardMarker = futurePoint;
 
     if(this.marker.x < 0 || this.marker.y < 0){
       return;
     }
+    this.futurePoint.x = (this.forwardMarker.x * this.gridsize) + (this.gridsize / 2);
+    this.futurePoint.y = (this.forwardMarker.y * this.gridsize) + (this.gridsize / 2);
+    this.turnPoint.x = (this.prevMarker.x * this.gridsize) + (this.gridsize / 2);
+    this.turnPoint.y = (this.prevMarker.y * this.gridsize) + (this.gridsize / 2);
 
     //  Update our grid sensors
     this.directions[0] = this.main.map.getTile(this.forwardMarker.x, this.forwardMarker.y, this.main.layer.index);
@@ -146,16 +154,44 @@
     this.directions[4] = this.main.map.getTileBelow(this.main.layer.index, this.forwardMarker.x, this.forwardMarker.y);
 
     //calculate next direction
-    this.nextDirection = this.getNextDirection();
+    this.turning = this.getNextDirection();
+  };
+
+  MonsterAI.prototype.turn = function(){
+    var cx = Math.floor(this.x);
+    var cy = Math.floor(this.y);
+
+    //if current position is almost equal to the turnpoint
+    if(!this.main.math.fuzzyEqual(cx, this.turnPoint.x, this.threshold) ||
+      !this.main.math.fuzzyEqual(cy, this.turnPoint.y, this.threshold)){
+        // console.log('Falsy');
+        return false;
+      }
+    console.log('Truthy');
+    // Grid align before turning
+    this.x = this.turnPoint.x;
+    this.y = this.turnPoint.y;
+
+    this.body.reset(this.turnPoint.x, this.turnPoint.y);
+
+    this.move(this.turning);
+
+    this.turning = Phaser.NONE;
   };
 
   MonsterAI.prototype.update = function(){
     this.feelForward();
 
-    this.move(this.current);
-    if(this.changeDirection){
-      this.current = this.nextDirection;
+    if(this.turning !== Phaser.NONE){
+      this.turn();
     }
+
+    // this.move(this.current);
+    // if(this.changeDirection){
+    //   this.current = this.nextDirection;
+    //   // this.turn();
+    //   this.move(this.current);
+    // }
   };
 
   MonsterAI.prototype.render = function(){
@@ -179,9 +215,12 @@
         }
 
         this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY,
-          this.gridsize, this.gridsize), color, true);
+         this.gridsize, this.gridsize), color, true);
     }
-    this.game.debug.geom(new Phaser.Rectangle(this.body.x, this.body.y, this.body.width, this.body.height), 0xffffff, true);
+    this.game.debug.geom(new Phaser.Circle(this.turnPoint.x, this.turnPoint.y, 5), 'rgba(255,0,0,1)');
+    this.game.debug.geom(new Phaser.Circle(this.futurePoint.x, this.futurePoint.y, 5), 'rgba(0,255,0,1)');
+    this.game.debug.geom(new Phaser.Circle(this.x, this.y, 5), 'rgba(0,0,0,1)');
+    // this.game.debug.geom(new Phaser.Rectangle(this.body.x, this.body.y, this.body.width, this.body.height), 0xffffff, true);
   };
 
   window['pacdungeon'] = window['pacdungeon'] || {};
