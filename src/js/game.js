@@ -165,7 +165,7 @@
         //pick random col and row
 
         var pos = this.pickRandomSquare();
-        var p = this.toWorldPosition(pos.row, pos.col, 5, 5);
+        var p = this.toWorldPosition(pos.row, pos.col, 3, 3);
         console.log('Spawning ...' , pos);
         this.createMonster(p.x, p.y);
       }

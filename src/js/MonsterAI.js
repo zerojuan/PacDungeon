@@ -60,7 +60,7 @@
     this.turning = Phaser.NONE;
     this.turnPoint = new Phaser.Point();
     this.futurePoint = new Phaser.Point();
-    this.threshold = 3;
+    this.threshold = 1;
 
     //override move function
     this.move = function(direction){
@@ -173,7 +173,7 @@
     this.y = this.turnPoint.y;
 
     this.body.reset(this.turnPoint.x, this.turnPoint.y);
-
+    this.prevMarker = this.forwardMarker;
     this.move(this.turning);
 
     this.turning = Phaser.NONE;
@@ -217,6 +217,7 @@
         this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY,
          this.gridsize, this.gridsize), color, true);
     }
+    // this.game.debug.geom(new Phaser.Line())
     this.game.debug.geom(new Phaser.Circle(this.turnPoint.x, this.turnPoint.y, 5), 'rgba(255,0,0,1)');
     this.game.debug.geom(new Phaser.Circle(this.futurePoint.x, this.futurePoint.y, 5), 'rgba(0,255,0,1)');
     this.game.debug.geom(new Phaser.Circle(this.x, this.y, 5), 'rgba(0,0,0,1)');
