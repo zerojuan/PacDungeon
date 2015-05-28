@@ -23,10 +23,9 @@
   function MonsterAI(main, x, y, type){
     // Phaser.Group.call(this, game);
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
-    // this.ghostBody = this.create(0,0,'ghost');
-    // Phaser.Sprite.call(this, game, x+8, y+8, 'ghost-eyes');
+
     this.main = main;
-    this.speed = this.main.speed * 0.10;
+    this.speed = this.main.speed * 0.50;
     this.type = type || types[Math.floor(Math.random() * 4)];
     this.directions = [ null, null, null, null, null ];
     switch(this.type){
@@ -60,7 +59,9 @@
     this.turning = Phaser.NONE;
     this.turnPoint = new Phaser.Point();
     this.futurePoint = new Phaser.Point();
-    this.threshold = 1;
+    this.threshold = 3;
+
+    this.targetFound = false;
 
     //override move function
     this.move = function(direction){
@@ -126,25 +127,33 @@
 
   MonsterAI.prototype.feelForward = function(){
     this.changeDirection = false;
-    this.marker.x = this.main.game.math.snapToFloor(Math.floor(this.x), this.main.gridsize) / this.main.gridsize;
-    this.marker.y = this.main.game.math.snapToFloor(Math.floor(this.y), this.main.gridsize) / this.main.gridsize;
+    var reference = new Phaser.Point();
+    if(this.turnPoint.x === 0 && this.turnPoint.y === 0){
+      reference.x = this.x;
+      reference.y = this.y;
+    }else{
+      reference.x = this.turnPoint.x;
+      reference.y = this.turnPoint.y;
+    }
+    this.marker.x = this.main.game.math.snapToFloor(Math.floor(reference.x), this.main.gridsize) / this.main.gridsize;
+    this.marker.y = this.main.game.math.snapToFloor(Math.floor(reference.y), this.main.gridsize) / this.main.gridsize;
 
     //move marker forward (see forward)
+    console.log('Marker:',this.marker);
+
 
     var futurePoint = this.getForward(new Phaser.Point(this.marker.x, this.marker.y));
-    if(futurePoint.x !== this.forwardMarker.x ||
-      futurePoint.y !== this.forwardMarker.y){
-        this.prevMarker = new Phaser.Point(this.forwardMarker.x, this.forwardMarker.y);
-      }
-    this.forwardMarker = futurePoint;
 
-    if(this.marker.x < 0 || this.marker.y < 0){
+    this.forwardMarker = futurePoint;
+    console.log('ForwardMarker:', this.forwardMarker);
+    console.log('Current: ', this.current);
+    if(this.marker.x <= 0 || this.marker.y <= 0){
       return;
     }
     this.futurePoint.x = (this.forwardMarker.x * this.gridsize) + (this.gridsize / 2);
     this.futurePoint.y = (this.forwardMarker.y * this.gridsize) + (this.gridsize / 2);
-    this.turnPoint.x = (this.prevMarker.x * this.gridsize) + (this.gridsize / 2);
-    this.turnPoint.y = (this.prevMarker.y * this.gridsize) + (this.gridsize / 2);
+    this.turnPoint.x = (this.forwardMarker.x * this.gridsize) + (this.gridsize / 2);
+    this.turnPoint.y = (this.forwardMarker.y * this.gridsize) + (this.gridsize / 2);
 
     //  Update our grid sensors
     this.directions[0] = this.main.map.getTile(this.forwardMarker.x, this.forwardMarker.y, this.main.layer.index);
@@ -155,35 +164,44 @@
 
     //calculate next direction
     this.turning = this.getNextDirection();
+
+    this.targetFound = true;
   };
 
   MonsterAI.prototype.turn = function(){
-    var cx = Math.floor(this.x);
-    var cy = Math.floor(this.y);
 
-    //if current position is almost equal to the turnpoint
-    if(!this.main.math.fuzzyEqual(cx, this.turnPoint.x, this.threshold) ||
-      !this.main.math.fuzzyEqual(cy, this.turnPoint.y, this.threshold)){
-        // console.log('Falsy');
-        return false;
-      }
-    console.log('Truthy');
     // Grid align before turning
     this.x = this.turnPoint.x;
     this.y = this.turnPoint.y;
 
     this.body.reset(this.turnPoint.x, this.turnPoint.y);
-    this.prevMarker = this.forwardMarker;
-    this.move(this.turning);
+  };
 
-    this.turning = Phaser.NONE;
+  MonsterAI.prototype.reachedGoal = function(){
+    var cx = Math.floor(this.x);
+    var cy = Math.floor(this.y);
+
+    //if current position is almost equal to the turnpoint
+    console.log('Cy: ', cy, 'vs', this.turnPoint.y);
+    if(this.main.math.fuzzyEqual(cx, this.turnPoint.x, this.threshold) &&
+      this.main.math.fuzzyEqual(cy, this.turnPoint.y, this.threshold)){
+        // console.log('Falsy');
+        return true;
+      }
+    return false;
   };
 
   MonsterAI.prototype.update = function(){
-    this.feelForward();
+    if(!this.targetFound){
+      this.feelForward();
+      this.move(this.current);
+    }
 
-    if(this.turning !== Phaser.NONE){
+    if(this.reachedGoal()){
+      console.log('Search for another target!');
+      this.targetFound = false;
       this.turn();
+      this.current = this.turning;
     }
 
     // this.move(this.current);
@@ -214,13 +232,19 @@
             color = 'rgba(255,255,255,0.3)';
         }
 
+        if(t === this.nextDirection){
+          this.game.debug.geom(new Phaser.Circle(this.directions[t].worldX, this.directions[t].worldY,
+           10), 'rgba(255,255,0,1)');
+        }
+
         this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY,
          this.gridsize, this.gridsize), color, true);
     }
     // this.game.debug.geom(new Phaser.Line())
     this.game.debug.geom(new Phaser.Circle(this.turnPoint.x, this.turnPoint.y, 5), 'rgba(255,0,0,1)');
-    this.game.debug.geom(new Phaser.Circle(this.futurePoint.x, this.futurePoint.y, 5), 'rgba(0,255,0,1)');
+    // this.game.debug.geom(new Phaser.Circle(this.futurePoint.x, this.futurePoint.y, 5), 'rgba(0,255,0,1)');
     this.game.debug.geom(new Phaser.Circle(this.x, this.y, 5), 'rgba(0,0,0,1)');
+    this.game.debug.geom(new Phaser.Circle(this.marker.x, this.marker.y, 5), 'rgba(0,255,0,1)');
     // this.game.debug.geom(new Phaser.Rectangle(this.body.x, this.body.y, this.body.width, this.body.height), 0xffffff, true);
   };
 
