@@ -56,7 +56,6 @@
 
     this.current = Phaser.DOWN;
     this.nextDirection = Phaser.NONE;
-    this.turning = Phaser.NONE;
     this.turnPoint = new Phaser.Point();
     this.futurePoint = new Phaser.Point();
     this.threshold = 3;
@@ -110,44 +109,27 @@
         continue;
       }
       if(t === this.main.opposites[this.current]){
-        console.log('This is opposite', t);
+        //ghost can't move back yo    
         continue;
       }
 
       if(this.directions[t].index === this.main.safetile){
-        console.log('T is found!', t);
         break;
       }
     }
-    console.log('T is: ' + t);
     return t;
   };
 
 
 
   MonsterAI.prototype.feelForward = function(){
-    this.changeDirection = false;
-    var reference = new Phaser.Point();
-    if(this.turnPoint.x === 0 && this.turnPoint.y === 0){
-      reference.x = this.x;
-      reference.y = this.y;
-    }else{
-      reference.x = this.turnPoint.x;
-      reference.y = this.turnPoint.y;
-    }
-    this.marker.x = this.main.game.math.snapToFloor(Math.floor(reference.x), this.main.gridsize) / this.main.gridsize;
-    this.marker.y = this.main.game.math.snapToFloor(Math.floor(reference.y), this.main.gridsize) / this.main.gridsize;
+    this.marker.x = this.main.game.math.snapToFloor(Math.floor(this.x), this.main.gridsize) / this.main.gridsize;
+    this.marker.y = this.main.game.math.snapToFloor(Math.floor(this.y), this.main.gridsize) / this.main.gridsize;
 
     //move marker forward (see forward)
-    console.log('Marker:',this.marker);
+    this.forwardMarker = this.getForward(new Phaser.Point(this.marker.x, this.marker.y));
 
-
-    var futurePoint = this.getForward(new Phaser.Point(this.marker.x, this.marker.y));
-
-    this.forwardMarker = futurePoint;
-    console.log('ForwardMarker:', this.forwardMarker);
-    console.log('Current: ', this.current);
-    if(this.marker.x <= 0 || this.marker.y <= 0){
+    if(this.marker.x < 0 || this.marker.y < 0){
       return;
     }
     this.futurePoint.x = (this.forwardMarker.x * this.gridsize) + (this.gridsize / 2);
@@ -163,7 +145,7 @@
     this.directions[4] = this.main.map.getTileBelow(this.main.layer.index, this.forwardMarker.x, this.forwardMarker.y);
 
     //calculate next direction
-    this.turning = this.getNextDirection();
+    this.nextDirection = this.getNextDirection();
 
     this.targetFound = true;
   };
@@ -182,34 +164,26 @@
     var cy = Math.floor(this.y);
 
     //if current position is almost equal to the turnpoint
-    console.log('Cy: ', cy, 'vs', this.turnPoint.y);
     if(this.main.math.fuzzyEqual(cx, this.turnPoint.x, this.threshold) &&
       this.main.math.fuzzyEqual(cy, this.turnPoint.y, this.threshold)){
-        // console.log('Falsy');
         return true;
       }
     return false;
   };
 
   MonsterAI.prototype.update = function(){
+    //look for next direction if you don't have any
     if(!this.targetFound){
       this.feelForward();
       this.move(this.current);
     }
 
     if(this.reachedGoal()){
-      console.log('Search for another target!');
+      //if you reached the goal, move to next goal based on nextDirection
       this.targetFound = false;
       this.turn();
-      this.current = this.turning;
+      this.current = this.nextDirection;
     }
-
-    // this.move(this.current);
-    // if(this.changeDirection){
-    //   this.current = this.nextDirection;
-    //   // this.turn();
-    //   this.move(this.current);
-    // }
   };
 
   MonsterAI.prototype.render = function(){
@@ -230,11 +204,6 @@
         if (t === this.current)
         {
             color = 'rgba(255,255,255,0.3)';
-        }
-
-        if(t === this.nextDirection){
-          this.game.debug.geom(new Phaser.Circle(this.directions[t].worldX, this.directions[t].worldY,
-           10), 'rgba(255,255,0,1)');
         }
 
         this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY,
