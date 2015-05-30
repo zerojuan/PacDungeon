@@ -9,8 +9,8 @@
   }
 
   function doShadow(directions, current){
-    //stalks pacman everywhere
-    for(var t = 1; t < 5; t++){
+    //stalks pacman everywhere    
+    for(var t = 5; t > 0; t--){
       if(!directions[t]){
         continue;
       }

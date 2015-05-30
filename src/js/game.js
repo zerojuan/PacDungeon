@@ -74,13 +74,15 @@
 
       this.graphics = this.add.graphics(0, 0);
 
+      this.monsters = this.add.group();
+
       this.createPacman((this.squareSize * 16) + 8,
                         (this.squareSize * 16) + 8);
 
-      this.monsters = this.add.group();
+
 
       //spawn 4 monsters
-      this.spawnMonsters(4);
+      this.spawnMonsters(1);
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
@@ -155,7 +157,9 @@
     },
 
     createPacman: function(x,y){
-      this.pacman = this.add.sprite(x,y,'pacman',0);
+      this.pacman = new ns.Pacman(this, x, y);
+      // this.game.add(this.pacman);
+      this.game.add.existing(this.pacman);
     },
 
     spawnMonsters: function(num){
@@ -170,7 +174,7 @@
     },
 
     createMonster: function(x,y){
-      var monster = new ns.MonsterAI(this, x, y);
+      var monster = new ns.MonsterAI(this, x, y, 'shadow');
       monster.player = this.pacman;
       monster.layer = this.layer;
       monster.gridsize = this.gridsize;
@@ -205,7 +209,7 @@
       var marker = new Phaser.Point();
       marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
       marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
-      console.log('Marker: ', marker);
+      
       var p = this.toWorldPosition(row, col, marker.x % 10, marker.y % 10);
       this.pacman.x = p.x;
       this.pacman.y = p.y;
@@ -400,6 +404,10 @@
 
     },
 
+    touchMonsters: function(pacman, monster){
+      console.log('touched the monster', monster);
+    },
+
     shakeScreen: function(){
       if (this.shakeWorld > 0) {
          var rand1 = this.rnd.integerInRange(-5,5);
@@ -441,6 +449,7 @@
         this.physics.arcade.collide(this.monsters, this.layer);
         this.physics.arcade.collide(this.pacman, this.layer);
         this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
+        this.physics.arcade.overlap(this.pacman, this.monsters, this.touchMonsters, null, this);
 
         this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
         this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
