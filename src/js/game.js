@@ -80,9 +80,7 @@
       this.monsters = this.add.group();
 
       //spawn 4 monsters
-      this.spawnMonsters(1);
-
-
+      this.spawnMonsters(4);
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
@@ -129,7 +127,7 @@
     },
 
     createSquare: function(row, col){
-      var level = this.DungeonGenerator.createSquare();
+      var level = this.DungeonGenerator.createCross();
       for(var i =0; i < this.size; i++){
         for(var j =0; j < this.size; j++){
           this.map.putTile(level[j][i], (row * this.size) + j, (col * this.size) + i, this.layer);
@@ -165,7 +163,7 @@
         //pick random col and row
 
         var pos = this.pickRandomSquare();
-        var p = this.toWorldPosition(pos.row, pos.col, 3, 3);
+        var p = this.toWorldPosition(pos.row, pos.col, 6, 7);
         console.log('Spawning ...' , pos);
         this.createMonster(p.x, p.y);
       }

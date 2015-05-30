@@ -19,7 +19,7 @@
     'pokey'
   ];
 
-
+  var ns = window['pacdungeon'];
   function MonsterAI(main, x, y, type){
     // Phaser.Group.call(this, game);
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
@@ -62,44 +62,45 @@
 
     this.targetFound = false;
 
-    //override move function
-    this.move = function(direction){
-      // this.marker
-      var speed = this.speed;
-
-      if (direction === Phaser.LEFT || direction === Phaser.UP)
-      {
-          speed = -speed;
-      }
-
-      if (direction === Phaser.LEFT || direction === Phaser.RIGHT)
-      {
-          this.body.velocity.x = speed;
-      }
-      else
-      {
-          this.body.velocity.y = speed;
-      }
-
-      //set the eyes
-      if(direction === Phaser.UP){
-        this.ghostEyes.frame = UP;
-      }else if(direction === Phaser.DOWN){
-        this.ghostEyes.frame = DOWN;
-      }else if(direction === Phaser.LEFT){
-        this.ghostEyes.frame = LEFT;
-      }else if(direction === Phaser.RIGHT){
-        this.ghostEyes.frame = RIGHT;
-      }
-
-      this.current = direction;
-    };
+    this.strategy = new ns.AIStrategy(main.player, this, main.safetile, main.opposites);
+    this.strategy.setStrategy(this.type);
 
     this.changeDirection = false;
   }
 
   MonsterAI.prototype = Object.create(Phaser.Sprite.prototype);
   MonsterAI.prototype.constructor = MonsterAI;
+
+  MonsterAI.prototype.move = function(direction){
+    var speed = this.speed;
+
+    if (direction === Phaser.LEFT || direction === Phaser.UP)
+    {
+        speed = -speed;
+    }
+
+    if (direction === Phaser.LEFT || direction === Phaser.RIGHT)
+    {
+        this.body.velocity.x = speed;
+    }
+    else
+    {
+        this.body.velocity.y = speed;
+    }
+
+    //set the eyes
+    if(direction === Phaser.UP){
+      this.ghostEyes.frame = UP;
+    }else if(direction === Phaser.DOWN){
+      this.ghostEyes.frame = DOWN;
+    }else if(direction === Phaser.LEFT){
+      this.ghostEyes.frame = LEFT;
+    }else if(direction === Phaser.RIGHT){
+      this.ghostEyes.frame = RIGHT;
+    }
+
+    this.current = direction;
+  };
 
   MonsterAI.prototype.getForward = function(marker){
     if(this.current === Phaser.RIGHT){
@@ -113,25 +114,6 @@
     }
     return marker;
   };
-
-  MonsterAI.prototype.getNextDirection = function(){
-    for(var t = 1; t < 5; t++){
-      if(!this.directions[t]){
-        continue;
-      }
-      if(t === this.main.opposites[this.current]){
-        //ghost can't move back yo
-        continue;
-      }
-
-      if(this.directions[t].index === this.main.safetile){
-        break;
-      }
-    }
-    return t;
-  };
-
-
 
   MonsterAI.prototype.feelForward = function(){
     this.marker.x = this.main.game.math.snapToFloor(Math.floor(this.x), this.main.gridsize) / this.main.gridsize;
@@ -156,7 +138,7 @@
     this.directions[4] = this.main.map.getTileBelow(this.main.layer.index, this.forwardMarker.x, this.forwardMarker.y);
 
     //calculate next direction
-    this.nextDirection = this.getNextDirection();
+    this.nextDirection = this.strategy.getNextDirection(this.directions, this.current);
 
     this.targetFound = true;
   };

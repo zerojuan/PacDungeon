@@ -1,27 +1,84 @@
 (function(){
   'use strict';
 
-  function AIStrategy(monster, ghost, safetile){
-    this.monster = monster;
+  function AIStrategy(pacman, ghost, safetile, opposites){
+    this.pacman = pacman;
     this.ghost = ghost;
     this.safetile = safetile;
+    this.opposites = opposites;
   }
 
-  function doShadow(directions, opposites){
+  function doShadow(directions, current){
     //stalks pacman everywhere
+    for(var t = 1; t < 5; t++){
+      if(!directions[t]){
+        continue;
+      }
+      if(t === this.opposites[current]){
+        //ghost can't move back yo
+        continue;
+      }
+
+      if(directions[t].index === this.safetile){
+        break;
+      }
+    }
+    return t;
   }
 
-  function doSpeedy(directions, opposites){
+  function doSpeedy(directions, current){
     //look forward four squares
+    for(var t = 1; t < 5; t++){
+      if(!directions[t]){
+        continue;
+      }
+      if(t === this.opposites[current]){
+        //ghost can't move back yo
+        continue;
+      }
+
+      if(directions[t].index === this.safetile){
+        break;
+      }
+    }
+    return t;
   }
 
-  function doBashful(directions, opposites){
+  function doBashful(directions, current){
     //two tiles forward, but consider shadow's position
+    for(var t = 1; t < 5; t++){
+      if(!directions[t]){
+        continue;
+      }
+      if(t === this.opposites[current]){
+        //ghost can't move back yo
+        continue;
+      }
+
+      if(directions[t].index === this.safetile){
+        break;
+      }
+    }
+    return t;
   }
 
-  function doPokey(directions, opposites){
+  function doPokey(directions, current){
     //if far away from pacman, be like blinky
     //if close, scatter mode
+    for(var t = 1; t < 5; t++){
+      if(!directions[t]){
+        continue;
+      }
+      if(t === this.opposites[current]){
+        //ghost can't move back yo
+        continue;
+      }
+
+      if(directions[t].index === this.safetile){
+        break;
+      }
+    }
+    return t;
   }
 
   AIStrategy.prototype.setStrategy = function(strategy){
@@ -39,24 +96,6 @@
         this.getNextDirection = doPokey;
         break;
     }
-  };
-
-  AIStrategy.prototype.getNextDirection = function(directions, opposites){
-    //default
-    for(var t = 1; t < 5; t++){
-      if(!directions[t]){
-        continue;
-      }
-      if(t === opposites[this.current]){
-        //ghost can't move back yo
-        continue;
-      }
-
-      if(this.directions[t].index === this.safetile){
-        break;
-      }
-    }
-    return t;
   };
 
   window['pacdungeon'] = window['pacdungeon'] || {};
