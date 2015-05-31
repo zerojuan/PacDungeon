@@ -14,6 +14,15 @@
     this.SAFE = 7;
   }
 
+  DungeonGenerator.TOPLEFTCORNER = 1;
+  DungeonGenerator.TOPWALL = 2;
+  DungeonGenerator.TOPRIGHTCORNER = 5;
+  DungeonGenerator.LEFTWALL = 6;
+  DungeonGenerator.RIGHTWALL = 10;
+  DungeonGenerator.BOTTOMLEFTCORNER = 20;
+  DungeonGenerator.BOTTOMRIGHTCORNER = 24;
+  DungeonGenerator.BOTTOMWALL = 21;
+
 
   DungeonGenerator.prototype = {
       createSquare : function(){

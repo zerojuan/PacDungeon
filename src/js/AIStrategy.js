@@ -1,6 +1,8 @@
 (function(){
   'use strict';
 
+  var ns = window['pacdungeon'];
+
   function AIStrategy(pacman, ghost, safetile, opposites){
     this.pacman = pacman;
     this.ghost = ghost;
@@ -9,7 +11,8 @@
   }
 
   function doShadow(directions, current){
-    //stalks pacman everywhere    
+    console.log('Doing shadow...', ns.DungeonGenerator.TOPWALL);
+    //stalks pacman everywhere
     for(var t = 5; t > 0; t--){
       if(!directions[t]){
         continue;
@@ -19,7 +22,11 @@
         continue;
       }
 
-      if(directions[t].index === this.safetile){
+      if(directions[t].index === this.safetile ||
+        directions[t].index === ns.DungeonGenerator.TOPWALL ||
+        directions[t].index === ns.DungeonGenerator.RIGHTWALL ||
+        directions[t].index === ns.DungeonGenerator.BOTTOMWALL ||
+        directions[t].index === ns.DungeonGenerator.LEFTWALL){
         break;
       }
     }

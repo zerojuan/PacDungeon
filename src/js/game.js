@@ -9,6 +9,7 @@
     this.map = null;
     this.layers = [];
     this.layer = null;
+    this.ghostLayer = null;
     this.pacman = null;
     this.monsters = null;
 
@@ -47,12 +48,18 @@
       this.map = this.add.tilemap();
       this.map.addTilesetImage('tiles', 'tiles', 16, 16, 0, 0, 1);
       this.layer = this.map.create('main', this.size * 4, this.size * 4, 16, 16);
+      this.ghostLayer = this.map.createBlankLayer('ghostLayer', this.size * 4, this.size * 4, 16, 16);
 
       for (var i = 0; i < this.squareSize; i++) {
         for (var j = 0; j < this.squareSize; j++) {
           this.createSquare(i, j);
         }
       }
+
+      this.createGhostPrison();
+      this.ghostLayer.visible = false;
+      console.log('Ghost Layer: ', this.ghostLayer, this.map);
+      this.map.setLayer(this.layer);
 
       this.dots = this.add.physicsGroup();
       this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
@@ -63,6 +70,8 @@
 
       //  Pacman should collide with everything except the safe tile
       this.map.setCollisionByExclusion([this.safetile], true, this.layer);
+      // Ghosts should collide with the ghost layer
+      this.map.setCollisionByExclusion([this.safetile], true, this.ghostLayer);
 
       this.graphics = this.add.graphics(0, 0);
 
@@ -125,6 +134,19 @@
         for (var j = 0; j < this.size; j++) {
           this.map.putTile(level[j][i], (row * this.size) + j, (col * this.size) + i, this.layer);
         }
+      }
+    },
+
+    createGhostPrison: function(){
+      var width = this.size * 3;
+      var height = this.size * 3;
+      for(var i = 0; i < width; i++){
+        this.map.putTile(this.DungeonGenerator.TOPWALL, i, 0, this.ghostLayer);
+        this.map.putTile(this.DungeonGenerator.BOTTOMWALL, i, height-1, this.ghostLayer);
+      }
+      for(var j = 0; j < height; j++){
+        this.map.putTile(this.DungeonGenerator.RIGHTWALL, 0, j, this.ghostLayer);
+        this.map.putTile(this.DungeonGenerator.LEFTWALL, width-1, j, this.ghostLayer);
       }
     },
 
@@ -335,7 +357,7 @@
     },
 
     update: function() {
-      this.physics.arcade.collide(this.monsters, this.layer);
+      this.physics.arcade.collide(this.monsters, this.ghostLayer);
       this.physics.arcade.collide(this.pacman, this.layer);
       this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
       this.physics.arcade.overlap(this.pacman, this.monsters, this.touchMonsters, null, this);
@@ -365,7 +387,7 @@
     },
     render: function() {
       this.monsters.callAll('render');
-      this.pacman.render();      
+      this.pacman.render();
     }
 
   };
