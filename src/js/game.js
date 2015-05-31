@@ -3,6 +3,7 @@
 
   var ns = window['pacdungeon'];
   var that;
+
   function Game() {
     that = this;
     this.map = null;
@@ -15,25 +16,16 @@
     this.gridsize = 16;
 
     this.speed = 100;
-    this.threshold = 10;
-
     this.size = 10;
     this.squareSize = 3;
 
     this.DungeonGenerator = new ns.DungeonGenerator(this.size);
 
-    this.marker = new Phaser.Point();
-    this.turnPoint = new Phaser.Point();
-
-    this.directions = [ null, null, null, null, null ];
-    this.opposites = [ Phaser.NONE, Phaser.RIGHT, Phaser.LEFT, Phaser.DOWN, Phaser.UP ];
-
-    this.current = Phaser.NONE;
-    this.turning = Phaser.NONE;
+    this.opposites = [Phaser.NONE, Phaser.RIGHT, Phaser.LEFT, Phaser.DOWN, Phaser.UP];
 
     this.score = 0;
-    this.teleportZone = new Phaser.Point(0,0);
-    this.activeZone = new Phaser.Point(0,0);
+    this.teleportZone = new Phaser.Point(0, 0);
+    this.activeZone = new Phaser.Point(0, 0);
     //flag if pacman jumped and hasn't moved yet
     this.isFreshJump = false;
 
@@ -49,15 +41,15 @@
 
   Game.prototype = {
 
-    create: function () {
+    create: function() {
       this.stage.backgroundColor = '#2d2d2d';
 
       this.map = this.add.tilemap();
       this.map.addTilesetImage('tiles', 'tiles', 16, 16, 0, 0, 1);
       this.layer = this.map.create('main', this.size * 4, this.size * 4, 16, 16);
 
-      for(var i = 0; i < this.squareSize; i++){
-        for(var j = 0; j < this.squareSize; j++){
+      for (var i = 0; i < this.squareSize; i++) {
+        for (var j = 0; j < this.squareSize; j++) {
           this.createSquare(i, j);
         }
       }
@@ -76,8 +68,7 @@
 
       this.monsters = this.add.group();
 
-      this.createPacman((this.squareSize * 16) + 8,
-                        (this.squareSize * 16) + 8);
+      this.createPacman((this.squareSize * 16) + 8, (this.squareSize * 16) + 8);
 
 
 
@@ -86,38 +77,38 @@
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
-      this.moveToSquare(0,1);
+      this.moveToSquare(0, 1);
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
-      this.input.keyboard.onUpCallback = function(event){
+      this.input.keyboard.onUpCallback = function(event) {
         console.log('OnUp: ', event.keyCode, 'Key:', Phaser.Keyboard.UP);
-        if(event.keyCode === Phaser.Keyboard.SPACEBAR){
+        if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
           that.teleport();
-        }else if(event.keyCode === Phaser.Keyboard.UP){
+        } else if (event.keyCode === Phaser.Keyboard.UP) {
           that.updateTeleportZone(Phaser.UP);
-        }else if(event.keyCode === Phaser.Keyboard.DOWN){
+        } else if (event.keyCode === Phaser.Keyboard.DOWN) {
           that.updateTeleportZone(Phaser.DOWN);
-        }else if(event.keyCode === Phaser.Keyboard.LEFT){
+        } else if (event.keyCode === Phaser.Keyboard.LEFT) {
           that.updateTeleportZone(Phaser.LEFT);
-        }else if(event.keyCode === Phaser.Keyboard.RIGHT){
+        } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
           that.updateTeleportZone(Phaser.RIGHT);
         }
       };
 
       this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
       this.pacman.play('munch');
-      this.move(Phaser.LEFT);
+      this.pacman.move(Phaser.LEFT);
 
       this.teleportEmitter = this.add.emitter();
       this.appearEmitter = this.add.emitter();
-      var initEmitter = function(emitter){
-        emitter.makeParticles('pacman', [0,1,2]);
+      var initEmitter = function(emitter) {
+        emitter.makeParticles('pacman', [0, 1, 2]);
         emitter.maxParticleScale = 0.1;
         emitter.minParticleScale = 0.01;
         emitter.width = 20;
         emitter.setYSpeed(-20, -100);
-        emitter.setXSpeed(-5,5);
+        emitter.setXSpeed(-5, 5);
         emitter.gravity = -200;
       };
 
@@ -128,16 +119,16 @@
 
     },
 
-    createSquare: function(row, col){
+    createSquare: function(row, col) {
       var level = this.DungeonGenerator.createCross();
-      for(var i =0; i < this.size; i++){
-        for(var j =0; j < this.size; j++){
+      for (var i = 0; i < this.size; i++) {
+        for (var j = 0; j < this.size; j++) {
           this.map.putTile(level[j][i], (row * this.size) + j, (col * this.size) + i, this.layer);
         }
       }
     },
 
-    pickRandomSquare: function(){
+    pickRandomSquare: function() {
       var row = Math.floor(Math.random() * (this.squareSize));
       var col = Math.floor(Math.random() * (this.squareSize));
       return {
@@ -146,34 +137,34 @@
       };
     },
 
-    teleport: function(){
+    teleport: function() {
       this.teleportEmitter.x = this.pacman.x;
       this.teleportEmitter.y = this.pacman.y;
       this.teleportEmitter.start(true, 250, null, 20);
-      this.moveToSquare(this.teleportZone.x,this.teleportZone.y);
+      this.moveToSquare(this.teleportZone.x, this.teleportZone.y);
       this.appearEmitter.x = this.pacman.x;
       this.appearEmitter.y = this.pacman.y - 15;
       this.appearEmitter.start(true, 250, null, 20);
     },
 
-    createPacman: function(x,y){
+    createPacman: function(x, y) {
       this.pacman = new ns.Pacman(this, x, y);
       // this.game.add(this.pacman);
       this.game.add.existing(this.pacman);
     },
 
-    spawnMonsters: function(num){
-      for(var i = 0; i < num; i++){
+    spawnMonsters: function(num) {
+      for (var i = 0; i < num; i++) {
         //pick random col and row
 
         var pos = this.pickRandomSquare();
         var p = this.toWorldPosition(pos.row, pos.col, 6, 7);
-        console.log('Spawning ...' , pos);
+        console.log('Spawning ...', pos);
         this.createMonster(p.x, p.y);
       }
     },
 
-    createMonster: function(x,y){
+    createMonster: function(x, y) {
       var monster = new ns.MonsterAI(this, x, y, 'shadow');
       monster.player = this.pacman;
       monster.layer = this.layer;
@@ -181,7 +172,7 @@
       monster.map = this.map;
       this.physics.arcade.enable(monster);
       //add it to the group immediately
-      monster.body.setSize(16,16,0,0);
+      monster.body.setSize(16, 16, 0, 0);
       monster.anchor.set(0.5);
       monster.move(Phaser.DOWN);
       this.monsters.add(monster);
@@ -189,27 +180,22 @@
       return monster;
     },
 
-    toWorldPosition: function(squareRow, squareCol, row, col){
+    toWorldPosition: function(squareRow, squareCol, row, col) {
       //+8 is the offset
       return new Phaser.Point(
-        (16 * (row)) + 8 + (squareRow * this.size * this.gridsize),
-        (16 * (col)) + 8 + (squareCol* this.size * this.gridsize)
+        (16 * (row)) + 8 + (squareRow * this.size * this.gridsize), (16 * (col)) + 8 + (squareCol * this.size * this.gridsize)
       );
     },
 
-    getJumpTargetPosition: function(){
-      var marker = new Phaser.Point();
-      marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
-      marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
+    getJumpTargetPosition: function() {
+      var marker = this.pacman.getGridPosition();
       return this.toWorldPosition(this.teleportZone.x, this.teleportZone.y, marker.x % 10, marker.y % 10);
     },
 
-    moveToSquare: function(row, col){
+    moveToSquare: function(row, col) {
       //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
-      var marker = new Phaser.Point();
-      marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
-      marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
-      
+      var marker = this.pacman.getGridPosition();
+
       var p = this.toWorldPosition(row, col, marker.x % 10, marker.y % 10);
       this.pacman.x = p.x;
       this.pacman.y = p.y;
@@ -224,50 +210,41 @@
 
       // this.move(this.turning);
       //move to square based on angle
-      this.current = Phaser.NONE;
+      this.pacman.current = Phaser.NONE;
 
     },
 
-    checkKeys: function () {
+    checkKeys: function() {
 
-      if (this.cursors.left.isDown && this.current !== Phaser.LEFT)
-      {
-          this.checkDirection(Phaser.LEFT);
-      }
-      else if (this.cursors.right.isDown && this.current !== Phaser.RIGHT)
-      {
-          this.checkDirection(Phaser.RIGHT);
-      }
-      else if (this.cursors.up.isDown && this.current !== Phaser.UP)
-      {
-          this.checkDirection(Phaser.UP);
-      }
-      else if (this.cursors.down.isDown && this.current !== Phaser.DOWN)
-      {
-          this.checkDirection(Phaser.DOWN);
-      }
-      else
-      {
-          //  This forces them to hold the key down to turn the corner
-          this.turning = Phaser.NONE;
+      if (this.cursors.left.isDown && this.pacman.current !== Phaser.LEFT) {
+        this.pacman.checkDirection(Phaser.LEFT);
+      } else if (this.cursors.right.isDown && this.pacman.current !== Phaser.RIGHT) {
+        this.pacman.checkDirection(Phaser.RIGHT);
+      } else if (this.cursors.up.isDown && this.pacman.current !== Phaser.UP) {
+        this.pacman.checkDirection(Phaser.UP);
+      } else if (this.cursors.down.isDown && this.pacman.current !== Phaser.DOWN) {
+        this.pacman.checkDirection(Phaser.DOWN);
+      } else {
+        //  This forces them to hold the key down to turn the corner
+        this.pacman.turning = Phaser.NONE;
       }
 
     },
 
-    updateTeleportZone: function(direction){
-      var next = new Phaser.Point(0,0);
-      if(direction === Phaser.LEFT){
+    updateTeleportZone: function(direction) {
+      var next = new Phaser.Point(0, 0);
+      if (direction === Phaser.LEFT) {
         next.x--;
-      }else if(direction === Phaser.RIGHT){
+      } else if (direction === Phaser.RIGHT) {
         next.x++;
-      }else if(direction === Phaser.DOWN){
+      } else if (direction === Phaser.DOWN) {
         next.y++;
-      }else if(direction === Phaser.UP){
+      } else if (direction === Phaser.UP) {
         next.y--;
       }
 
       var prevZone = new Phaser.Point(this.teleportZone.x, this.teleportZone.y);
-      if(this.isFreshJump){
+      if (this.isFreshJump) {
         this.teleportZone.x = this.activeZone.x;
         this.teleportZone.y = this.activeZone.y;
         this.isFreshJump = false;
@@ -278,8 +255,8 @@
 
       this.clipTeleportZone();
 
-      if(this.teleportZone.x === this.activeZone.x &&
-        this.teleportZone.y === this.activeZone.y){
+      if (this.teleportZone.x === this.activeZone.x &&
+        this.teleportZone.y === this.activeZone.y) {
         this.teleportZone.x = prevZone.x;
         this.teleportZone.y = prevZone.y;
       }
@@ -287,227 +264,109 @@
       this.clipTeleportZone();
 
 
-      console.log('Teleport Zone:',this.teleportZone.x + ',' + this.teleportZone.y);
+      console.log('Teleport Zone:', this.teleportZone.x + ',' + this.teleportZone.y);
     },
 
-    clipTeleportZone: function(){
-      if(this.teleportZone.x < 0){
+    clipTeleportZone: function() {
+      if (this.teleportZone.x < 0) {
         this.teleportZone.x = 0;
-      }else if(this.teleportZone.x > this.squareSize-1){
-        this.teleportZone.x = this.squareSize-1;
+      } else if (this.teleportZone.x > this.squareSize - 1) {
+        this.teleportZone.x = this.squareSize - 1;
       }
 
-      if(this.teleportZone.y < 0){
+      if (this.teleportZone.y < 0) {
         this.teleportZone.y = 0;
-      }else if(this.teleportZone.y > this.squareSize-1){
-        this.teleportZone.y = this.squareSize-1;
+      } else if (this.teleportZone.y > this.squareSize - 1) {
+        this.teleportZone.y = this.squareSize - 1;
       }
     },
 
-    checkDirection: function (turnTo) {
-        if (this.turning === turnTo || this.directions[turnTo] === null || this.directions[turnTo].index !== this.safetile)
-        {
-            //  Invalid direction if they're already set to turn that way
-            //  Or there is no tile there, or the tile isn't index 1 (a floor tile)
-            return;
-        }
+    eatDot: function(pacman, dot) {
 
-        //  Check if they want to turn around and can
-        if (this.current === this.opposites[turnTo])
-        {
-            this.move(turnTo);
-        }
-        else
-        {
-            this.turning = turnTo;
+      dot.kill();
+      this.score++;
 
-            this.turnPoint.x = (this.marker.x * this.gridsize) + (this.gridsize / 2);
-            this.turnPoint.y = (this.marker.y * this.gridsize) + (this.gridsize / 2);
-        }
+      if (this.dots.total === 0) {
+
+        this.dots.callAll('revive');
+      }
 
     },
 
-    turn: function () {
-
-        var cx = Math.floor(this.pacman.x);
-        var cy = Math.floor(this.pacman.y);
-
-        //  This needs a threshold, because at high speeds you can't turn because the coordinates skip past
-        if (!this.math.fuzzyEqual(cx, this.turnPoint.x, this.threshold) || !this.math.fuzzyEqual(cy, this.turnPoint.y, this.threshold))
-        {
-            return false;
-        }
-
-        //  Grid align before turning
-        this.pacman.x = this.turnPoint.x;
-        this.pacman.y = this.turnPoint.y;
-
-        this.pacman.body.reset(this.turnPoint.x, this.turnPoint.y);
-
-        this.move(this.turning);
-
-        this.turning = Phaser.NONE;
-
-        return true;
-
-    },
-
-    move: function (direction) {
-
-        var speed = this.speed;
-
-        if (direction === Phaser.LEFT || direction === Phaser.UP)
-        {
-            speed = -speed;
-        }
-
-        if (direction === Phaser.LEFT || direction === Phaser.RIGHT)
-        {
-            this.pacman.body.velocity.x = speed;
-        }
-        else
-        {
-            this.pacman.body.velocity.y = speed;
-        }
-
-        //  Reset the scale and angle (Pacman is facing to the right in the sprite sheet)
-        this.pacman.scale.x = 1;
-        this.pacman.angle = 0;
-
-        if (direction === Phaser.LEFT)
-        {
-            this.pacman.scale.x = -1;
-        }
-        else if (direction === Phaser.UP)
-        {
-            this.pacman.angle = 270;
-        }
-        else if (direction === Phaser.DOWN)
-        {
-            this.pacman.angle = 90;
-        }
-
-        this.current = direction;
-
-    },
-
-    eatDot: function (pacman, dot) {
-
-        dot.kill();
-        this.score++;
-
-        if (this.dots.total === 0)
-        {
-
-            this.dots.callAll('revive');
-        }
-
-    },
-
-    touchMonsters: function(pacman, monster){
+    touchMonsters: function(pacman, monster) {
       console.log('touched the monster', monster);
     },
 
-    shakeScreen: function(){
+    shakeScreen: function() {
       if (this.shakeWorld > 0) {
-         var rand1 = this.rnd.integerInRange(-5,5);
-         var rand2 = this.rnd.integerInRange(-5,5);
-          this.game.world.setBounds(rand1, rand2, this.game.width + rand1, this.game.height + rand2);
-          this.shakeWorld--;
-          if (this.shakeWorld === 0) {
-              this.game.world.setBounds(0, 0, this.game.width,this.game.height); // normalize after shake?
-          }
+        var rand1 = this.rnd.integerInRange(-5, 5);
+        var rand2 = this.rnd.integerInRange(-5, 5);
+        this.game.world.setBounds(rand1, rand2, this.game.width + rand1, this.game.height + rand2);
+        this.shakeWorld--;
+        if (this.shakeWorld === 0) {
+          this.game.world.setBounds(0, 0, this.game.width, this.game.height); // normalize after shake?
+        }
       }
     },
 
-    drawTeleportPath: function(){
+    drawTeleportPath: function() {
       // set a fill and line style again
       this.graphics.clear();
       this.graphics.lineStyle(1, 0xFF0000, 0.8);
 
       // draw a second shape
       var targetPosition = this.getJumpTargetPosition();
-      this.graphics.moveTo(this.pacman.x,this.pacman.y);
+      this.graphics.moveTo(this.pacman.x, this.pacman.y);
       //calculate control points
       this.c1.x = this.pacman.x;
-      this.c1.y = this.pacman.y-15;
+      this.c1.y = this.pacman.y - 15;
       this.c2.x = targetPosition.x;
-      this.c2.y = targetPosition.y-15;
+      this.c2.y = targetPosition.y - 15;
 
-      if(this.pacman.y > targetPosition.y){
+      if (this.pacman.y > targetPosition.y) {
         this.c1.y = targetPosition.y;
-      }else if(this.pacman.y === targetPosition.y){
+      } else if (this.pacman.y === targetPosition.y) {
         this.c1.y -= 30;
-        this.c2.y -=30;
-      }else{
+        this.c2.y -= 30;
+      } else {
         this.c2.y = this.pacman.y;
       }
       this.graphics.bezierCurveTo(this.c1.x, this.c1.y, this.c2.x, this.c2.y, targetPosition.x, targetPosition.y);
     },
 
-    update: function () {
-        this.physics.arcade.collide(this.monsters, this.layer);
-        this.physics.arcade.collide(this.pacman, this.layer);
-        this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
-        this.physics.arcade.overlap(this.pacman, this.monsters, this.touchMonsters, null, this);
+    update: function() {
+      this.physics.arcade.collide(this.monsters, this.layer);
+      this.physics.arcade.collide(this.pacman, this.layer);
+      this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
+      this.physics.arcade.overlap(this.pacman, this.monsters, this.touchMonsters, null, this);
 
-        this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
-        this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
+      this.pacman.marker = this.pacman.getGridPosition();
 
-        if(this.marker.x < 0 || this.marker.y < 0){
-          return;
-        }
-        //  Update our grid sensors
-        this.directions[1] = this.map.getTileLeft(this.layer.index, this.marker.x, this.marker.y);
-        this.directions[2] = this.map.getTileRight(this.layer.index, this.marker.x, this.marker.y);
-        this.directions[3] = this.map.getTileAbove(this.layer.index, this.marker.x, this.marker.y);
-        this.directions[4] = this.map.getTileBelow(this.layer.index, this.marker.x, this.marker.y);
+      if (this.pacman.marker.x < 0 || this.pacman.marker.y < 0) {
+        return;
+      }
+      //  Update our grid sensors
+      this.pacman.directions[1] = this.map.getTileLeft(this.layer.index, this.pacman.marker.x, this.pacman.marker.y);
+      this.pacman.directions[2] = this.map.getTileRight(this.layer.index, this.pacman.marker.x, this.pacman.marker.y);
+      this.pacman.directions[3] = this.map.getTileAbove(this.layer.index, this.pacman.marker.x, this.pacman.marker.y);
+      this.pacman.directions[4] = this.map.getTileBelow(this.layer.index, this.pacman.marker.x, this.pacman.marker.y);
 
-        this.checkKeys();
+      this.checkKeys();
 
-        if (this.turning !== Phaser.NONE)
-        {
-            this.turn();
-        }
+      if (this.pacman.turning !== Phaser.NONE) {
+        this.pacman.turn();
+      }
 
-        //update graphics
-        this.drawTeleportPath();
+      //update graphics
+      this.drawTeleportPath();
 
-        this.shakeScreen();
+      this.shakeScreen();
 
     },
-    render: function () {
-            this.monsters.callAll('render');
-            //  Un-comment this to see the debug drawing
-
-            for (var t = 1; t < 5; t++)
-            {
-                if (this.directions[t] === null)
-                {
-                    continue;
-                }
-
-                var color = 'rgba(0,255,0,0.3)';
-
-                if (this.directions[t].index !== this.safetile)
-                {
-                    color = 'rgba(255,0,0,0.3)';
-                }
-
-                if (t === this.current)
-                {
-                    color = 'rgba(255,255,255,0.3)';
-                }
-
-                this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.gridsize, this.gridsize), color, true);
-            }
-
-            // this.game.debug.geom(new Phaser.Rectangle(this.teleportZone.x * this.gridsize * this.size,
-              // this.teleportZone.y * this.gridsize * this.size, this.gridsize * this.size, this.gridsize * this.size), 'rgba(255,255,255,0.3)', true);
-          // this.game.debug.geom(this.teleportZone, '#ffff00');
-          //this.game.debug.geom(new Phaser.Circle(this.c1.x, this.c1.y, 10), 'rgba(255,0,0,1)', true);
-          //this.game.debug.geom(new Phaser.Circle(this.c2.x, this.c2.y, 10), 'rgba(0,255,0,1)', true);
-        }
+    render: function() {
+      this.monsters.callAll('render');
+      this.pacman.render();      
+    }
 
   };
 
