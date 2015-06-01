@@ -30,6 +30,21 @@
     return marker;
   };
 
+  Pacman.prototype.getForwardPosition = function(howFar){
+    var marker = this.getGridPosition();
+    if(this.current === Phaser.LEFT){
+      marker.x -= howFar;
+    }else if(this.current === Phaser.RIGHT){
+      marker.x += howFar;
+    }else if(this.current === Phaser.UP){
+      marker.y -= howFar;
+    }else if(this.current === Phaser.DOWN){
+      marker.y += howFar;
+    }
+
+    return marker;
+  };
+
   Pacman.prototype.move = function(direction){
     var speed = this.speed;
 

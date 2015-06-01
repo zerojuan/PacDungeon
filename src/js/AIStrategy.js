@@ -11,9 +11,14 @@
   }
 
   function doShadow(directions, current){
-    console.log('Doing shadow...', ns.DungeonGenerator.TOPWALL);
+    /*jshint validthis:true */
+
+    var pacmanPos = this.pacman.getGridPosition();
+    var t = 0;
+    var min = 1000;
+    var nextDirection = Phaser.NONE;
     //stalks pacman everywhere
-    for(var t = 5; t > 0; t--){
+    for(t = 5; t > 0; t--){
       if(!directions[t]){
         continue;
       }
@@ -27,15 +32,29 @@
         directions[t].index === ns.DungeonGenerator.RIGHTWALL ||
         directions[t].index === ns.DungeonGenerator.BOTTOMWALL ||
         directions[t].index === ns.DungeonGenerator.LEFTWALL){
-        break;
+
+        //which of the directions is closer to the pacman?
+        var distance = Phaser.Math.distance(pacmanPos.x, pacmanPos.y, directions[t].x, directions[t].y);
+        if(distance < min){
+          nextDirection = t;
+          min = distance;
+        }
       }
     }
-    return t;
+
+    return nextDirection;
   }
 
   function doSpeedy(directions, current){
+    /*jshint validthis:true */
+    //get where pacman is facing
+    var pacmanPos = this.pacman.getForwardPosition(4);    
+    var t = 0;
+    var min = 1000;
+    var nextDirection = Phaser.NONE;
+
     //look forward four squares
-    for(var t = 1; t < 5; t++){
+    for(t = 1; t < 5; t++){
       if(!directions[t]){
         continue;
       }
@@ -44,14 +63,26 @@
         continue;
       }
 
-      if(directions[t].index === this.safetile){
-        break;
+      if(directions[t].index === this.safetile ||
+        directions[t].index === ns.DungeonGenerator.TOPWALL ||
+        directions[t].index === ns.DungeonGenerator.RIGHTWALL ||
+        directions[t].index === ns.DungeonGenerator.BOTTOMWALL ||
+        directions[t].index === ns.DungeonGenerator.LEFTWALL){
+
+        //which of the directions is closer to the pacman?
+        var distance = Phaser.Math.distance(pacmanPos.x, pacmanPos.y, directions[t].x, directions[t].y);
+        if(distance < min){
+          nextDirection = t;
+          min = distance;
+        }
       }
     }
-    return t;
+    return nextDirection;
   }
 
   function doBashful(directions, current){
+    /*jshint validthis:true */
+
     //two tiles forward, but consider shadow's position
     for(var t = 1; t < 5; t++){
       if(!directions[t]){
@@ -70,6 +101,8 @@
   }
 
   function doPokey(directions, current){
+    /*jshint validthis:true */
+
     //if far away from pacman, be like blinky
     //if close, scatter mode
     for(var t = 1; t < 5; t++){

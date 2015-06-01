@@ -25,7 +25,7 @@
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
 
     this.main = main;
-    this.speed = this.main.speed * 0.50;
+    this.speed = this.main.speed * 0.90;
     this.type = type || types[Math.floor(Math.random() * 4)];
     this.directions = [ null, null, null, null, null ];
     switch(this.type){
@@ -62,7 +62,7 @@
 
     this.targetFound = false;
 
-    this.strategy = new ns.AIStrategy(main.player, this, main.safetile, main.opposites);
+    this.strategy = new ns.AIStrategy(main.pacman, this, main.safetile, main.opposites);
     this.strategy.setStrategy(this.type);
 
     this.changeDirection = false;

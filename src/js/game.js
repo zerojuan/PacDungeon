@@ -82,7 +82,7 @@
 
 
       //spawn 4 monsters
-      this.spawnMonsters(1);
+      this.spawnMonsters(['shadow', 'speedy']);
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
@@ -175,19 +175,19 @@
       this.game.add.existing(this.pacman);
     },
 
-    spawnMonsters: function(num) {
-      for (var i = 0; i < num; i++) {
+    spawnMonsters: function(types) {
+      for (var i = 0; i < types.length; i++) {
         //pick random col and row
 
         var pos = this.pickRandomSquare();
         var p = this.toWorldPosition(pos.row, pos.col, 6, 7);
         console.log('Spawning ...', pos);
-        this.createMonster(p.x, p.y);
+        this.createMonster(p.x, p.y, types[i]);
       }
     },
 
-    createMonster: function(x, y) {
-      var monster = new ns.MonsterAI(this, x, y, 'shadow');
+    createMonster: function(x, y, type) {
+      var monster = new ns.MonsterAI(this, x, y, type);
       monster.player = this.pacman;
       monster.layer = this.layer;
       monster.gridsize = this.gridsize;
