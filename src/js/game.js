@@ -86,7 +86,7 @@
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
-      this.moveToSquare(0, 1);
+      this.moveToSquare(0, 0);
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -216,6 +216,13 @@
       return marker;
     },
 
+    toCellPosition: function(gridX, gridY){
+      var marker = new Phaser.Point();
+      marker.x =Math.floor(gridX / this.size);
+      marker.y = Math.floor(gridY / this.size);
+      return marker;
+    },
+
     getJumpTargetPosition: function() {
       var marker = this.pacman.getGridPosition();
       return this.toWorldPosition(this.teleportZone.x, this.teleportZone.y, marker.x % 10, marker.y % 10);
@@ -328,8 +335,22 @@
 
     isCellCleared: function(dot){
       var position = this.toGridPosition(dot.x, dot.y);
-      console.log('Grid Eaten:',position);
-      //get other dots in that cell
+      var cellPosition = this.toCellPosition(position.x, position.y);
+      // console.log('Grid Eaten:',position);
+      //loop through the elements in the dots
+      var alives = 0;
+      this.dots.forEachAlive(function(d){
+        //is same cell
+        var gPosition = this.toGridPosition(d.x, d.y);
+        var cPosition = this.toCellPosition(gPosition.x, gPosition.y);
+        if(cellPosition.x === cPosition.x && cellPosition.y === cPosition.y){
+          alives++;
+        }
+      }, this);
+
+      if(alives === 0){
+        console.log('Cleared!!');
+      }
     },
 
     touchMonsters: function(pacman, monster) {
