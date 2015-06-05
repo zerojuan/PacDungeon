@@ -209,6 +209,13 @@
       );
     },
 
+    toGridPosition: function(x,y){
+      var marker = new Phaser.Point();
+      marker.x = this.math.snapToFloor(Math.floor(x), this.gridsize) / this.gridsize;
+      marker.y = this.math.snapToFloor(Math.floor(y), this.gridsize) / this.gridsize;
+      return marker;
+    },
+
     getJumpTargetPosition: function() {
       var marker = this.pacman.getGridPosition();
       return this.toWorldPosition(this.teleportZone.x, this.teleportZone.y, marker.x % 10, marker.y % 10);
@@ -286,7 +293,7 @@
       this.clipTeleportZone();
 
 
-      console.log('Teleport Zone:', this.teleportZone.x + ',' + this.teleportZone.y);
+      // console.log('Teleport Zone:', this.teleportZone.x + ',' + this.teleportZone.y);
     },
 
     clipTeleportZone: function() {
@@ -306,13 +313,23 @@
     eatDot: function(pacman, dot) {
 
       dot.kill();
+
       this.score++;
+
+      //get dots in this area
+      this.isCellCleared(dot);
 
       if (this.dots.total === 0) {
 
         this.dots.callAll('revive');
       }
 
+    },
+
+    isCellCleared: function(dot){
+      var position = this.toGridPosition(dot.x, dot.y);
+      console.log('Grid Eaten:',position);
+      //get other dots in that cell
     },
 
     touchMonsters: function(pacman, monster) {

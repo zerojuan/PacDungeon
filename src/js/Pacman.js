@@ -24,10 +24,7 @@
   Pacman.prototype.constructor = Pacman;
 
   Pacman.prototype.getGridPosition = function(){
-    var marker = new Phaser.Point();
-    marker.x = this.main.math.snapToFloor(Math.floor(this.x), this.main.gridsize) / this.main.gridsize;
-    marker.y = this.main.math.snapToFloor(Math.floor(this.y), this.main.gridsize) / this.main.gridsize;
-    return marker;
+    return this.main.toGridPosition(this.x, this.y);    
   };
 
   Pacman.prototype.getForwardPosition = function(howFar){
