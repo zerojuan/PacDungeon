@@ -324,11 +324,11 @@
       this.score++;
 
       //get dots in this area
-      this.isCellCleared(dot);
+      var cell = this.isCellCleared(dot);
 
-      if (this.dots.total === 0) {
-
-        this.dots.callAll('revive');
+      if (cell) {
+        this.reviveCell(cell);
+        //this.dots.callAll('revive');
       }
 
     },
@@ -348,9 +348,22 @@
         }
       }, this);
 
-      if(alives === 0){
-        console.log('Cleared!!');
+      if(!alives){
+        return cellPosition;
       }
+      return false;
+    },
+
+    reviveCell: function(cell){
+      this.dots.forEachDead(function(d){
+        var gPosition = this.toGridPosition(d.x, d.y);
+        var cPosition = this.toCellPosition(gPosition.x, gPosition.y);
+        if(cell.x === cPosition.x && cell.y === cPosition.y){
+          console.log('Alive??', d);
+          // d.alive = true;
+          d.revive();
+        }
+      }, this);
     },
 
     touchMonsters: function(pacman, monster) {
