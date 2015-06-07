@@ -327,8 +327,8 @@
       var cell = this.isCellCleared(dot);
 
       if (cell) {
+        //TODO: add a timer to this cell
         this.reviveCell(cell);
-        //this.dots.callAll('revive');
       }
 
     },
@@ -429,6 +429,8 @@
       if (this.pacman.turning !== Phaser.NONE) {
         this.pacman.turn();
       }
+
+      //TODO: update cell refresh
 
       //update graphics
       this.drawTeleportPath();
