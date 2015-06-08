@@ -21,6 +21,11 @@
     this.squareSize = 3;
 
     this.DungeonGenerator = new ns.DungeonGenerator(this.size);
+    this.cells = [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null],
+    ];
 
     this.opposites = [Phaser.NONE, Phaser.RIGHT, Phaser.LEFT, Phaser.DOWN, Phaser.UP];
 
@@ -50,15 +55,16 @@
       this.layer = this.map.create('main', this.size * 4, this.size * 4, 16, 16);
       this.ghostLayer = this.map.createBlankLayer('ghostLayer', this.size * 4, this.size * 4, 16, 16);
 
-      for (var i = 0; i < this.squareSize; i++) {
-        for (var j = 0; j < this.squareSize; j++) {
-          this.createSquare(i, j);
+      var i = 0, j = 0;
+      for (i = 0; i < this.squareSize; i++) {
+        for (j = 0; j < this.squareSize; j++) {
+          var cellData = this.createCellData(i, j);
+          this.cells[i][j] = new ns.Cell(i,j,cellData);
         }
       }
 
       this.createGhostPrison();
       this.ghostLayer.visible = false;
-      console.log('Ghost Layer: ', this.ghostLayer, this.map);
       this.map.setLayer(this.layer);
 
       this.dots = this.add.physicsGroup();
@@ -67,6 +73,21 @@
       //  The dots will need to be offset by 6px to put them back in the middle of the grid
       this.dots.setAll('x', 6, false, false, 1);
       this.dots.setAll('y', 6, false, false, 1);
+
+      //add dots to Cells
+      for(i = 0; i < this.cells.length; i++){
+        for(j = 0; j < this.cells[i].length; j++){
+          var cell = this.cells[j][i];
+          this.dots.forEach(function(d){
+            var gPosition = this.toGridPosition(d.x, d.y);
+            var cPosition = this.toCellPosition(gPosition.x, gPosition.y);
+            if(cell.x === cPosition.x && cell.y === cPosition.y){
+              // d.alive = true;
+              cell.dots.push(d);
+            }
+          }, this);
+        }
+      }
 
       //  Pacman should collide with everything except the safe tile
       this.map.setCollisionByExclusion([this.safetile], true, this.layer);
@@ -81,7 +102,7 @@
 
 
 
-      //spawn 4 monsters
+      //spawn 2 monsters
       this.spawnMonsters(['shadow', 'speedy']);
 
       this.physics.arcade.enable(this.pacman);
@@ -90,8 +111,7 @@
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
-      this.input.keyboard.onUpCallback = function(event) {
-        console.log('OnUp: ', event.keyCode, 'Key:', Phaser.Keyboard.UP);
+      this.input.keyboard.onUpCallback = function(event) {        
         if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
           that.teleport();
         } else if (event.keyCode === Phaser.Keyboard.UP) {
@@ -128,13 +148,14 @@
 
     },
 
-    createSquare: function(row, col) {
+    createCellData: function(row, col) {
       var level = this.DungeonGenerator.createCross();
       for (var i = 0; i < this.size; i++) {
         for (var j = 0; j < this.size; j++) {
           this.map.putTile(level[j][i], (row * this.size) + j, (col * this.size) + i, this.layer);
         }
       }
+      return level;
     },
 
     createGhostPrison: function(){
@@ -326,10 +347,10 @@
       //get dots in this area
       var cell = this.isCellCleared(dot);
 
-      if (cell) {
-        //TODO: add a timer to this cell
-        this.reviveCell(cell);
-      }
+      // if (cell) {
+      //   //TODO: add a timer to this cell
+      //   this.reviveCell(cell);
+      // }
 
     },
 
@@ -338,36 +359,16 @@
       var cellPosition = this.toCellPosition(position.x, position.y);
       // console.log('Grid Eaten:',position);
       //loop through the elements in the dots
-      var alives = 0;
-      this.dots.forEachAlive(function(d){
-        //is same cell
-        var gPosition = this.toGridPosition(d.x, d.y);
-        var cPosition = this.toCellPosition(gPosition.x, gPosition.y);
-        if(cellPosition.x === cPosition.x && cellPosition.y === cPosition.y){
-          alives++;
-        }
-      }, this);
-
-      if(!alives){
-        return cellPosition;
+      if(this.cells[cellPosition.x][cellPosition.y].isCleared()){
+        console.log('Are we cleared?');
+        this.cells[cellPosition.x][cellPosition.y].revive();
       }
+
       return false;
     },
 
-    reviveCell: function(cell){
-      this.dots.forEachDead(function(d){
-        var gPosition = this.toGridPosition(d.x, d.y);
-        var cPosition = this.toCellPosition(gPosition.x, gPosition.y);
-        if(cell.x === cPosition.x && cell.y === cPosition.y){
-          console.log('Alive??', d);
-          // d.alive = true;
-          d.revive();
-        }
-      }, this);
-    },
-
     touchMonsters: function(pacman, monster) {
-      console.log('touched the monster', monster);
+      //console.log('touched the monster', monster);
     },
 
     shakeScreen: function() {
