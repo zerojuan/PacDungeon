@@ -1,12 +1,15 @@
 (function(){
   'use strict';
 
-  function Cell(x,y,data){
+  function Cell(x,y,data, timerContainer, game){
     this.x = x;
     this.y = y;
     this.data = data;
+    this.timerContainer = timerContainer;
 
     this.dots = [];
+    this.countdown = new Phaser.BitmapText(game, x * 16,y*16, 'minecraftia', 'START');
+    timerContainer.add(this.countdown);
   }
 
   Cell.prototype.isCleared = function(){

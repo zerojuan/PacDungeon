@@ -26,6 +26,7 @@
       [null, null, null],
       [null, null, null],
     ];
+    this.timerContainer = null;
 
     this.opposites = [Phaser.NONE, Phaser.RIGHT, Phaser.LEFT, Phaser.DOWN, Phaser.UP];
 
@@ -55,11 +56,13 @@
       this.layer = this.map.create('main', this.size * 4, this.size * 4, 16, 16);
       this.ghostLayer = this.map.createBlankLayer('ghostLayer', this.size * 4, this.size * 4, 16, 16);
 
+      this.timerContainer = this.add.group();
+
       var i = 0, j = 0;
       for (i = 0; i < this.squareSize; i++) {
         for (j = 0; j < this.squareSize; j++) {
           var cellData = this.createCellData(i, j);
-          this.cells[i][j] = new ns.Cell(i,j,cellData);
+          this.cells[i][j] = new ns.Cell(i,j,cellData, this.timerContainer, this.game);
         }
       }
 
@@ -111,7 +114,7 @@
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
-      this.input.keyboard.onUpCallback = function(event) {        
+      this.input.keyboard.onUpCallback = function(event) {
         if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
           that.teleport();
         } else if (event.keyCode === Phaser.Keyboard.UP) {
