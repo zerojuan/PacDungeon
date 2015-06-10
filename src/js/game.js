@@ -62,7 +62,7 @@
       for (i = 0; i < this.squareSize; i++) {
         for (j = 0; j < this.squareSize; j++) {
           var cellData = this.createCellData(i, j);
-          this.cells[i][j] = new ns.Cell(i,j,cellData, this.timerContainer, this.game);
+          this.cells[i][j] = new ns.Cell(i,j,cellData, this.timerContainer, this);
         }
       }
 
@@ -226,10 +226,10 @@
       return monster;
     },
 
-    toWorldPosition: function(squareRow, squareCol, row, col) {
+    toWorldPosition: function(cellRow, cellCol, row, col) {
       //+8 is the offset
       return new Phaser.Point(
-        (16 * (row)) + 8 + (squareRow * this.size * this.gridsize), (16 * (col)) + 8 + (squareCol * this.size * this.gridsize)
+        (16 * (row)) + 8 + (cellRow * this.size * this.gridsize), (16 * (col)) + 8 + (cellCol * this.size * this.gridsize)
       );
     },
 

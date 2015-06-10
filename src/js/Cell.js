@@ -1,14 +1,16 @@
 (function(){
   'use strict';
 
-  function Cell(x,y,data, timerContainer, game){
+  function Cell(x,y,data, timerContainer, main){
     this.x = x;
     this.y = y;
     this.data = data;
+    this.main = main;
     this.timerContainer = timerContainer;
 
     this.dots = [];
-    this.countdown = new Phaser.BitmapText(game, x * 16,y*16, 'minecraftia', 'START');
+    var pos = main.toWorldPosition(this.x, this.y, 0, 0);
+    this.countdown = new Phaser.BitmapText(main.game, pos.x,pos.y, 'minecraftia', '0');
     timerContainer.add(this.countdown);
   }
 
