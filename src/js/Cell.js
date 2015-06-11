@@ -12,6 +12,9 @@
     var pos = main.toWorldPosition(this.x, this.y, 0, 0);
     this.countdown = new Phaser.BitmapText(main.game, pos.x,pos.y, 'minecraftia', '0');
     timerContainer.add(this.countdown);
+
+    this.CELLREFRESHTIME = 3000;
+    this.cellRefresh = -1;
   }
 
   Cell.prototype.isCleared = function(){
@@ -21,12 +24,26 @@
       }
     }
 
+    this.cellRefresh = this.CELLREFRESHTIME;
     return true;
   };
 
   Cell.prototype.revive = function(){
     for(var i = 0; i < this.dots.length; i++){
       this.dots[i].revive();
+    }
+  };
+
+  Cell.prototype.update = function(time){
+    if(this.cellRefresh < 0){
+      return;
+    }
+
+    this.cellRefresh -= time.elapsed;
+    if(this.cellRefresh > 0){
+      this.countdown.text = Math.round(this.cellRefresh/1000);
+    }else if(this.cellRefresh < 0){
+      this.revive();
     }
   };
 

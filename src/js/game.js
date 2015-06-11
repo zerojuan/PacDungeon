@@ -348,7 +348,7 @@
       this.score++;
 
       //get dots in this area
-      var cell = this.isCellCleared(dot);
+      this.isCellCleared(dot);
 
       // if (cell) {
       //   //TODO: add a timer to this cell
@@ -362,12 +362,7 @@
       var cellPosition = this.toCellPosition(position.x, position.y);
       // console.log('Grid Eaten:',position);
       //loop through the elements in the dots
-      if(this.cells[cellPosition.x][cellPosition.y].isCleared()){
-        console.log('Are we cleared?');
-        this.cells[cellPosition.x][cellPosition.y].revive();
-      }
-
-      return false;
+      this.cells[cellPosition.x][cellPosition.y].isCleared();
     },
 
     touchMonsters: function(pacman, monster) {
@@ -411,7 +406,7 @@
       this.graphics.bezierCurveTo(this.c1.x, this.c1.y, this.c2.x, this.c2.y, targetPosition.x, targetPosition.y);
     },
 
-    update: function() {
+    update: function(game) {
       this.physics.arcade.collide(this.monsters, this.ghostLayer);
       this.physics.arcade.collide(this.pacman, this.layer);
       this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
@@ -435,6 +430,11 @@
       }
 
       //TODO: update cell refresh
+      for(var i = 0; i < this.cells.length; i++){
+        for(var j = 0; j < this.cells[i].length; j++){
+          this.cells[i][j].update(game.time);
+        }
+      }
 
       //update graphics
       this.drawTeleportPath();
