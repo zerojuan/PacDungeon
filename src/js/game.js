@@ -428,8 +428,7 @@
       if (this.pacman.turning !== Phaser.NONE) {
         this.pacman.turn();
       }
-
-      //TODO: update cell refresh
+      
       for(var i = 0; i < this.cells.length; i++){
         for(var j = 0; j < this.cells[i].length; j++){
           this.cells[i][j].update(game.time);
