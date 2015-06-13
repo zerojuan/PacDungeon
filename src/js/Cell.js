@@ -67,9 +67,15 @@
 
   Cell.prototype.nextLevel = function(){
     //load a different level data
-    var level = this.main.DungeonGenerator.createSquare();
-    this.main.createCellData(this.x, this.y, level);
-    this.data = level;
+    var levelData = null;
+    this.level++;
+    if(this.level%2){
+      levelData = this.main.DungeonGenerator.createCross();
+    }else{
+      levelData = this.main.DungeonGenerator.createSquare();
+    }    
+    this.main.createCellData(this.x, this.y, levelData);
+    this.data = levelData;
     this.revive();
   };
 
