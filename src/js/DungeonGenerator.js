@@ -1,5 +1,5 @@
 (function(){
-  'use strict';
+  'use strict';  
 
   function DungeonGenerator(size){
     this.size = size || 10;

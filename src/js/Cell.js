@@ -2,6 +2,8 @@
   'use strict';
 
   function Cell(x,y,data, timerContainer, main){
+    this.level = 0;
+
     this.x = x;
     this.y = y;
     this.data = data;
@@ -34,6 +36,13 @@
     }
   };
 
+  Cell.prototype.nextLevel = function(){
+    //load a different level data
+    var level = this.main.DungeonGenerator.createSquare();
+    this.main.createCellData(this.y, this.x, level);
+    //this.revive();
+  };
+
   Cell.prototype.update = function(time){
     if(this.cellRefresh < 0){
       return;
@@ -43,7 +52,7 @@
     if(this.cellRefresh > 0){
       this.countdown.text = Math.round(this.cellRefresh/1000);
     }else if(this.cellRefresh < 0){
-      this.revive();
+      this.nextLevel();
     }
   };
 

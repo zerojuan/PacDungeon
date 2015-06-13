@@ -61,7 +61,8 @@
       var i = 0, j = 0;
       for (i = 0; i < this.squareSize; i++) {
         for (j = 0; j < this.squareSize; j++) {
-          var cellData = this.createCellData(i, j);
+          var level = this.DungeonGenerator.createCross();
+          var cellData = this.createCellData(i, j, level);
           this.cells[i][j] = new ns.Cell(i,j,cellData, this.timerContainer, this);
         }
       }
@@ -151,8 +152,7 @@
 
     },
 
-    createCellData: function(row, col) {
-      var level = this.DungeonGenerator.createCross();
+    createCellData: function(row, col, level) {
       for (var i = 0; i < this.size; i++) {
         for (var j = 0; j < this.size; j++) {
           this.map.putTile(level[j][i], (row * this.size) + j, (col * this.size) + i, this.layer);
@@ -428,7 +428,7 @@
       if (this.pacman.turning !== Phaser.NONE) {
         this.pacman.turn();
       }
-      
+
       for(var i = 0; i < this.cells.length; i++){
         for(var j = 0; j < this.cells[i].length; j++){
           this.cells[i][j].update(game.time);
