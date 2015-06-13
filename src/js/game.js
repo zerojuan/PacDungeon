@@ -152,10 +152,15 @@
 
     },
 
+    createDot: function(){
+      var dot = this.add.sprite(0,0,'dot',this.dots);
+      this.dots.add(dot);      
+      return dot;
+    },
+
     createCellData: function(row, col, level) {
       for (var i = 0; i < this.size; i++) {
         for (var j = 0; j < this.size; j++) {
-          this.map.putTile(null, (row * this.size) + j, (col * this.size) + i, this.layer);
           this.map.putTile(level[j][i], (row * this.size) + j, (col * this.size) + i, this.layer);
         }
       }

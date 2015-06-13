@@ -31,15 +31,45 @@
   };
 
   Cell.prototype.revive = function(){
-    for(var i = 0; i < this.dots.length; i++){
-      this.dots[i].revive();
+    var dotIndex = 0;
+    var dotLength = this.dots.length;
+
+    //foreach safetile
+    for(var i = 0; i < this.data.length; i++){
+      for(var j = 0; j < this.data[i].length; j++){
+        if(this.data[i][j] === 14){
+          var dot = this.dots[dotIndex];
+          if(!dot){
+            dot = this.main.createDot();
+            this.dots.push(dot);
+          }
+          var pos = this.main.toWorldPosition(this.x, this.y, i, j);
+
+          dot.revive();
+          dotIndex++;
+          dot.x = pos.x - 3;
+          dot.y = pos.y - 3;
+        }
+
+      }
     }
+      //get dot
+      //if ran out of dots
+        //create a dot
+      //put dot on safetile location
+
+
+
+    // for(var i = 0; i < this.dots.length; i++){
+    //   this.dots[i].revive();
+    // }
   };
 
   Cell.prototype.nextLevel = function(){
     //load a different level data
     var level = this.main.DungeonGenerator.createSquare();
     this.main.createCellData(this.x, this.y, level);
+    this.data = level;
     this.revive();
   };
 
