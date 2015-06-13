@@ -1,5 +1,5 @@
 (function(){
-  'use strict';  
+  'use strict';
 
   function DungeonGenerator(size){
     this.size = size || 10;
@@ -11,7 +11,7 @@
     this.BOTTOMLEFTCORNER = 20;
     this.BOTTOMRIGHTCORNER = 24;
     this.BOTTOMWALL = 21;
-    this.SAFE = 7;
+    this.SAFE = 14;
   }
 
   DungeonGenerator.TOPLEFTCORNER = 1;

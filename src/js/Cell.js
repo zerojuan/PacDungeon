@@ -39,8 +39,10 @@
   Cell.prototype.nextLevel = function(){
     //load a different level data
     var level = this.main.DungeonGenerator.createSquare();
+    console.log(level);
     this.main.createCellData(this.y, this.x, level);
-    //this.revive();
+    console.log(this.main.map);
+    this.revive();
   };
 
   Cell.prototype.update = function(time){

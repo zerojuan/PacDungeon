@@ -4,7 +4,7 @@
   function Pacman(main, x, y){
     Phaser.Sprite.call(this, main.game, x, y, 'pacman');
 
-    this.debug = false;
+    this.debug = true;
 
     this.main = main;
 
@@ -24,7 +24,7 @@
   Pacman.prototype.constructor = Pacman;
 
   Pacman.prototype.getGridPosition = function(){
-    return this.main.toGridPosition(this.x, this.y);    
+    return this.main.toGridPosition(this.x, this.y);
   };
 
   Pacman.prototype.getForwardPosition = function(howFar){
@@ -131,6 +131,7 @@
           if (this.directions[t].index !== this.main.safetile)
           {
               color = 'rgba(255,0,0,0.3)';
+              // console.log('Tile is: ', this.directions[t].index);
           }
 
           if (t === this.current)

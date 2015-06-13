@@ -72,7 +72,7 @@
       this.map.setLayer(this.layer);
 
       this.dots = this.add.physicsGroup();
-      this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
+      this.map.createFromTiles(14, this.safetile, 'dot', this.layer, this.dots);
 
       //  The dots will need to be offset by 6px to put them back in the middle of the grid
       this.dots.setAll('x', 6, false, false, 1);
@@ -97,7 +97,7 @@
       this.map.setCollisionByExclusion([this.safetile], true, this.layer);
       // Ghosts should collide with the ghost layer
       this.map.setCollisionByExclusion([this.safetile], true, this.ghostLayer);
-
+      console.log(this.map);
       this.graphics = this.add.graphics(0, 0);
 
       this.monsters = this.add.group();
@@ -155,6 +155,7 @@
     createCellData: function(row, col, level) {
       for (var i = 0; i < this.size; i++) {
         for (var j = 0; j < this.size; j++) {
+          this.map.putTile(null, (row * this.size) + j, (col * this.size) + i, this.layer);
           this.map.putTile(level[j][i], (row * this.size) + j, (col * this.size) + i, this.layer);
         }
       }
@@ -418,10 +419,11 @@
         return;
       }
       //  Update our grid sensors
-      this.pacman.directions[1] = this.map.getTileLeft(this.layer.index, this.pacman.marker.x, this.pacman.marker.y);
-      this.pacman.directions[2] = this.map.getTileRight(this.layer.index, this.pacman.marker.x, this.pacman.marker.y);
-      this.pacman.directions[3] = this.map.getTileAbove(this.layer.index, this.pacman.marker.x, this.pacman.marker.y);
-      this.pacman.directions[4] = this.map.getTileBelow(this.layer.index, this.pacman.marker.x, this.pacman.marker.y);
+      var index = this.map.getLayer(this.layer);
+      this.pacman.directions[1] = this.map.getTileLeft(index, this.pacman.marker.x, this.pacman.marker.y);
+      this.pacman.directions[2] = this.map.getTileRight(index, this.pacman.marker.x, this.pacman.marker.y);
+      this.pacman.directions[3] = this.map.getTileAbove(index, this.pacman.marker.x, this.pacman.marker.y);
+      this.pacman.directions[4] = this.map.getTileBelow(index, this.pacman.marker.x, this.pacman.marker.y);
 
       this.checkKeys();
 
