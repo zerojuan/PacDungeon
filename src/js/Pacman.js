@@ -4,7 +4,7 @@
   function Pacman(main, x, y){
     Phaser.Sprite.call(this, main.game, x, y, 'pacman');
 
-    this.debug = true;
+    this.debug = false
 
     this.main = main;
 
