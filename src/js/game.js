@@ -375,6 +375,10 @@
       //console.log('touched the monster', monster);
     },
 
+    doShakeScreen: function(){
+      this.shakeWorld = 30;
+    },
+
     shakeScreen: function() {
       if (this.shakeWorld > 0) {
         var rand1 = this.rnd.integerInRange(-5, 5);

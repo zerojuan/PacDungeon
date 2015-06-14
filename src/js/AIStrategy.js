@@ -145,12 +145,13 @@
 
   AIStrategy.prototype.isAtEdge = function(tile){
     if(tile === ns.DungeonGenerator.TOPWALL){
-      console.log('Ghost Marker: ', this.ghost.forwardMarker.y, this.ghost.forwardMarker.y === 1);
+
       return this.ghost.forwardMarker.y === 1;
     }else if(tile === ns.DungeonGenerator.RIGHTWALL){
-      return this.ghost.forwardMarker.x === 38;
+      console.log('Ghost Marker: ', this.ghost.forwardMarker.x, this.ghost.forwardMarker.x === 38);
+      return this.ghost.forwardMarker.x === 28;
     }else if(tile === ns.DungeonGenerator.BOTTOMWALL){
-      return this.ghost.forwardMarker.y === 38;
+      return this.ghost.forwardMarker.y === 28;
     }else if(tile === ns.DungeonGenerator.LEFTWALL){
       return this.ghost.forwardMarker.x === 1;
     }
