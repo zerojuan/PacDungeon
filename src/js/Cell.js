@@ -32,7 +32,6 @@
 
   Cell.prototype.revive = function(){
     var dotIndex = 0;
-    var dotLength = this.dots.length;
 
     //foreach safetile
     for(var i = 0; i < this.data.length; i++){
@@ -73,10 +72,11 @@
       levelData = this.main.DungeonGenerator.createCross();
     }else{
       levelData = this.main.DungeonGenerator.createSquare();
-    }    
+    }
     this.main.createCellData(this.x, this.y, levelData);
     this.data = levelData;
     this.revive();
+    this.main.doShakeScreen();
   };
 
   Cell.prototype.update = function(time){
