@@ -33,22 +33,24 @@
         directions[t].index === ns.DungeonGenerator.BOTTOMWALL ||
         directions[t].index === ns.DungeonGenerator.LEFTWALL){
 
-        //which of the directions is closer to the pacman?
-        var distance = Phaser.Math.distance(pacmanPos.x, pacmanPos.y, directions[t].x, directions[t].y);
-        if(distance < min){
-          nextDirection = t;
-          min = distance;
+        if(!this.isAtEdge(directions[t].index)){
+          //which of the directions is closer to the pacman?
+          var distance = Phaser.Math.distance(pacmanPos.x, pacmanPos.y, directions[t].x, directions[t].y);
+          if(distance < min){
+            nextDirection = t;
+            min = distance;
+          }
         }
+
       }
     }
-
     return nextDirection;
   }
 
   function doSpeedy(directions, current){
     /*jshint validthis:true */
     //get where pacman is facing
-    var pacmanPos = this.pacman.getForwardPosition(4);    
+    var pacmanPos = this.pacman.getForwardPosition(4);
     var t = 0;
     var min = 1000;
     var nextDirection = Phaser.NONE;
@@ -69,14 +71,17 @@
         directions[t].index === ns.DungeonGenerator.BOTTOMWALL ||
         directions[t].index === ns.DungeonGenerator.LEFTWALL){
 
-        //which of the directions is closer to the pacman?
-        var distance = Phaser.Math.distance(pacmanPos.x, pacmanPos.y, directions[t].x, directions[t].y);
-        if(distance < min){
-          nextDirection = t;
-          min = distance;
+        if(!this.isAtEdge(directions[t].index)){
+          //which of the directions is closer to the pacman?
+          var distance = Phaser.Math.distance(pacmanPos.x, pacmanPos.y, directions[t].x, directions[t].y);
+          if(distance < min){
+            nextDirection = t;
+            min = distance;
+          }
         }
       }
     }
+
     return nextDirection;
   }
 
@@ -136,6 +141,22 @@
         this.getNextDirection = doPokey;
         break;
     }
+  };
+
+  AIStrategy.prototype.isAtEdge = function(tile){
+    if(tile === ns.DungeonGenerator.TOPWALL){
+      console.log('Ghost Marker: ', this.ghost.forwardMarker.y, this.ghost.forwardMarker.y === 1);
+      return this.ghost.forwardMarker.y === 1;
+    }else if(tile === ns.DungeonGenerator.RIGHTWALL){
+      return this.ghost.forwardMarker.x === 38;
+    }else if(tile === ns.DungeonGenerator.BOTTOMWALL){
+      return this.ghost.forwardMarker.y === 38;
+    }else if(tile === ns.DungeonGenerator.LEFTWALL){
+      return this.ghost.forwardMarker.x === 1;
+    }
+
+    return false;
+
   };
 
   window['pacdungeon'] = window['pacdungeon'] || {};

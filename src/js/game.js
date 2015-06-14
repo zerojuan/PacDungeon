@@ -107,7 +107,7 @@
 
 
       //spawn 2 monsters
-      this.spawnMonsters(['shadow', 'speedy']);
+      this.spawnMonsters(['shadow']);//, 'speedy']);
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
@@ -154,7 +154,7 @@
 
     createDot: function(){
       var dot = this.add.sprite(0,0,'dot',this.dots);
-      this.dots.add(dot);      
+      this.dots.add(dot);
       return dot;
     },
 

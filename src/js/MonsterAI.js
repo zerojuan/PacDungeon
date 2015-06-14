@@ -180,34 +180,34 @@
   };
 
   MonsterAI.prototype.render = function(){
-    // for (var t = 0; t < 5; t++)
-    // {
-    //     if (this.directions[t] === null)
-    //     {
-    //         continue;
-    //     }
-    //
-    //     var color = 'rgba(0,255,0,0.3)';
-    //
-    //     if (this.directions[t].index !== this.main.safetile)
-    //     {
-    //         color = 'rgba(255,0,0,0.3)';
-    //     }
-    //
-    //     if (t === this.current)
-    //     {
-    //         color = 'rgba(255,255,255,0.3)';
-    //     }
-    //
-    //     this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY,
-    //      this.gridsize, this.gridsize), color, true);
-    // }
-    // // this.game.debug.geom(new Phaser.Line())
-    // this.game.debug.geom(new Phaser.Circle(this.turnPoint.x, this.turnPoint.y, 5), 'rgba(255,0,0,1)');
-    // // this.game.debug.geom(new Phaser.Circle(this.futurePoint.x, this.futurePoint.y, 5), 'rgba(0,255,0,1)');
-    // this.game.debug.geom(new Phaser.Circle(this.x, this.y, 5), 'rgba(0,0,0,1)');
-    // this.game.debug.geom(new Phaser.Circle(this.marker.x, this.marker.y, 5), 'rgba(0,255,0,1)');
-    // // this.game.debug.geom(new Phaser.Rectangle(this.body.x, this.body.y, this.body.width, this.body.height), 0xffffff, true);
+    for (var t = 0; t < 5; t++)
+    {
+        if (this.directions[t] === null)
+        {
+            continue;
+        }
+
+        var color = 'rgba(0,255,0,0.3)';
+
+        if (this.directions[t].index !== this.main.safetile)
+        {
+            color = 'rgba(255,0,0,0.3)';
+        }
+
+        if (t === this.current)
+        {
+            color = 'rgba(255,255,255,0.3)';
+        }
+
+        this.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY,
+         this.gridsize, this.gridsize), color, true);
+    }
+    // this.game.debug.geom(new Phaser.Line())
+    this.game.debug.geom(new Phaser.Circle(this.turnPoint.x, this.turnPoint.y, 5), 'rgba(255,0,0,1)');
+    // this.game.debug.geom(new Phaser.Circle(this.futurePoint.x, this.futurePoint.y, 5), 'rgba(0,255,0,1)');
+    this.game.debug.geom(new Phaser.Circle(this.x, this.y, 5), 'rgba(0,0,0,1)');
+    this.game.debug.geom(new Phaser.Circle(this.marker.x, this.marker.y, 5), 'rgba(0,255,0,1)');
+    // this.game.debug.geom(new Phaser.Rectangle(this.body.x, this.body.y, this.body.width, this.body.height), 0xffffff, true);
   };
 
   window['pacdungeon'] = window['pacdungeon'] || {};
