@@ -79,6 +79,26 @@
         data[4][3] = 10+1;
 
         return data;
+      },
+      createFace: function(){
+        var data = this.createSquare();
+        data[2][2] = 10+1;
+        data[3][2] = 15+1;
+        data[4][2] = 15+1;
+        data[5][2] = 15+1;
+        data[6][2] = 15+1;
+        data[7][2] = 12+1;
+        data[2][3] = 14+1;
+        data[7][3] = 16+1;
+        data[3][3] = 15+1;
+        data[4][3] = 15+1;
+        data[5][3] = 15+1;
+        data[6][3] = 15+1;
+
+                
+
+
+        return data;
       }
   };
 
