@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="16" tileheight="16" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" nextobjectid="1">
  <tileset firstgid="1" name="pacman-tiles" tilewidth="16" tileheight="16">
   <image source="pacman-tiles.png" width="256" height="48"/>
  </tileset>
- <layer name="Pacman" width="10" height="10">
+ <layer name="Pacman" width="30" height="30">
   <data encoding="base64" compression="zlib">
-   eJxjYCAOMAIxEwHMCsRsQMxOAHPRWB03EPMAMS8BdfxALADEgnRwnwgQixLAEkAMAK7rAw0=
+   eJztlO0KwjAMRavgx1q166rV939SM0ghXCJ2WiZCfhwGIe1Je1k3zrntyuyIPXFowHfs8+ANxElwVvYLUMcaejMxvfEeiYtgULyRSLCPrHlwDbyvnAG98/pRkBQv3g2efe4rxF3x1jp6W3KrvsR3EsGP80nvN/nWLDJ/J8hEejPPFyHjT/OtM41wfvQW7gvi3jXvknwj+F71FXBq3rX/31sDvmPfr89rXvOa93+99l6Z17zmXeK9urb3oCcP4gktDyAJ
   </data>
  </layer>
 </map>
