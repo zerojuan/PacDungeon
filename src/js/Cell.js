@@ -37,6 +37,7 @@
     for(var i = 0; i < this.data.length; i++){
       for(var j = 0; j < this.data[i].length; j++){
         if(this.data[i][j] === 7){
+          this.data[i][j] = 14;
           var dot = this.dots[dotIndex];
           if(!dot){
             dot = this.main.createDot();
@@ -49,7 +50,6 @@
           dot.x = pos.x - 3;
           dot.y = pos.y - 3;
         }
-
       }
     }
       //get dot
@@ -66,12 +66,11 @@
 
   Cell.prototype.nextLevel = function(){
     //load a different level data
-    var levelData = null;
     this.level++;
-    levelData = this.main.DungeonGenerator.loadLevel(this.level);
-    this.main.createCellData(this.x, this.y, levelData);
-    this.data = levelData;
-    this.revive();
+    this.data = this.main.DungeonGenerator.loadLevel(this.level);
+    this.revive(); //check where '7' is, and revive our dot sprites there
+
+    this.main.createCellData(this.x, this.y, this.data);
     this.main.doShakeScreen();
   };
 

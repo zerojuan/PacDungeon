@@ -66,8 +66,8 @@
         var row = level % 3;
         var col = Math.floor(level / 3);
         var data = this.createSquare();
-        for(var i = 1; i < data.length-1; i++){
-          for(var j = 1; j < data[i].length-1; j++){
+        for(var i = 0; i < data.length; i++){
+          for(var j = 0; j < data[i].length; j++){
             var x = (row * 10) + i;
             var y = (col * 10) + j;
             data[i][j] = this.tilemap.getTile(x,y,0).index;
