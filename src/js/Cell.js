@@ -36,7 +36,7 @@
     //foreach safetile
     for(var i = 0; i < this.data.length; i++){
       for(var j = 0; j < this.data[i].length; j++){
-        if(this.data[i][j] === 14){
+        if(this.data[i][j] === 7){
           var dot = this.dots[dotIndex];
           if(!dot){
             dot = this.main.createDot();
@@ -68,11 +68,7 @@
     //load a different level data
     var levelData = null;
     this.level++;
-    if(this.level%2){
-      levelData = this.main.DungeonGenerator.createCross();
-    }else{
-      levelData = this.main.DungeonGenerator.createSquare();
-    }
+    levelData = this.main.DungeonGenerator.loadLevel(this.level);
     this.main.createCellData(this.x, this.y, levelData);
     this.data = levelData;
     this.revive();

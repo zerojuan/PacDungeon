@@ -20,7 +20,7 @@
     this.size = 10;
     this.squareSize = 3;
 
-    this.DungeonGenerator = new ns.DungeonGenerator(this.size);
+    this.DungeonGenerator = null;
     this.cells = [
       [null, null, null],
       [null, null, null],
@@ -58,10 +58,13 @@
 
       this.timerContainer = this.add.group();
 
+      var levelTilemap = this.game.add.tilemap('levels');
+      this.DungeonGenerator = new ns.DungeonGenerator(this.size, levelTilemap);
+
       var i = 0, j = 0;
       for (i = 0; i < this.squareSize; i++) {
         for (j = 0; j < this.squareSize; j++) {
-          var level = this.DungeonGenerator.createFace();
+          var level = this.DungeonGenerator.loadLevel(0);
           var cellData = this.createCellData(i, j, level);
           this.cells[i][j] = new ns.Cell(i,j,cellData, this.timerContainer, this);
         }
@@ -72,7 +75,7 @@
       this.map.setLayer(this.layer);
 
       this.dots = this.add.physicsGroup();
-      this.map.createFromTiles(14, this.safetile, 'dot', this.layer, this.dots);
+      this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
 
       //  The dots will need to be offset by 6px to put them back in the middle of the grid
       this.dots.setAll('x', 6, false, false, 1);

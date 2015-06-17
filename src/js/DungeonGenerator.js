@@ -1,7 +1,9 @@
 (function(){
   'use strict';
 
-  function DungeonGenerator(size){
+  function DungeonGenerator(size, tilemap){
+    this.tilemap = tilemap;
+    console.log('tilemap?', tilemap);
     this.size = size || 10;
     this.TOPLEFTCORNER = 1;
     this.TOPWALL = 2;
@@ -60,6 +62,20 @@
           }
           return data;
       },
+      loadLevel: function(level){
+        var row = level % 3;
+        var col = Math.floor(level / 3);
+        var data = this.createSquare();
+        for(var i = 1; i < data.length-1; i++){
+          for(var j = 1; j < data[i].length-1; j++){
+            var x = (row * 10) + i;
+            var y = (col * 10) + j;
+            data[i][j] = this.tilemap.getTile(x,y,0).index;
+          }
+        }
+        console.log(data);
+        return data;
+      },
       createCross: function(){
         var data = this.createSquare();
         data[4][3] = 10+1;
@@ -95,7 +111,7 @@
         data[5][3] = 15+1;
         data[6][3] = 15+1;
 
-                
+
 
 
         return data;
