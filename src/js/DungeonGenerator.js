@@ -65,55 +65,15 @@
       loadLevel: function(level){
         var row = level % 3;
         var col = Math.floor(level / 3);
-        var data = this.createSquare();
-        for(var i = 0; i < data.length; i++){
-          for(var j = 0; j < data[i].length; j++){
+        var data = [];
+        for(var i = 0; i < this.size; i++){
+          data.push([]);
+          for(var j = 0; j < this.size; j++){
             var x = (row * 10) + i;
             var y = (col * 10) + j;
             data[i][j] = this.tilemap.getTile(x,y,0).index;
           }
         }
-        console.log(data);
-        return data;
-      },
-      createCross: function(){
-        var data = this.createSquare();
-        data[4][3] = 10+1;
-        data[5][3] = 12+1;
-        data[5][4] = 8+1;
-        data[5][5] = 21+1;
-        data[6][5] = 12+1;
-        data[6][6] = 16+1;
-        data[5][6] = 18+1;
-        data[5][7] = 16+1;
-        data[4][7] = 14+1;
-        data[4][6] = 17+1;
-        data[3][6] = 14+1;
-        data[3][5] = 10+1;
-        data[4][5] = 22+1;
-        data[4][4] = 7+1;
-        data[4][3] = 10+1;
-
-        return data;
-      },
-      createFace: function(){
-        var data = this.createSquare();
-        data[2][2] = 10+1;
-        data[3][2] = 15+1;
-        data[4][2] = 15+1;
-        data[5][2] = 15+1;
-        data[6][2] = 15+1;
-        data[7][2] = 12+1;
-        data[2][3] = 14+1;
-        data[7][3] = 16+1;
-        data[3][3] = 15+1;
-        data[4][3] = 15+1;
-        data[5][3] = 15+1;
-        data[6][3] = 15+1;
-
-
-
-
         return data;
       }
   };
