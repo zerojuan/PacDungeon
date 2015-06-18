@@ -18,6 +18,8 @@
     this.turning = Phaser.NONE;
 
     this.directions = [null, null, null, null, null];
+
+    this.previousTarget = null;
   }
 
   Pacman.prototype = Object.create(Phaser.Sprite.prototype);

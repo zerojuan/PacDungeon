@@ -258,16 +258,25 @@
 
     getJumpTargetPosition: function() {
       var marker = this.pacman.getGridPosition();
-      return this.toWorldPosition(this.teleportZone.x, this.teleportZone.y, marker.x % 10, marker.y % 10);
+      var targetPosition = this.toWorldPosition(this.teleportZone.x, this.teleportZone.y, marker.x % 10, marker.y % 10);
+      var targetGridPosition = this.toGridPosition(targetPosition.x, targetPosition.y);
+      //target position is not clear,
+      var tile = this.map.getTile(targetGridPosition.x, targetGridPosition.y, 0);
+      if(tile.index !== this.safetile && this.pacman.previousTarget){
+        targetPosition = this.pacman.previousTarget;
+      }else{
+        this.pacman.previousTarget = targetPosition;
+      }
+      return targetPosition;
     },
 
     moveToSquare: function(row, col) {
       //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
       var marker = this.pacman.getGridPosition();
-
+      var targetPosition = this.getJumpTargetPosition();
       var p = this.toWorldPosition(row, col, marker.x % 10, marker.y % 10);
-      this.pacman.x = p.x;
-      this.pacman.y = p.y;
+      this.pacman.x = targetPosition.x;
+      this.pacman.y = targetPosition.y;
 
       this.teleportZone.x = this.activeZone.x;
       this.teleportZone.y = this.activeZone.y;
