@@ -271,10 +271,8 @@
     },
 
     moveToSquare: function(row, col) {
-      //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
-      var marker = this.pacman.getGridPosition();
+      //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)      
       var targetPosition = this.getJumpTargetPosition();
-      var p = this.toWorldPosition(row, col, marker.x % 10, marker.y % 10);
       this.pacman.x = targetPosition.x;
       this.pacman.y = targetPosition.y;
 
