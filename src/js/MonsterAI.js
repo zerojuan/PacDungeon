@@ -23,7 +23,7 @@
   function MonsterAI(main, x, y, type){
     // Phaser.Group.call(this, game);
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
-    this.debug = true;
+    this.debug = false;
     this.main = main;
     this.speed = this.main.speed * 0.90;
     this.type = type || types[Math.floor(Math.random() * 4)];
