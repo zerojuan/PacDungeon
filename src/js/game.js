@@ -87,7 +87,6 @@
           var gPosition = this.toGridPosition(d.x, d.y);
           var cPosition = this.toCellPosition(gPosition.x, gPosition.y);
           if(cell.x === cPosition.x && cell.y === cPosition.y){
-            // d.alive = true;
             cell.dots.push(d);
           }
         };
@@ -311,26 +310,39 @@
     },
 
     updateTeleportZone: function(direction) {
-      var next = new Phaser.Point(0, 0);
-      if (direction === Phaser.LEFT) {
-        next.x--;
-      } else if (direction === Phaser.RIGHT) {
-        next.x++;
-      } else if (direction === Phaser.DOWN) {
-        next.y++;
-      } else if (direction === Phaser.UP) {
-        next.y--;
-      }
-
-      var prevZone = new Phaser.Point(this.teleportZone.x, this.teleportZone.y);
+      //if freshjump, the next zone should be relative to the active zone
       if (this.isFreshJump) {
         this.teleportZone.x = this.activeZone.x;
         this.teleportZone.y = this.activeZone.y;
         this.isFreshJump = false;
       }
 
-      this.teleportZone.x += next.x;
-      this.teleportZone.y += next.y;
+      var next = new Phaser.Point(this.teleportZone.x, this.teleportZone.y);
+
+      //if direction lands you on the same active cell, try the one next to it
+      var tryNextCell = function(n, effect){
+        if(Phaser.Point.equals(n, this.activeZone)){
+          return effect;
+        }
+        return 0;
+      };
+      if (direction === Phaser.LEFT) {
+        next.x--;
+        next.x += tryNextCell.call(this,next,-1);
+      } else if (direction === Phaser.RIGHT) {
+        next.x++;
+        next.x += tryNextCell.call(this, next, 1);
+      } else if (direction === Phaser.DOWN) {
+        next.y++;
+        next.y += tryNextCell.call(this, next, 1);
+      } else if (direction === Phaser.UP) {
+        next.y--;
+        next.y += tryNextCell.call(this, next, -1);
+      }
+
+      //
+      var prevZone = new Phaser.Point(this.teleportZone.x, this.teleportZone.y);
+      this.teleportZone.copyFrom(next);
 
       this.clipTeleportZone();
 
@@ -341,9 +353,6 @@
       }
 
       this.clipTeleportZone();
-
-
-      // console.log('Teleport Zone:', this.teleportZone.x + ',' + this.teleportZone.y);
     },
 
     clipTeleportZone: function() {
@@ -368,19 +377,11 @@
 
       //get dots in this area
       this.isCellCleared(dot);
-
-      // if (cell) {
-      //   //TODO: add a timer to this cell
-      //   this.reviveCell(cell);
-      // }
-
     },
 
     isCellCleared: function(dot){
       var position = this.toGridPosition(dot.x, dot.y);
       var cellPosition = this.toCellPosition(position.x, position.y);
-      // console.log('Grid Eaten:',position);
-      //loop through the elements in the dots
       this.cells[cellPosition.x][cellPosition.y].isCleared();
     },
 
