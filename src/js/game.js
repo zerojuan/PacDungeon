@@ -6,6 +6,7 @@
 
   function Game() {
     that = this;
+    this.offset = new Phaser.Point(-30,-30);
     this.map = null;
     this.layers = [];
     this.layer = null;
@@ -15,6 +16,8 @@
 
     this.safetile = 14;
     this.gridsize = 16;
+
+    this.scoreTxt = null;
 
     this.speed = 100;
     this.size = 10;
@@ -49,6 +52,8 @@
   Game.prototype = {
 
     create: function() {
+      this.game.world.setBounds(this.offset.x, this.offset.y, this.game.width, this.game.height); // normalize after shake?
+
       this.stage.backgroundColor = '#2d2d2d';
 
       this.map = this.add.tilemap();
@@ -155,6 +160,10 @@
       this.appearEmitter.setYSpeed(100, -20);
       this.appearEmitter.gravity = 200;
 
+      this.scoreTxt = this.add.bitmapText(0, 0, 'minecraftia', '0' );
+      this.scoreTxt.align = 'left';
+      this.scoreTxt.x = 0;
+      this.scoreTxt.y = -40;
     },
 
     createDot: function(){
@@ -373,7 +382,8 @@
 
       dot.kill();
 
-      this.score++;
+      this.score += 10;
+      this.scoreTxt.text = this.score;
 
       //get dots in this area
       this.isCellCleared(dot);
@@ -395,12 +405,12 @@
 
     shakeScreen: function() {
       if (this.shakeWorld > 0) {
-        var rand1 = this.rnd.integerInRange(-5, 5);
-        var rand2 = this.rnd.integerInRange(-5, 5);
+        var rand1 = this.rnd.integerInRange(this.offset.x-5, this.offset.x+5);
+        var rand2 = this.rnd.integerInRange(this.offset.y-5, this.offset.y+5);
         this.game.world.setBounds(rand1, rand2, this.game.width + rand1, this.game.height + rand2);
         this.shakeWorld--;
         if (this.shakeWorld === 0) {
-          this.game.world.setBounds(0, 0, this.game.width, this.game.height); // normalize after shake?
+          this.game.world.setBounds(this.offset.x, this.offset.y, this.game.width, this.game.height); // normalize after shake?
         }
       }
     },
@@ -464,7 +474,6 @@
       this.drawTeleportPath();
 
       this.shakeScreen();
-
     },
     render: function() {
       this.monsters.callAll('render');
