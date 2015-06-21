@@ -82,17 +82,20 @@
       this.dots.setAll('y', 6, false, false, 1);
 
       //add dots to Cells
+      var setDotPosition = function(cell){
+        return function(d){
+          var gPosition = this.toGridPosition(d.x, d.y);
+          var cPosition = this.toCellPosition(gPosition.x, gPosition.y);
+          if(cell.x === cPosition.x && cell.y === cPosition.y){
+            // d.alive = true;
+            cell.dots.push(d);
+          }
+        };
+      };
       for(i = 0; i < this.cells.length; i++){
         for(j = 0; j < this.cells[i].length; j++){
           var cell = this.cells[j][i];
-          this.dots.forEach(function(d){
-            var gPosition = this.toGridPosition(d.x, d.y);
-            var cPosition = this.toCellPosition(gPosition.x, gPosition.y);
-            if(cell.x === cPosition.x && cell.y === cPosition.y){
-              // d.alive = true;
-              cell.dots.push(d);
-            }
-          }, this);
+          this.dots.forEach(setDotPosition(cell), this);
         }
       }
 
@@ -271,7 +274,7 @@
     },
 
     moveToSquare: function(row, col) {
-      //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)      
+      //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
       var targetPosition = this.getJumpTargetPosition();
       this.pacman.x = targetPosition.x;
       this.pacman.y = targetPosition.y;
