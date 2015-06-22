@@ -20,6 +20,10 @@
     this.directions = [null, null, null, null, null];
 
     this.previousTarget = null;
+
+    this.animations.add('munch', [0, 1, 2, 1], 20, true);
+    this.animations.add('die', [2,3,4,], 10, true);
+    this.play('die');
   }
 
   Pacman.prototype = Object.create(Phaser.Sprite.prototype);
@@ -95,6 +99,7 @@
     return true;
 
   };
+  
 
   Pacman.prototype.checkDirection = function(turnTo){
     if (this.turning === turnTo || this.directions[turnTo] === null || this.directions[turnTo].index !== this.main.safetile) {

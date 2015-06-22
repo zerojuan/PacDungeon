@@ -138,9 +138,7 @@
           that.updateTeleportZone(Phaser.RIGHT);
         }
       };
-
-      this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
-      this.pacman.play('munch');
+      
       this.pacman.move(Phaser.LEFT);
 
       this.teleportEmitter = this.add.emitter();
