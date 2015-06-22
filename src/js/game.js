@@ -138,7 +138,7 @@
           that.updateTeleportZone(Phaser.RIGHT);
         }
       };
-      
+
       this.pacman.move(Phaser.LEFT);
 
       this.teleportEmitter = this.add.emitter();
@@ -395,6 +395,7 @@
 
     touchMonsters: function(pacman, monster) {
       //console.log('touched the monster', monster);
+      pacman.onDie();
     },
 
     doShakeScreen: function(){
@@ -442,7 +443,7 @@
       this.physics.arcade.collide(this.monsters, this.ghostLayer);
       this.physics.arcade.collide(this.pacman, this.layer);
       this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
-      this.physics.arcade.overlap(this.pacman, this.monsters, this.touchMonsters, null, this);
+      this.physics.arcade.collide(this.pacman, this.monsters, this.touchMonsters, null, this);
 
       this.pacman.marker = this.pacman.getGridPosition();
 
