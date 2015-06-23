@@ -31,8 +31,8 @@
 
   Pacman.prototype.onDie = function(){
     this.angle = 0;
-    this.play('die');
-    this.kill();
+    this.play('die', null, false, true);
+
   };
 
   Pacman.prototype.getGridPosition = function(){

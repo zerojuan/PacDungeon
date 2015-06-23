@@ -220,7 +220,6 @@
     spawnMonsters: function(types) {
       for (var i = 0; i < types.length; i++) {
         //pick random col and row
-
         var pos = this.pickRandomSquare();
         var p = this.toWorldPosition(pos.row, pos.col, 6, 7);
         console.log('Spawning ...', pos);
