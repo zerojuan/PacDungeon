@@ -30,7 +30,15 @@
     },
 
     onDown: function () {
-      this.game.state.start('game');
+      var tween = this.game.add.tween(this.titleTxt);
+      tween.to({x: -900}, 300);
+
+
+      tween.onComplete.addOnce(function(){
+        this.game.state.start('game');
+      }, this);
+
+      tween.start();
     }
   };
 

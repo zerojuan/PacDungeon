@@ -117,7 +117,7 @@
 
 
       //spawn 2 monsters
-      this.spawnMonsters(['shadow']);//, 'speedy']);
+      this.spawnMonsters(['shadow', 'speedy']);
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
