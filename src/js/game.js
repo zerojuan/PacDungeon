@@ -6,6 +6,7 @@
 
   function Game() {
     that = this;
+    this.livesLeft = 3;
     this.offset = new Phaser.Point(-30,-30);
     this.map = null;
     this.layers = [];
@@ -18,6 +19,7 @@
     this.gridsize = 16;
 
     this.scoreTxt = null;
+    this.livesGroup = null;
 
     this.speed = 100;
     this.size = 10;
@@ -114,7 +116,8 @@
 
       this.createPacman((this.squareSize * 16) + 8, (this.squareSize * 16) + 8);
 
-
+      this.livesGroup = this.add.group();
+      this.updateLives();
 
       //spawn 2 monsters
       this.spawnMonsters(['shadow', 'speedy']);
@@ -162,6 +165,16 @@
       this.scoreTxt.align = 'left';
       this.scoreTxt.x = 0;
       this.scoreTxt.y = -40;
+    },
+
+    updateLives: function(){
+      //remove all sprites
+      for(var i = 0; i < this.livesLeft; i++){
+        var spr = new ns.Pacman(this, i*30, 160*3);
+        spr.play('idle');
+        this.livesGroup.add(spr);
+        // spr.setFrame(1);
+      }
     },
 
     createDot: function(){
@@ -393,7 +406,7 @@
     },
 
     touchMonsters: function(pacman, monster) {
-      //console.log('touched the monster', monster);
+      console.log('touched the monster', monster);
       pacman.onDie();
     },
 

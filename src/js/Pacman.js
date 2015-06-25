@@ -23,6 +23,7 @@
 
     this.animations.add('munch', [0, 1, 2, 1], 20, true);
     this.animations.add('die', [2,3,4,], 10, false);
+    this.animations.add('idle', [1], 20, true);
     this.play('munch');
   }
 
