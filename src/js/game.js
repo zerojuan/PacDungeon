@@ -169,6 +169,7 @@
 
     updateLives: function(){
       //remove all sprites
+      this.livesGroup.removeAll();
       for(var i = 0; i < this.livesLeft; i++){
         var spr = new ns.Pacman(this, i*30, 160*3);
         spr.play('idle');
@@ -407,6 +408,8 @@
 
     touchMonsters: function(pacman, monster) {
       console.log('touched the monster', monster);
+      this.livesLeft -= 1;
+      this.updateLives();
       pacman.onDie();
     },
 
