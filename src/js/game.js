@@ -174,7 +174,6 @@
         var spr = new ns.Pacman(this, i*30, 160*3);
         spr.play('idle');
         this.livesGroup.add(spr);
-        // spr.setFrame(1);
       }
     },
 
@@ -226,8 +225,7 @@
     },
 
     createPacman: function(x, y) {
-      this.pacman = new ns.Pacman(this, x, y);
-      // this.game.add(this.pacman);
+      this.pacman = new ns.Pacman(this, x, y);      
       this.game.add.existing(this.pacman);
     },
 
