@@ -225,7 +225,7 @@
     },
 
     createPacman: function(x, y) {
-      this.pacman = new ns.Pacman(this, x, y);      
+      this.pacman = new ns.Pacman(this, x, y);
       this.game.add.existing(this.pacman);
     },
 
@@ -281,6 +281,7 @@
       var targetPosition = this.toWorldPosition(this.teleportZone.x, this.teleportZone.y, marker.x % 10, marker.y % 10);
       var targetGridPosition = this.toGridPosition(targetPosition.x, targetPosition.y);
       //target position is not clear,
+      //something
       var tile = this.map.getTile(targetGridPosition.x, targetGridPosition.y, 0);
       if(tile.index !== this.safetile && this.pacman.previousTarget){
         targetPosition = this.pacman.previousTarget;
