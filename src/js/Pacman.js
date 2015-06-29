@@ -22,7 +22,12 @@
     this.previousTarget = null;
 
     this.animations.add('munch', [0, 1, 2, 1], 20, true);
-    this.animations.add('die', [2,3,4,], 10, false);
+    var dieAnimation = this.animations.add('die', [2,3,4,], 10, false);
+    dieAnimation.onComplete.add(function(){
+      //move me to another place
+      this.x = -30;
+    }, this);
+
     this.animations.add('idle', [1], 20, true);
     this.play('munch');
   }
@@ -30,10 +35,9 @@
   Pacman.prototype = Object.create(Phaser.Sprite.prototype);
   Pacman.prototype.constructor = Pacman;
 
-  Pacman.prototype.onDie = function(){
+  Pacman.prototype.onDie = function(callback){
     this.angle = 0;
-    this.play('die', null, false, true);
-
+    this.play('die', null, false, true).onComplete.add(callback);
   };
 
   Pacman.prototype.getGridPosition = function(){

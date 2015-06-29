@@ -411,7 +411,9 @@
       console.log('touched the monster', monster);
       this.livesLeft -= 1;
       this.updateLives();
-      pacman.onDie();
+      pacman.onDie(function(){
+        console.log('show cell selection now');
+      });
     },
 
     doShakeScreen: function(){
@@ -459,7 +461,10 @@
       this.physics.arcade.collide(this.monsters, this.ghostLayer);
       this.physics.arcade.collide(this.pacman, this.layer);
       this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
-      this.physics.arcade.collide(this.pacman, this.monsters, this.touchMonsters, null, this);
+      if(this.pacman.alive){
+        this.physics.arcade.collide(this.pacman, this.monsters, this.touchMonsters, null, this);
+      }
+
 
       this.pacman.marker = this.pacman.getGridPosition();
 
