@@ -23,7 +23,7 @@
   function MonsterAI(main, x, y, type){
     // Phaser.Group.call(this, game);
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
-    this.debug = false;
+    this.debug = true;
     this.main = main;
     this.speed = this.main.speed * 0.90;
     this.type = type || types[Math.floor(Math.random() * 4)];
@@ -209,6 +209,7 @@
       this.game.debug.geom(new Phaser.Circle(this.x, this.y, 5), 'rgba(0,0,0,1)');
       this.game.debug.geom(new Phaser.Circle(this.marker.x, this.marker.y, 5), 'rgba(0,255,0,1)');
       // this.game.debug.geom(new Phaser.Rectangle(this.body.x, this.body.y, this.body.width, this.body.height), 0xffffff, true);
+      this.game.debug.body(this);
     }
   };
 

@@ -109,7 +109,7 @@
       this.map.setCollisionByExclusion([this.safetile], true, this.layer);
       // Ghosts should collide with the ghost layer
       this.map.setCollisionByExclusion([this.safetile], true, this.ghostLayer);
-      console.log(this.map);
+
       this.graphics = this.add.graphics(0, 0);
 
       this.monsters = this.add.group();
@@ -139,6 +139,8 @@
           that.updateTeleportZone(Phaser.LEFT);
         } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
           that.updateTeleportZone(Phaser.RIGHT);
+        } else if (event.keyCode === Phaser.Keyboard.Z){
+          that.toggleDebug();
         }
       };
 
@@ -491,6 +493,13 @@
     render: function() {
       this.monsters.callAll('render');
       this.pacman.render();
+    },
+    toggleDebug: function(){
+      this.monsters.forEach(function(m){
+        m.debug = !m.debug;
+      });
+      this.pacman.debug = !this.pacman.debug;
+      this.game.debug.reset();
     }
 
   };

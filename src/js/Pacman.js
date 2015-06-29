@@ -4,7 +4,7 @@
   function Pacman(main, x, y){
     Phaser.Sprite.call(this, main.game, x, y, 'pacman');
 
-    this.debug = false;
+    this.debug = true;
 
     this.main = main;
 
@@ -152,8 +152,8 @@
           {
               color = 'rgba(255,255,255,0.3)';
           }
-
-          this.main.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.main.gridsize, this.main.gridsize), color, true);
+          this.main.game.debug.body(this);
+          // this.main.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.main.gridsize, this.main.gridsize), color, true);
       }
     }
   };
