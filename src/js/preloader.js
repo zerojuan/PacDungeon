@@ -24,6 +24,7 @@
       this.load.image('dot', 'assets/dot.png');
       this.load.image('tiles', 'assets/pacman-tiles.png');
       this.load.spritesheet('pacman', 'assets/pacman.png', 32, 32);
+      this.load.spritesheet('grave', 'assets/grave.png', 32, 32);
       this.load.tilemap('map', 'assets/pacman-small.json', null, Phaser.Tilemap.TILED_JSON);
       this.load.tilemap('levels', 'assets/pacman-maze.json', null, Phaser.Tilemap.TILED_JSON);
     },
