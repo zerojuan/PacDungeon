@@ -4,7 +4,8 @@
   function Grave(main, x, y){
     Phaser.Sprite.call(this, main.game, x, y, 'grave');
 
-    this.animations.add('die', [2,3,4,], 10, false);
+    this.animations.add('die', [2,3,4,], 10, true);
+    this.play('die');
   }
 
   Grave.prototype = Object.create(Phaser.Sprite.prototype);

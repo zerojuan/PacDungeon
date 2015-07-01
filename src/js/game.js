@@ -411,9 +411,10 @@
       console.log('touched the monster', monster);
       this.livesLeft -= 1;
       this.updateLives();
-      pacman.onDie(function(){
-        console.log('show cell selection now');
-      });
+      //put a grave here
+      
+      pacman.onDie();
+
     },
 
     doShakeScreen: function(){
