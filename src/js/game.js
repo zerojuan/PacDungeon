@@ -14,6 +14,7 @@
     this.ghostLayer = null;
     this.pacman = null;
     this.monsters = null;
+    this.graves = null;
 
     this.safetile = 14;
     this.gridsize = 16;
@@ -65,6 +66,8 @@
 
       this.timerContainer = this.add.group();
 
+      this.graves = this.add.group();
+
       var levelTilemap = this.game.add.tilemap('levels');
       this.DungeonGenerator = new ns.DungeonGenerator(this.size, levelTilemap);
 
@@ -76,6 +79,8 @@
           this.cells[i][j] = new ns.Cell(i,j,cellData, this.timerContainer, this);
         }
       }
+
+      this.timerContainer = this.add.group();
 
       this.createGhostPrison();
       this.ghostLayer.visible = false;
@@ -121,6 +126,13 @@
 
       //spawn 2 monsters
       this.spawnMonsters(['shadow', 'speedy']);
+
+      //create 3 graves
+      for(i = 0; i < 3; i++){
+        var grave = new ns.Grave(this, i*30, 160*3);
+        grave.kill();
+        this.graves.add(grave);
+      }
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
@@ -412,7 +424,10 @@
       this.livesLeft -= 1;
       this.updateLives();
       //put a grave here
-      
+      var grave = this.graves.getFirstDead();
+      grave.revive();
+      grave.x = pacman.x;
+      grave.y = pacman.y;
       pacman.onDie();
 
     },

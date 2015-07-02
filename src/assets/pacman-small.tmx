@@ -5,7 +5,7 @@
  </tileset>
  <layer name="Pacman" width="30" height="30">
   <data encoding="base64" compression="zlib">
-   eJztlFELwjAMhDtB66y6ddXpo/j/f6QZNBBCuuq2sAl9+Bgrt1yXg6uMMbsMe6BaWHcAbIaTss4BZ8JF0DlybtmZ5BuALuN7BK6EWtA1gGdz8Ax11KuOc+kduO/wfUvwgu83++uBh+CL51Py4Fmk8rCC75x8MYsQnx2Zy+eFuLOGZTw1X7xTG++ayqOPOkf2Lul+yRf9/cg8minf8w24Z3gq6JbuoX/pK94r9F3Tl+dPe0m7n9fU8X0P//1S8qVeUu9bJd+UF/7/e0N5zNWVvtpWHkVXdEWX1q3VVx8r0x/i
+   eJztlFELwjAMhDdB66yu66rTR/H//0gzaOEIqZW6sgl9+BgLt9ySg7RN0+wS7Il2Yd2BUAlOhXWaOAMXQaehrlhN8nXEmPA9Ej3QCTpDWNYn1IIOvTrfF/+B+87fD4AVfL/Z30TcBd9Qz8mDZxHLQwm+sT33AlwXsnD+OUJf3s/5nRmWcY6vgRkHP38sj8nrNOw911cxf/uhH2bK93wlbgkeBXRL36F/uVf8ruB7SV+eP96l0vd5TR3f9zz3s5Avekl3XxXyjXmF+V8byuNXXb1X28qj6qqu6uK6te7VG6sXH+0=
   </data>
  </layer>
 </map>
