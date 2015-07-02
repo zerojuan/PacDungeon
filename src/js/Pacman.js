@@ -6,6 +6,7 @@
 
     this.debug = true;
 
+    this.inLimbo = false;
     this.main = main;
 
     this.speed = 100;
@@ -35,12 +36,12 @@
   Pacman.prototype = Object.create(Phaser.Sprite.prototype);
   Pacman.prototype.constructor = Pacman;
 
-  Pacman.prototype.onDie = function(){
+  Pacman.prototype.gotoLimbo = function(){
     this.angle = 0;
     this.x = -100;
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
-    // this.play('die', null, false, true).onComplete.add(callback);
+    this.inLimbo = true;
   };
 
   Pacman.prototype.getGridPosition = function(){

@@ -420,16 +420,18 @@
     },
 
     touchMonsters: function(pacman, monster) {
-      console.log('touched the monster', monster);
-      this.livesLeft -= 1;
-      this.updateLives();
-      //put a grave here
-      var grave = this.graves.getFirstDead();
-      grave.revive();
-      grave.x = pacman.x;
-      grave.y = pacman.y;
-      pacman.onDie();
-
+      if(!this.pacman.inLimbo){
+        monster.addKill(1);
+        this.livesLeft -= 1;
+        this.updateLives();
+        //put a grave here
+        var grave = this.graves.getFirstDead();
+        grave.revive();
+        grave.x = pacman.x;
+        grave.y = pacman.y;
+        //pacman is in limbo
+        pacman.gotoLimbo();
+      }
     },
 
     doShakeScreen: function(){

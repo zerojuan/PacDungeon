@@ -25,6 +25,7 @@
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
     this.debug = true;
     this.main = main;
+    this.killCount = 0;
     this.speed = this.main.speed * 0.90;
     this.type = type || types[Math.floor(Math.random() * 4)];
     this.directions = [ null, null, null, null, null ];
@@ -100,6 +101,13 @@
     }
 
     this.current = direction;
+  };
+
+  /**
+  TODO: Use this to add nemesis system or something
+  */
+  MonsterAI.prototype.addKill = function(i){
+    this.killCount += i;
   };
 
   MonsterAI.prototype.getForward = function(marker){
