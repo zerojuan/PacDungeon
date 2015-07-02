@@ -37,7 +37,7 @@
 
   Pacman.prototype.onDie = function(){
     this.angle = 0;
-    this.x = -30;
+    this.x = -100;
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
     // this.play('die', null, false, true).onComplete.add(callback);
