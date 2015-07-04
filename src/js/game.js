@@ -380,7 +380,13 @@
           }
         }
 
-
+        //check if resurrect point is dead
+        var targetGridPosition = new Phaser.Point((this.resurrectCell.x*this.size)+this.resurrectPoint.x,
+          (this.resurrectCell.y*this.size)+this.resurrectPoint.y);
+        var tile = this.map.getTile(targetGridPosition.x, targetGridPosition.y, 0);
+        if(tile.index !== this.safetile){
+          moveToNextTile.call(this);
+        }
       };
       if(this.resurrectTimer > 5){
         this.resurrectTimer = 0;
