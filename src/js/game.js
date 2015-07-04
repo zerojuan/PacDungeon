@@ -138,7 +138,7 @@
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
-      this.moveToSquare(0, 0);
+      this.jumpToSquare(0, 0);
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -202,6 +202,7 @@
     moveLimbo: function(event){
       if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
         //resurrect here
+        that.resurrect();
       } else if (event.keyCode === Phaser.Keyboard.UP) {
         that.updateResurrectZone(Phaser.UP);
       } else if (event.keyCode === Phaser.Keyboard.DOWN) {
@@ -252,11 +253,21 @@
       };
     },
 
+    resurrect: function(){
+      this.livesLeft -= 1;
+      this.updateLives();
+      this.moveToSquare(this.resurrectCell.x, this.resurrectCell.y);
+      var targetPosition = this.toWorldPosition(this.resurrectCell.x, this.resurrectCell.y, this.resurrectPoint.x, this.resurrectPoint.y);
+      this.pacman.x = targetPosition.x;
+      this.pacman.y = targetPosition.y;
+      this.pacman.resurrect();
+    },
+
     teleport: function() {
       this.teleportEmitter.x = this.pacman.x;
       this.teleportEmitter.y = this.pacman.y;
       this.teleportEmitter.start(true, 250, null, 20);
-      this.moveToSquare(this.teleportZone.x, this.teleportZone.y);
+      this.jumpToSquare(this.teleportZone.x, this.teleportZone.y);
       this.appearEmitter.x = this.pacman.x;
       this.appearEmitter.y = this.pacman.y - 15;
       this.appearEmitter.start(true, 250, null, 20);
@@ -272,7 +283,6 @@
         //pick random col and row
         var pos = this.pickRandomSquare();
         var p = this.toWorldPosition(pos.row, pos.col, 6, 7);
-        console.log('Spawning ...', pos);
         this.createMonster(p.x, p.y, types[i]);
       }
     },
@@ -330,12 +340,16 @@
       return targetPosition;
     },
 
-    moveToSquare: function(row, col) {
+    jumpToSquare: function(row, col){
       //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
       var targetPosition = this.getJumpTargetPosition();
       this.pacman.x = targetPosition.x;
       this.pacman.y = targetPosition.y;
 
+      this.moveToSquare(row, col);
+    },
+
+    moveToSquare: function(row, col) {
       this.teleportZone.x = this.activeZone.x;
       this.teleportZone.y = this.activeZone.y;
       this.activeZone.x = row;
@@ -503,8 +517,6 @@
     touchMonsters: function(pacman, monster) {
       if(!this.pacman.inLimbo){
         monster.addKill(1);
-        this.livesLeft -= 1;
-        this.updateLives();
         //put a grave here
         var grave = this.graves.getFirstDead();
         grave.revive();
@@ -607,9 +619,12 @@
       this.monsters.callAll('render');
       this.pacman.render();
 
-      var pos = this.toWorldPosition(this.resurrectCell.x, this.resurrectCell.y, this.resurrectPoint.x, this.resurrectPoint.y);
-      this.game.debug.geom(new Phaser.Rectangle(pos.x-(this.gridsize/2), pos.y-(this.gridsize/2),
-       this.gridsize, this.gridsize), 'rgba(120,120,120,0.5)', true);
+      if(this.pacman.inLimbo){
+        var pos = this.toWorldPosition(this.resurrectCell.x, this.resurrectCell.y, this.resurrectPoint.x, this.resurrectPoint.y);
+        this.game.debug.geom(new Phaser.Rectangle(pos.x-(this.gridsize/2), pos.y-(this.gridsize/2),
+         this.gridsize, this.gridsize), 'rgba(120,120,120,0.5)', true);
+      }
+
     },
     toggleDebug: function(){
       this.monsters.forEach(function(m){

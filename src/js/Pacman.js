@@ -22,7 +22,7 @@
 
     this.previousTarget = null;
 
-    this.animations.add('munch', [0, 1, 2, 1], 20, true);    
+    this.animations.add('munch', [0, 1, 2, 1], 20, true);
     this.animations.add('idle', [1], 20, true);
     this.play('munch');
   }
@@ -36,6 +36,10 @@
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
     this.inLimbo = true;
+  };
+
+  Pacman.prototype.resurrect = function(){
+    this.inLimbo = false;
   };
 
   Pacman.prototype.getGridPosition = function(){
