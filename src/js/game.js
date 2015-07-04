@@ -15,7 +15,6 @@
     this.pacman = null;
     this.monsters = null;
     this.graves = null;
-
     this.safetile = 14;
     this.gridsize = 16;
 
@@ -141,19 +140,24 @@
       this.cursors = this.input.keyboard.createCursorKeys();
 
       this.input.keyboard.onUpCallback = function(event) {
-        if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
-          that.teleport();
-        } else if (event.keyCode === Phaser.Keyboard.UP) {
-          that.updateTeleportZone(Phaser.UP);
-        } else if (event.keyCode === Phaser.Keyboard.DOWN) {
-          that.updateTeleportZone(Phaser.DOWN);
-        } else if (event.keyCode === Phaser.Keyboard.LEFT) {
-          that.updateTeleportZone(Phaser.LEFT);
-        } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
-          that.updateTeleportZone(Phaser.RIGHT);
-        } else if (event.keyCode === Phaser.Keyboard.Z){
-          that.toggleDebug();
+        if(that.pacman.inLimbo){
+          //Do the selection screen
+        }else{
+          if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
+            that.teleport();
+          } else if (event.keyCode === Phaser.Keyboard.UP) {
+            that.updateTeleportZone(Phaser.UP);
+          } else if (event.keyCode === Phaser.Keyboard.DOWN) {
+            that.updateTeleportZone(Phaser.DOWN);
+          } else if (event.keyCode === Phaser.Keyboard.LEFT) {
+            that.updateTeleportZone(Phaser.LEFT);
+          } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
+            that.updateTeleportZone(Phaser.RIGHT);
+          } else if (event.keyCode === Phaser.Keyboard.Z){
+            that.toggleDebug();
+          }
         }
+
       };
 
       this.pacman.move(Phaser.LEFT);
@@ -431,6 +435,7 @@
         grave.y = pacman.y;
         //pacman is in limbo
         pacman.gotoLimbo();
+        this.graphics.clear();
       }
     },
 
@@ -483,7 +488,6 @@
         this.physics.arcade.collide(this.pacman, this.monsters, this.touchMonsters, null, this);
       }
 
-
       this.pacman.marker = this.pacman.getGridPosition();
 
       if (this.pacman.marker.x < 0 || this.pacman.marker.y < 0) {
@@ -508,7 +512,7 @@
         }
       }
 
-      //update graphics
+
       this.drawTeleportPath();
 
       this.shakeScreen();

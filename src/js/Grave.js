@@ -4,7 +4,7 @@
   function Grave(main, x, y){
     Phaser.Sprite.call(this, main.game, x, y, 'grave');
     this.anchor.setTo(0.5, 0.5);
-    this.animations.add('die', [2,3,4,], 10, true);
+    this.animations.add('die', null, 1, false);
     this.play('die');
   }
 

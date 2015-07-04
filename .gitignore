@@ -2,4 +2,6 @@
 *.db
 node_modules/
 bower_components/
-
+.tags
+.tags1
+.tern-project
