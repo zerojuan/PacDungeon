@@ -13,6 +13,9 @@
     this.layer = null;
     this.ghostLayer = null;
     this.pacman = null;
+    this.resurrectTimer = 0;
+    this.resurrectPoint = new Phaser.Point(0,0);
+    this.resurrectCell = new Phaser.Point(0,0);
     this.monsters = null;
     this.graves = null;
     this.safetile = 14;
@@ -142,6 +145,7 @@
       this.input.keyboard.onUpCallback = function(event) {
         if(that.pacman.inLimbo){
           //Do the selection screen
+          that.moveLimbo(event);
         }else{
           if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
             that.teleport();
@@ -192,6 +196,22 @@
         var spr = new ns.Pacman(this, i*30, 160*3);
         spr.play('idle');
         this.livesGroup.add(spr);
+      }
+    },
+
+    moveLimbo: function(event){
+      if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
+        //resurrect here
+      } else if (event.keyCode === Phaser.Keyboard.UP) {
+        that.updateResurrectZone(Phaser.UP);
+      } else if (event.keyCode === Phaser.Keyboard.DOWN) {
+        that.updateResurrectZone(Phaser.DOWN);
+      } else if (event.keyCode === Phaser.Keyboard.LEFT) {
+        that.updateResurrectZone(Phaser.LEFT);
+      } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
+        that.updateResurrectZone(Phaser.RIGHT);
+      } else if (event.keyCode === Phaser.Keyboard.Z){
+        that.toggleDebug();
       }
     },
 
@@ -294,6 +314,7 @@
       return marker;
     },
 
+
     getJumpTargetPosition: function() {
       var marker = this.pacman.getGridPosition();
       var targetPosition = this.toWorldPosition(this.teleportZone.x, this.teleportZone.y, marker.x % 10, marker.y % 10);
@@ -344,6 +365,56 @@
         this.pacman.turning = Phaser.NONE;
       }
 
+    },
+
+    updateResurrectPoint: function(){
+      this.resurrectTimer++;
+      var moveToNextTile = function(){
+        this.resurrectPoint.x++;
+        if(this.resurrectPoint.x > 8){
+          this.resurrectPoint.x = 1;
+          this.resurrectPoint.y++;
+          if(this.resurrectPoint.y > 8){
+            this.resurrectPoint.x = 1;
+            this.resurrectPoint.y = 1;
+          }
+        }
+        
+
+      };
+      if(this.resurrectTimer > 5){
+        this.resurrectTimer = 0;
+        //move to next tile
+        moveToNextTile.call(this);
+      }
+    },
+
+    updateResurrectZone: function(direction){
+      var next = new Phaser.Point(this.resurrectCell.x, this.resurrectCell.y);
+      console.log('Updating resurrect zone');
+      if(direction === Phaser.LEFT){
+        next.x--;
+      } else if(direction === Phaser.RIGHT){
+        next.x++;
+      } else if(direction === Phaser.UP){
+        next.y--;
+      } else if(direction === Phaser.DOWN){
+        next.y++;
+      }
+
+      if(next.x > 2){
+        next.x = 2;
+      }else if(next.x < 0){
+        next.x = 0;
+      }
+
+      if(next.y > 2){
+        next.y = 2;
+      }else if(next.y < 0){
+        next.y = 0;
+      }
+      this.resurrectCell.x = next.x;
+      this.resurrectCell.y = next.y;
     },
 
     updateTeleportZone: function(direction) {
@@ -436,6 +507,10 @@
         //pacman is in limbo
         pacman.gotoLimbo();
         this.graphics.clear();
+        this.resurrectCell.x = this.activeZone.x;
+        this.resurrectCell.y = this.activeZone.y;
+        this.resurrectPoint.x = 1;
+        this.resurrectPoint.y = 1;
       }
     },
 
@@ -490,6 +565,11 @@
 
       this.pacman.marker = this.pacman.getGridPosition();
 
+      if(this.pacman.inLimbo){
+        //move resurrect point
+        this.updateResurrectPoint();
+      }
+
       if (this.pacman.marker.x < 0 || this.pacman.marker.y < 0) {
         return;
       }
@@ -520,6 +600,10 @@
     render: function() {
       this.monsters.callAll('render');
       this.pacman.render();
+
+      var pos = this.toWorldPosition(this.resurrectCell.x, this.resurrectCell.y, this.resurrectPoint.x, this.resurrectPoint.y);
+      this.game.debug.geom(new Phaser.Rectangle(pos.x-(this.gridsize/2), pos.y-(this.gridsize/2),
+       this.gridsize, this.gridsize), 'rgba(120,120,120,0.5)', true);
     },
     toggleDebug: function(){
       this.monsters.forEach(function(m){
