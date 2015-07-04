@@ -379,7 +379,7 @@
             this.resurrectPoint.y = 1;
           }
         }
-        
+
 
       };
       if(this.resurrectTimer > 5){
@@ -560,7 +560,7 @@
       this.physics.arcade.collide(this.pacman, this.layer);
       this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
       if(this.pacman.alive){
-        this.physics.arcade.collide(this.pacman, this.monsters, this.touchMonsters, null, this);
+        this.physics.arcade.overlap(this.pacman, this.monsters, this.touchMonsters, null, this);
       }
 
       this.pacman.marker = this.pacman.getGridPosition();
