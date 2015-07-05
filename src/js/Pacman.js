@@ -6,7 +6,7 @@
 
     this.debug = true;
 
-    this.inLimbo = false;
+
     this.main = main;
 
     this.speed = 100;
@@ -24,7 +24,7 @@
 
     this.animations.add('munch', [0, 1, 2, 1], 20, true);
     this.animations.add('idle', [1], 20, true);
-    this.play('munch');
+    this.play('munch');    
   }
 
   Pacman.prototype = Object.create(Phaser.Sprite.prototype);

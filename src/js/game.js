@@ -138,7 +138,8 @@
 
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
-      this.jumpToSquare(0, 0);
+      // this.jumpToSquare(0, 0);
+      this.pacman.gotoLimbo();
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
