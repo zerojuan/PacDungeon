@@ -521,6 +521,7 @@
         //put a grave here
         var grave = this.graves.getFirstDead();
         grave.revive();
+        grave.play('die').setFrame(0);
         grave.x = pacman.x;
         grave.y = pacman.y;
         //pacman is in limbo
