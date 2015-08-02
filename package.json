@@ -1,9 +1,9 @@
 {
   "name": "pacdungeon",
-  "description": "",
-  "readme": "",
-  "repository": "",
-  "version": "0.0.0",
+  "description": "What if pacman had a teleporter?",
+  "readme": "README.md",
+  "repository": "https://github.com/zerojuan/PacDungeon",
+  "version": "0.0.1",
   "dependencies": {},
   "devDependencies": {
     "bower": "*",
