@@ -5,30 +5,29 @@
   "repository": "",
   "version": "0.0.0",
   "dependencies": {},
-
   "devDependencies": {
     "bower": "*",
+    "del": "*",
     "gulp": "*",
-    "gulp-util": "*",
+    "gulp-babel": "^5.2.0",
     "gulp-concat": "*",
+    "gulp-connect": "*",
     "gulp-download": "*",
-    "gulp-rename": "*",
+    "gulp-jshint": "*",
     "gulp-minify-css": "*",
     "gulp-minify-html": "*",
     "gulp-processhtml": "*",
-    "gulp-jshint": "*",
+    "gulp-rename": "*",
+    "gulp-sourcemaps": "^1.5.2",
     "gulp-uglify": "*",
-    "gulp-connect": "*",
+    "gulp-util": "*",
     "gulp-watch": "*",
-    "tiny-lr": "*",
-	"del": "*"
+    "tiny-lr": "*"
   },
-
   "scripts": {
     "post-install": "node ./node_modules/bower/bin/bower install",
     "start": "node ./node_modules/gulp/bin/gulp.js",
-
     "build": "node ./node_modules/gulp/bin/gulp.js build",
-    "lint":  "node ./node_modules/gulp/bin/gulp.js lint"
+    "lint": "node ./node_modules/gulp/bin/gulp.js lint"
   }
 }

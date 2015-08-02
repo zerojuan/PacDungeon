@@ -5,3 +5,6 @@ bower_components/
 .tags
 .tags1
 .tern-project
+
+src/js6/all.js
+src/js6/all.js.map

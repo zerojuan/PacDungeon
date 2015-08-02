@@ -9,6 +9,8 @@ var gulp = require('gulp')
   , jshint = require('gulp-jshint')
   , uglify = require('gulp-uglify')
   , connect = require('gulp-connect')
+  , babel = require('gulp-babel')
+  , sourcemaps = require('gulp-sourcemaps')
   , paths;
 
 paths = {
@@ -18,6 +20,7 @@ paths = {
     'src/bower_components/phaser-official/build/phaser.min.js'
   ],
   js:     ['src/js/**/*.js'],
+  js6:    ['src/js6/**/*.js'],
   dist:   './dist/'
 };
 
@@ -77,6 +80,15 @@ gulp.task('lint', function() {
     .on('error', gutil.log);
 });
 
+gulp.task('babelify', function(){
+  gulp.src(paths.js6)
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    .pipe(concat('all.js'))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('src/js6'));
+});
+
 gulp.task('html', function(){
   gulp.src('src/*.html')
     .pipe(connect.reload())
@@ -92,7 +104,7 @@ gulp.task('connect', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch(paths.js, ['lint']);
+  gulp.watch([paths.js, paths.js6], ['lint', 'babelify']);
   gulp.watch(['./src/index.html', paths.css, paths.js], ['html']);
 });
 
