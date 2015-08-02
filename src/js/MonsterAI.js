@@ -20,8 +20,7 @@
   ];
 
   var ns = window['pacdungeon'];
-  function MonsterAI(main, x, y, type){
-    // Phaser.Group.call(this, game);
+  function MonsterAI(main, x, y, type){    
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
     this.debug = true;
     this.main = main;
