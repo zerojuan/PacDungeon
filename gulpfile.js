@@ -104,7 +104,7 @@ gulp.task('connect', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch([paths.js, paths.js6], ['lint', 'babelify']);
+  gulp.watch([paths.js], ['lint']);
   gulp.watch(['./src/index.html', paths.css, paths.js], ['html']);
 });
 
