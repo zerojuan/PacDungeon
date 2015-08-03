@@ -25,7 +25,6 @@
   DungeonGenerator.BOTTOMRIGHTCORNER = 24;
   DungeonGenerator.BOTTOMWALL = 21;
 
-
   DungeonGenerator.prototype = {
       createSquare : function(){
           var data = [];

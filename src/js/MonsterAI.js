@@ -20,7 +20,7 @@
   ];
 
   var ns = window['pacdungeon'];
-  function MonsterAI(main, x, y, type){    
+  function MonsterAI(main, x, y, type){
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
     this.debug = true;
     this.main = main;
@@ -70,6 +70,11 @@
 
   MonsterAI.prototype = Object.create(Phaser.Sprite.prototype);
   MonsterAI.prototype.constructor = MonsterAI;
+
+  MonsterAI.prototype.explode = function(){
+    console.log('I exploded!');
+    this.ghostEyes.frame = 5;
+  };
 
   MonsterAI.prototype.move = function(direction){
     var speed = this.speed;

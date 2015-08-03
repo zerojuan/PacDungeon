@@ -534,7 +534,15 @@
       }
     },
 
-    doShakeScreen: function(){
+    //called by Cell
+    explodeCell: function(){
+      //search for ghosts who are in this cell and make them explode
+      this.monsters.forEachAlive(function(monster){
+        //am i inside the cell?
+        monster.explode();
+      }, this);
+
+      //screen shake
       this.shakeWorld = 30;
     },
 
