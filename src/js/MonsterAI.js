@@ -10,7 +10,8 @@
   var RED = 0xff0000,
       PINK = 0xff69b4,
       CYAN = 0x00ffff,
-      ORANGE = 0xff0500;
+      ORANGE = 0xff0500,
+      BLUE = 0x0000ff;
 
   var types = [
     'shadow',
@@ -72,7 +73,7 @@
   MonsterAI.prototype.constructor = MonsterAI;
 
   MonsterAI.prototype.explode = function(){
-    console.log('I exploded!');
+    this.tint = BLUE;
     this.ghostEyes.frame = 5;
   };
 

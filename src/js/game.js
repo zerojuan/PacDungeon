@@ -535,11 +535,16 @@
     },
 
     //called by Cell
-    explodeCell: function(){
+    explodeCell: function(cell){
       //search for ghosts who are in this cell and make them explode
       this.monsters.forEachAlive(function(monster){
         //am i inside the cell?
-        monster.explode();
+        var gridPos = this.toGridPosition(monster.x, monster.y);
+        var cellPos = this.toCellPosition(gridPos.x, gridPos.y);
+
+        if(cell.x === cellPos.x && cell.y === cellPos.y){
+          monster.explode();
+        }
       }, this);
 
       //screen shake
