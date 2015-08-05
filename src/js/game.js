@@ -144,7 +144,7 @@
       this.cursors = this.input.keyboard.createCursorKeys();
 
       this.input.keyboard.onUpCallback = function(event) {
-        if(that.pacman.inLimbo){
+        if(that.pacman.state === that.pacman.LIMBO){
           //Do the selection screen
           that.moveLimbo(event);
         }else{
@@ -516,21 +516,29 @@
     },
 
     touchMonsters: function(pacman, monster) {
-      if(!this.pacman.inLimbo){
+      if(this.pacman.state !== this.pacman.LIMBO){
         monster.addKill(1);
         //put a grave here
         var grave = this.graves.getFirstDead();
-        grave.revive();
-        grave.play('die').setFrame(0);
-        grave.x = pacman.x;
-        grave.y = pacman.y;
-        //pacman is in limbo
-        pacman.gotoLimbo();
-        this.graphics.clear();
-        this.resurrectCell.x = this.activeZone.x;
-        this.resurrectCell.y = this.activeZone.y;
-        this.resurrectPoint.x = 1;
-        this.resurrectPoint.y = 1;
+        if(grave){
+          grave.revive();
+          grave.play('die').setFrame(0);
+          grave.x = pacman.x;
+          grave.y = pacman.y;
+          //pacman is in limbo
+          pacman.gotoLimbo();
+          this.graphics.clear();
+          this.resurrectCell.x = this.activeZone.x;
+          this.resurrectCell.y = this.activeZone.y;
+          this.resurrectPoint.x = 1;
+          this.resurrectPoint.y = 1;
+        }else{
+          //TODO: Gameover screen!
+          //TODO: show pacman dying
+          pacman.die();
+          this.graphics.clear();
+        }
+
       }
     },
 
@@ -546,6 +554,8 @@
           monster.explode();
         }
       }, this);
+
+      //TODO: Show explosion graphics
 
       //screen shake
       this.shakeWorld = 30;
@@ -598,7 +608,7 @@
 
       this.pacman.marker = this.pacman.getGridPosition();
 
-      if(this.pacman.inLimbo){
+      if(this.pacman.state === this.pacman.LIMBO){
         //move resurrect point
         this.updateResurrectPoint();
       }
@@ -634,7 +644,7 @@
       this.monsters.callAll('render');
       this.pacman.render();
 
-      if(this.pacman.inLimbo){
+      if(this.pacman.state === this.pacman.LIMBO){
         var pos = this.toWorldPosition(this.resurrectCell.x, this.resurrectCell.y, this.resurrectPoint.x, this.resurrectPoint.y);
         this.game.debug.geom(new Phaser.Rectangle(pos.x-(this.gridsize/2), pos.y-(this.gridsize/2),
          this.gridsize, this.gridsize), 'rgba(120,120,120,0.5)', true);

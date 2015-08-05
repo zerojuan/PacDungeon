@@ -29,15 +29,28 @@
   Pacman.prototype = Object.create(Phaser.Sprite.prototype);
   Pacman.prototype.constructor = Pacman;
 
-  Pacman.prototype.gotoLimbo = function(){
+  Pacman.prototype.ALIVE = 1;
+  Pacman.prototype.LIMBO = 2;
+  Pacman.prototype.DEAD = 3;
+
+  Pacman.prototype.disappear = function(){
     this.angle = 0;
     this.x = -100;
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
-    this.inLimbo = true;
+  };
+
+  Pacman.prototype.gotoLimbo = function(){
+    this.disappear();
+    this.state = this.LIMBO;
   };
   Pacman.prototype.resurrect = function(){
-    this.inLimbo = false;
+    this.state = this.ALIVE;
+  };
+
+  Pacman.prototype.die = function(){
+    this.disappear();
+    this.state = this.DEAD;
   };
 
   Pacman.prototype.getGridPosition = function(){
