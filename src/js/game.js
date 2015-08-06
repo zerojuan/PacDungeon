@@ -147,6 +147,8 @@
         if(that.pacman.state === that.pacman.LIMBO){
           //Do the selection screen
           that.moveLimbo(event);
+        }else if(that.pacman.state === that.pacman.DEAD){
+          //TODO: don't do anything when dead
         }else{
           if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
             that.teleport();
@@ -516,7 +518,7 @@
     },
 
     touchMonsters: function(pacman, monster) {
-      if(this.pacman.state !== this.pacman.LIMBO){
+      if(this.pacman.state !== this.pacman.LIMBO || this.pacman.state !== this.pacman.DEAD){
         monster.addKill(1);
         //put a grave here
         var grave = this.graves.getFirstDead();
