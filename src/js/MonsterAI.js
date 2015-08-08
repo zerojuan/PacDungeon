@@ -74,7 +74,8 @@
 
   MonsterAI.prototype.explode = function(){
     this.tint = BLUE;
-    this.ghostEyes.frame = 5;
+    this.ghostEyes.frame = 4;
+    this.state = 'BLUE';
   };
 
   MonsterAI.prototype.move = function(direction){
@@ -95,14 +96,18 @@
     }
 
     //set the eyes
-    if(direction === Phaser.UP){
-      this.ghostEyes.frame = UP;
-    }else if(direction === Phaser.DOWN){
-      this.ghostEyes.frame = DOWN;
-    }else if(direction === Phaser.LEFT){
-      this.ghostEyes.frame = LEFT;
-    }else if(direction === Phaser.RIGHT){
-      this.ghostEyes.frame = RIGHT;
+    if(this.state === 'BLUE'){
+
+    }else{
+      if(direction === Phaser.UP){
+        this.ghostEyes.frame = UP;
+      }else if(direction === Phaser.DOWN){
+        this.ghostEyes.frame = DOWN;
+      }else if(direction === Phaser.LEFT){
+        this.ghostEyes.frame = LEFT;
+      }else if(direction === Phaser.RIGHT){
+        this.ghostEyes.frame = RIGHT;
+      }
     }
 
     this.current = direction;
