@@ -20,6 +20,7 @@
   "debug": true,
   "globals": {
     "Phaser": false,
-    "require": false
+    "require": false,
+    "StateMachine": false
   }
 }

@@ -44,6 +44,39 @@
         break;
     }
 
+    this.fsm = StateMachine.create({
+      events: [
+        { name: 'startup', from: 'none', to: 'wander'},
+        { name: 'targetSpotted',  from: 'wander',  to: 'chase' },
+        { name: 'wanderExpires', from: 'wander', to: 'chase'},
+        { name: 'exploded', from: ['chase', 'wander'], to: 'flee'  },
+        { name: 'exploded', from: 'flee', to: 'die'},
+        { name: 'pacmanLost',  from: 'chase',    to: 'wander' },
+        { name: 'explodeExpired', from: 'flee', to: 'wander'  },
+        { name: 'eaten', from: 'flee', to: 'die'}
+      ],
+      callbacks: {
+        onstartup: function(event, from, to, context){
+          context.nextDirectionFinder = context.strategy.getWanderDirection;
+        },
+        onwander: function(event, from, to, context){          
+          context.nextDirectionFinder = context.strategy.getWanderDirection;
+        },
+        onchase: function(event, from, to, context){
+          context.nextDirectionFinder = context.strategy.getNextDirection;
+        },
+        onflee: function(event, from, to, context){
+          context.tint = BLUE;
+          context.ghostEyes.frame = 4;
+          context.state = 'BLUE';
+          context.speed = context.main.speed * 0.50;
+        },
+        ondie: function(){
+
+        }
+      }
+      });
+
     this.animations.add('munch', [0, 1, 2, 3], 20, true);
     this.animations.play('munch');
 
@@ -65,17 +98,18 @@
 
     this.strategy = new ns.AIStrategy(main.pacman, this, main.safetile, main.opposites);
     this.strategy.setStrategy(this.type);
+    this.nextDirectionFinder = this.strategy.getWanderDirection;
 
     this.changeDirection = false;
+
+    this.fsm.startup(this);
   }
 
   MonsterAI.prototype = Object.create(Phaser.Sprite.prototype);
   MonsterAI.prototype.constructor = MonsterAI;
 
   MonsterAI.prototype.explode = function(){
-    this.tint = BLUE;
-    this.ghostEyes.frame = 4;
-    this.state = 'BLUE';
+    this.fsm.exploded(this);
   };
 
   MonsterAI.prototype.move = function(direction){
@@ -156,7 +190,7 @@
     this.directions[4] = this.main.map.getTileBelow(this.main.layer.index, this.forwardMarker.x, this.forwardMarker.y);
 
     //calculate next direction
-    this.nextDirection = this.strategy.getNextDirection(this.directions, this.current);
+    this.nextDirection = this.nextDirectionFinder(this.directions, this.current, this.strategy);
 
     this.targetFound = true;
   };

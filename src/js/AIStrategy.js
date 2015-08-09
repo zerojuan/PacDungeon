@@ -10,10 +10,10 @@
     this.opposites = opposites;
   }
 
-  function doShadow(directions, current){
+  function doShadow(directions, current, context){
     /*jshint validthis:true */
 
-    var pacmanPos = this.pacman.getGridPosition();
+    var pacmanPos = context.pacman.getGridPosition();
     var t = 0;
     var min = 1000;
     var nextDirection = Phaser.NONE;
@@ -22,18 +22,18 @@
       if(!directions[t]){
         continue;
       }
-      if(t === this.opposites[current]){
+      if(t === context.opposites[current]){
         //ghost can't move back yo
         continue;
       }
 
-      if(directions[t].index === this.safetile ||
+      if(directions[t].index === context.safetile ||
         directions[t].index === ns.DungeonGenerator.TOPWALL ||
         directions[t].index === ns.DungeonGenerator.RIGHTWALL ||
         directions[t].index === ns.DungeonGenerator.BOTTOMWALL ||
         directions[t].index === ns.DungeonGenerator.LEFTWALL){
 
-        if(!this.isAtEdge(directions[t].index)){
+        if(!context.isAtEdge(directions[t].index)){
           //which of the directions is closer to the pacman?
           var distance = Phaser.Math.distance(pacmanPos.x, pacmanPos.y, directions[t].x, directions[t].y);
           if(distance < min){
@@ -47,10 +47,10 @@
     return nextDirection;
   }
 
-  function doSpeedy(directions, current){
+  function doSpeedy(directions, current, context){
     /*jshint validthis:true */
     //get where pacman is facing
-    var pacmanPos = this.pacman.getForwardPosition(4);
+    var pacmanPos = context.pacman.getForwardPosition(4);
     var t = 0;
     var min = 1000;
     var nextDirection = Phaser.NONE;
@@ -60,18 +60,18 @@
       if(!directions[t]){
         continue;
       }
-      if(t === this.opposites[current]){
+      if(t === context.opposites[current]){
         //ghost can't move back yo
         continue;
       }
 
-      if(directions[t].index === this.safetile ||
+      if(directions[t].index === context.safetile ||
         directions[t].index === ns.DungeonGenerator.TOPWALL ||
         directions[t].index === ns.DungeonGenerator.RIGHTWALL ||
         directions[t].index === ns.DungeonGenerator.BOTTOMWALL ||
         directions[t].index === ns.DungeonGenerator.LEFTWALL){
 
-        if(!this.isAtEdge(directions[t].index)){
+        if(!context.isAtEdge(directions[t].index)){
           //which of the directions is closer to the pacman?
           var distance = Phaser.Math.distance(pacmanPos.x, pacmanPos.y, directions[t].x, directions[t].y);
           if(distance < min){
@@ -141,6 +141,24 @@
         this.getNextDirection = doPokey;
         break;
     }
+  };
+
+  AIStrategy.prototype.getWanderDirection = function(directions, current, context){
+    //get where pacman is facing
+    for(var t = 1; t < 5; t++){
+      if(!directions[t]){
+        continue;
+      }
+      if(t === context.opposites[current]){
+        //ghost can't move back yo
+        continue;
+      }
+
+      if(directions[t].index === context.safetile){
+        break;
+      }
+    }
+    return t;
   };
 
   AIStrategy.prototype.isAtEdge = function(tile){
