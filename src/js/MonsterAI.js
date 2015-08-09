@@ -29,51 +29,44 @@
     this.speed = this.main.speed * 0.90;
     this.type = type || types[Math.floor(Math.random() * 4)];
     this.directions = [ null, null, null, null, null ];
-    switch(this.type){
-      case 'shadow':
-        this.tint = RED;
-        break;
-      case 'speedy':
-        this.tint = PINK;
-        break;
-      case 'bashful':
-        this.tint = CYAN;
-        break;
-      case 'pokey':
-        this.tint = ORANGE;
-        break;
-    }
+    this.setTint();
 
     this.fsm = StateMachine.create({
       events: [
         { name: 'startup', from: 'none', to: 'wander'},
-        { name: 'timerExpires', from: 'flee', to: 'wander'},
+        { name: 'timerExpires', from: 'flee', to: 'fleeblink'},
+        { name: 'timerExpires', from: 'fleeblink', to: 'wander'},
         { name: 'timerExpires', from: 'wander', to: 'chase'},
         { name: 'timerExpires', from: 'chase', to: 'wander'},
         { name: 'wanderExpires', from: 'wander', to: 'chase'},
         { name: 'exploded', from: ['chase', 'wander'], to: 'flee'  },
         { name: 'exploded', from: 'flee', to: 'die'},
         { name: 'explodeExpired', from: 'flee', to: 'wander'  },
-        { name: 'eaten', from: 'flee', to: 'die'}
+        { name: 'eaten', from: ['flee', 'fleeblink'], to: 'die'}
       ],
       callbacks: {
         onstartup: function(event, from, to, context){
-          context.seekTime = 300;
+          context.seekTime = 3000;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
         onwander: function(event, from, to, context){
-          context.seekTime = 300;
+          context.seekTime = 3000;
+          context.setTint();
+          context.speed = context.main.speed * 0.90;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
+        onfleeblink: function(event, from, to, context){
+          context.seekTime = 1000;
+        },
         onchase: function(event, from, to, context){
-          context.seekTime = 300;
+          context.seekTime = 10000;
           context.nextDirectionFinder = context.strategy.getNextDirection;
         },
         onflee: function(event, from, to, context){
+          context.seekTime = 2000;
           context.tint = BLUE;
           context.ghostEyes.frame = 4;
-          context.state = 'BLUE';
-          context.speed = context.main.speed * 0.50;
+          context.state = 'BLUE';          
         },
         ondie: function(){
 
@@ -116,6 +109,23 @@
     this.fsm.exploded(this);
   };
 
+  MonsterAI.prototype.setTint = function(){
+    switch(this.type){
+      case 'shadow':
+        this.tint = RED;
+        break;
+      case 'speedy':
+        this.tint = PINK;
+        break;
+      case 'bashful':
+        this.tint = CYAN;
+        break;
+      case 'pokey':
+        this.tint = ORANGE;
+        break;
+    }
+  };
+
   MonsterAI.prototype.move = function(direction){
     var speed = this.speed;
 
@@ -134,7 +144,7 @@
     }
 
     //set the eyes
-    if(this.state === 'BLUE'){
+    if(this.fsm.current === 'flee'){
 
     }else{
       if(direction === Phaser.UP){
@@ -220,6 +230,14 @@
     return false;
   };
 
+  MonsterAI.prototype.blinkingAnimation = function(){
+    if(this.tint === BLUE){
+      this.setTint();
+    }else{
+      this.tint = BLUE;
+    }
+  };
+
   MonsterAI.prototype.updateTimers = function(time){
     if(this.seekTime < 0){
       return;
@@ -233,6 +251,10 @@
 
   MonsterAI.prototype.update = function(){
     this.updateTimers(this.main.game.time);
+
+    if(this.fsm.current === 'fleeblink'){
+      this.blinkingAnimation();
+    }
 
     //look for next direction if you don't have any
     if(!this.targetFound){
