@@ -47,22 +47,26 @@
     this.fsm = StateMachine.create({
       events: [
         { name: 'startup', from: 'none', to: 'wander'},
-        { name: 'targetSpotted',  from: 'wander',  to: 'chase' },
+        { name: 'timerExpires', from: 'flee', to: 'wander'},
+        { name: 'timerExpires', from: 'wander', to: 'chase'},
+        { name: 'timerExpires', from: 'chase', to: 'wander'},
         { name: 'wanderExpires', from: 'wander', to: 'chase'},
         { name: 'exploded', from: ['chase', 'wander'], to: 'flee'  },
         { name: 'exploded', from: 'flee', to: 'die'},
-        { name: 'pacmanLost',  from: 'chase',    to: 'wander' },
         { name: 'explodeExpired', from: 'flee', to: 'wander'  },
         { name: 'eaten', from: 'flee', to: 'die'}
       ],
       callbacks: {
         onstartup: function(event, from, to, context){
+          context.seekTime = 300;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
-        onwander: function(event, from, to, context){          
+        onwander: function(event, from, to, context){
+          context.seekTime = 300;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
         onchase: function(event, from, to, context){
+          context.seekTime = 300;
           context.nextDirectionFinder = context.strategy.getNextDirection;
         },
         onflee: function(event, from, to, context){
@@ -216,7 +220,20 @@
     return false;
   };
 
+  MonsterAI.prototype.updateTimers = function(time){
+    if(this.seekTime < 0){
+      return;
+    }
+
+    this.seekTime -= time.elapsed;
+    if(this.seekTime < 0){
+      this.fsm.timerExpires(this);
+    }
+  };
+
   MonsterAI.prototype.update = function(){
+    this.updateTimers(this.main.game.time);
+
     //look for next direction if you don't have any
     if(!this.targetFound){
       this.feelForward();
