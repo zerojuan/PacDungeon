@@ -65,8 +65,7 @@
         onflee: function(event, from, to, context){
           context.seekTime = 2000;
           context.tint = BLUE;
-          context.ghostEyes.frame = 4;
-          context.state = 'BLUE';
+          context.ghostEyes.frame = 4;          
           context.speed = context.main.speed * 0.30;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
