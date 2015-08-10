@@ -27,7 +27,6 @@
 
     this.fsm = StateMachine.create({
       events: [
-        { name: 'startup', from: 'none', to: 'limbo'},
         { name: 'toLimbo', from: ['none','alive'], to: 'limbo'},
         { name: 'resurrect', from: 'limbo', to: 'alive'},
         { name: 'die', from: 'limbo', to: 'dead'}
@@ -35,9 +34,14 @@
       callbacks: {
         onlimbo: function(event, from, to, context){
           context.disappear();
+          context.executeInput = context.moveLimbo;
         },
         ondead: function(event, from, to, context){
           context.disappear();
+          this.executeInput = null;
+        },
+        onalive: function(event, from, to, context){
+          context.executeInput = context.moveAlive;
         }
       }
     });
@@ -46,9 +50,43 @@
   Pacman.prototype = Object.create(Phaser.Sprite.prototype);
   Pacman.prototype.constructor = Pacman;
 
-  Pacman.prototype.ALIVE = 1;
-  Pacman.prototype.LIMBO = 2;
-  Pacman.prototype.DEAD = 3;
+  Pacman.prototype.processInput = function(event){
+    if(this.executeInput){ //because some states disables inputs
+      this.executeInput(event);
+    }
+  };
+
+  Pacman.prototype.moveLimbo = function(event){
+    if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
+      this.main.resurrect();
+    } else if (event.keyCode === Phaser.Keyboard.UP) {
+      this.main.updateResurrectZone(Phaser.UP);
+    } else if (event.keyCode === Phaser.Keyboard.DOWN) {
+      this.main.updateResurrectZone(Phaser.DOWN);
+    } else if (event.keyCode === Phaser.Keyboard.LEFT) {
+      this.main.updateResurrectZone(Phaser.LEFT);
+    } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
+      this.main.updateResurrectZone(Phaser.RIGHT);
+    } else if (event.keyCode === Phaser.Keyboard.Z){
+      this.main.toggleDebug();
+    }
+  };
+
+  Pacman.prototype.moveAlive = function(event){
+    if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
+      this.main.teleport();
+    } else if (event.keyCode === Phaser.Keyboard.UP) {
+      this.main.updateTeleportZone(Phaser.UP);
+    } else if (event.keyCode === Phaser.Keyboard.DOWN) {
+      this.main.updateTeleportZone(Phaser.DOWN);
+    } else if (event.keyCode === Phaser.Keyboard.LEFT) {
+      this.main.updateTeleportZone(Phaser.LEFT);
+    } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
+      this.main.updateTeleportZone(Phaser.RIGHT);
+    } else if (event.keyCode === Phaser.Keyboard.Z){
+      this.main.toggleDebug();
+    }
+  };
 
   Pacman.prototype.disappear = function(){
     this.angle = 0;

@@ -144,27 +144,7 @@
       this.cursors = this.input.keyboard.createCursorKeys();
 
       this.input.keyboard.onUpCallback = function(event) {
-        if(that.pacman.fsm.current === 'limbo'){
-          //Do the selection screen
-          that.moveLimbo(event);
-        }else if(that.pacman.fsm.current === 'dead'){
-          //TODO: don't do anything when dead
-        }else{
-          if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
-            that.teleport();
-          } else if (event.keyCode === Phaser.Keyboard.UP) {
-            that.updateTeleportZone(Phaser.UP);
-          } else if (event.keyCode === Phaser.Keyboard.DOWN) {
-            that.updateTeleportZone(Phaser.DOWN);
-          } else if (event.keyCode === Phaser.Keyboard.LEFT) {
-            that.updateTeleportZone(Phaser.LEFT);
-          } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
-            that.updateTeleportZone(Phaser.RIGHT);
-          } else if (event.keyCode === Phaser.Keyboard.Z){
-            that.toggleDebug();
-          }
-        }
-
+        that.pacman.processInput(event);
       };
 
       this.pacman.move(Phaser.LEFT);
@@ -199,23 +179,6 @@
         var spr = new ns.Pacman(this, i*30, 160*3);
         spr.play('idle');
         this.livesGroup.add(spr);
-      }
-    },
-
-    moveLimbo: function(event){
-      if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
-        //resurrect here
-        that.resurrect();
-      } else if (event.keyCode === Phaser.Keyboard.UP) {
-        that.updateResurrectZone(Phaser.UP);
-      } else if (event.keyCode === Phaser.Keyboard.DOWN) {
-        that.updateResurrectZone(Phaser.DOWN);
-      } else if (event.keyCode === Phaser.Keyboard.LEFT) {
-        that.updateResurrectZone(Phaser.LEFT);
-      } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
-        that.updateResurrectZone(Phaser.RIGHT);
-      } else if (event.keyCode === Phaser.Keyboard.Z){
-        that.toggleDebug();
       }
     },
 
@@ -536,7 +499,7 @@
           this.resurrectPoint.y = 1;
         }else{
           //TODO: Gameover screen!
-          //TODO: show pacman dying          
+          //TODO: show pacman dying
           this.graphics.clear();
         }
 
