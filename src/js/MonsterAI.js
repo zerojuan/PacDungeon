@@ -67,7 +67,8 @@
           context.tint = BLUE;
           context.ghostEyes.frame = 4;
           context.state = 'BLUE';
-          context.nextDirectionFinder = context.strategy.getWanderDirection;      
+          context.speed = context.main.speed * 0.30;
+          context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
         ondie: function(){
 
