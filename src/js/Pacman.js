@@ -24,6 +24,23 @@
     this.animations.add('munch', [0, 1, 2, 1], 20, true);
     this.animations.add('idle', [1], 20, true);
     this.play('munch');
+
+    this.fsm = StateMachine.create({
+      events: [
+        { name: 'startup', from: 'none', to: 'limbo'},
+        { name: 'toLimbo', from: ['none','alive'], to: 'limbo'},
+        { name: 'resurrect', from: 'limbo', to: 'alive'},
+        { name: 'die', from: 'limbo', to: 'dead'}
+      ],
+      callbacks: {
+        onlimbo: function(event, from, to, context){
+          context.disappear();
+        },
+        ondead: function(event, from, to, context){
+          context.disappear();
+        }
+      }
+    });
   }
 
   Pacman.prototype = Object.create(Phaser.Sprite.prototype);
@@ -36,21 +53,20 @@
   Pacman.prototype.disappear = function(){
     this.angle = 0;
     this.x = -100;
-    this.body.velocity.x = 0;
-    this.body.velocity.y = 0;
+    if(this.body){
+      this.body.velocity.x = 0;
+      this.body.velocity.y = 0;
+    }
   };
 
-  Pacman.prototype.gotoLimbo = function(){
-    this.disappear();
-    this.state = this.LIMBO;
+  Pacman.prototype.gotoLimbo = function(livesLeft){
+    this.fsm.toLimbo(this);
+    if(livesLeft === 0){
+      this.fsm.die(this);
+    }
   };
   Pacman.prototype.resurrect = function(){
-    this.state = this.ALIVE;
-  };
-
-  Pacman.prototype.die = function(){
-    this.disappear();
-    this.state = this.DEAD;
+    this.fsm.resurrect(this);
   };
 
   Pacman.prototype.getGridPosition = function(){

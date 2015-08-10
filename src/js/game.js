@@ -144,10 +144,10 @@
       this.cursors = this.input.keyboard.createCursorKeys();
 
       this.input.keyboard.onUpCallback = function(event) {
-        if(that.pacman.state === that.pacman.LIMBO){
+        if(that.pacman.fsm.current === 'limbo'){
           //Do the selection screen
           that.moveLimbo(event);
-        }else if(that.pacman.state === that.pacman.DEAD){
+        }else if(that.pacman.fsm.current === 'dead'){
           //TODO: don't do anything when dead
         }else{
           if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
@@ -518,7 +518,7 @@
     },
 
     touchMonsters: function(pacman, monster) {
-      if(this.pacman.state !== this.pacman.LIMBO || this.pacman.state !== this.pacman.DEAD){
+      if(this.pacman.fsm.current !== 'limbo' || this.pacman.fsm.current !== 'dead'){
         monster.addKill(1);
         //put a grave here
         var grave = this.graves.getFirstDead();
@@ -528,7 +528,7 @@
           grave.x = pacman.x;
           grave.y = pacman.y;
           //pacman is in limbo
-          pacman.gotoLimbo();
+          pacman.gotoLimbo(this.livesLeft);
           this.graphics.clear();
           this.resurrectCell.x = this.activeZone.x;
           this.resurrectCell.y = this.activeZone.y;
@@ -536,8 +536,7 @@
           this.resurrectPoint.y = 1;
         }else{
           //TODO: Gameover screen!
-          //TODO: show pacman dying
-          pacman.die();
+          //TODO: show pacman dying          
           this.graphics.clear();
         }
 
@@ -610,7 +609,7 @@
 
       this.pacman.marker = this.pacman.getGridPosition();
 
-      if(this.pacman.state === this.pacman.LIMBO){
+      if(this.pacman.fsm.current === 'limbo'){
         //move resurrect point
         this.updateResurrectPoint();
       }
@@ -646,7 +645,7 @@
       this.monsters.callAll('render');
       this.pacman.render();
 
-      if(this.pacman.state === this.pacman.LIMBO){
+      if(this.pacman.fsm.current === 'limbo'){
         var pos = this.toWorldPosition(this.resurrectCell.x, this.resurrectCell.y, this.resurrectPoint.x, this.resurrectPoint.y);
         this.game.debug.geom(new Phaser.Rectangle(pos.x-(this.gridsize/2), pos.y-(this.gridsize/2),
          this.gridsize, this.gridsize), 'rgba(120,120,120,0.5)', true);
