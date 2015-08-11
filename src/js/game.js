@@ -73,10 +73,16 @@
       var levelTilemap = this.game.add.tilemap('levels');
       this.DungeonGenerator = new ns.DungeonGenerator(this.size, levelTilemap);
 
+      //initialize cells based on this format
+      var initialLevel = [
+        [0,1,0],
+        [1,0,1],
+        [0,1,0]
+      ];
       var i = 0, j = 0;
       for (i = 0; i < this.squareSize; i++) {
         for (j = 0; j < this.squareSize; j++) {
-          var level = this.DungeonGenerator.loadLevel(0);
+          var level = this.DungeonGenerator.loadLevel(initialLevel[i][j]);
           var cellData = this.createCellData(i, j, level);
           this.cells[i][j] = new ns.Cell(i,j,cellData, this.timerContainer, this);
         }
@@ -84,6 +90,7 @@
 
       this.timerContainer = this.add.group();
 
+      //so that ghosts can move between cells but not out of bounds
       this.createGhostPrison();
       this.ghostLayer.visible = false;
       this.map.setLayer(this.layer);
