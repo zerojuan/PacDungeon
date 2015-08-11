@@ -76,15 +76,14 @@
       //initialize cells based on this format
       var initialLevel = [
         [0,1,0],
-        [1,0,1],
+        [1,2,1],
         [0,1,0]
       ];
       var i = 0, j = 0;
       for (i = 0; i < this.squareSize; i++) {
         for (j = 0; j < this.squareSize; j++) {
           var level = this.DungeonGenerator.loadLevel(initialLevel[i][j]);
-          var cellData = this.createCellData(i, j, level);
-          this.cells[i][j] = new ns.Cell(i,j,cellData, this.timerContainer, this);
+          this.cells[i][j] = new ns.Cell(i,j,level, this.timerContainer, this);
         }
       }
 

@@ -1,12 +1,19 @@
 (function(){
   'use strict';
 
+  var RED = 35,
+      PINK = 36,
+      CYAN = 37,
+      ORANGE = 38,
+      BLUE = 39;
+
   function Cell(x,y,data, timerContainer, main){
     this.level = 0;
 
     this.x = x;
     this.y = y;
     this.data = data;
+    this.parseMonsters();
     this.main = main;
     this.timerContainer = timerContainer;
 
@@ -17,6 +24,8 @@
 
     this.CELLREFRESHTIME = 3000;
     this.cellRefresh = -1;
+
+    this.main.createCellData(this.x, this.y, this.data);
   }
 
   Cell.prototype.isCleared = function(){
@@ -28,6 +37,37 @@
 
     this.cellRefresh = this.CELLREFRESHTIME;
     return true;
+  };
+
+  Cell.prototype.parseMonsters = function(){
+    //loop through the data and see if there are spawn points
+    for(var i = 0; i < this.data.length; i++){
+      for(var j = 0; j < this.data[i].length; j++){
+        var t = this.data[i][j];
+        var found = false;
+        switch(t){
+          case RED:
+            console.log('Found RED!');
+            found = true;
+            break;
+          case PINK:
+            console.log('Found PINK!');
+            found = true;
+            break;
+          case CYAN:
+            console.log('Found CYAN!');
+            found = true;
+            break;
+          case ORANGE:
+            console.log('Found ORANGE!');
+            found = true;
+            break;
+        }
+        if(found){
+          this.data[i][j] = 7;
+        }
+      }
+    }
   };
 
   Cell.prototype.revive = function(){
@@ -52,22 +92,13 @@
         }
       }
     }
-      //get dot
-      //if ran out of dots
-        //create a dot
-      //put dot on safetile location
-
-
-
-    // for(var i = 0; i < this.dots.length; i++){
-    //   this.dots[i].revive();
-    // }
   };
 
   Cell.prototype.nextLevel = function(){
     //load a different level data
     this.level++;
     this.data = this.main.DungeonGenerator.loadLevel(this.level);
+    this.parseMonsters();
     this.revive(); //check where '7' is, and revive our dot sprites there
 
     this.main.createCellData(this.x, this.y, this.data);
