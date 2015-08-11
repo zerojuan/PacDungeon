@@ -13,6 +13,7 @@
     this.x = x;
     this.y = y;
     this.data = data;
+    this.monsters = [];
     this.parseMonsters();
     this.main = main;
     this.timerContainer = timerContainer;
@@ -44,26 +45,29 @@
     for(var i = 0; i < this.data.length; i++){
       for(var j = 0; j < this.data[i].length; j++){
         var t = this.data[i][j];
-        var found = false;
+        var type = 'none';
         switch(t){
           case RED:
-            console.log('Found RED!');
-            found = true;
+            type = 'shadow';
             break;
           case PINK:
-            console.log('Found PINK!');
-            found = true;
+            type = 'speedy';
             break;
           case CYAN:
-            console.log('Found CYAN!');
-            found = true;
+            type = 'bashful';
             break;
           case ORANGE:
-            console.log('Found ORANGE!');
-            found = true;
+            type = 'pokey';
             break;
         }
-        if(found){
+        if(type !== 'none'){
+          this.monsters.push({
+            type: type,
+            row: this.y,
+            col: this.x,
+            x: i,
+            y: j
+          });
           this.data[i][j] = 7;
         }
       }

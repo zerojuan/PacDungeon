@@ -133,7 +133,13 @@
       this.updateLives();
 
       //spawn 2 monsters
-      this.spawnMonsters(['shadow', 'speedy']);
+      for(i = 0; i < this.cells.length; i++){
+        for(j = 0; j < this.cells[i].length; j++){
+          var cell1 = this.cells[j][i];
+          this.spawnMonsters(cell1.monsters);
+        }
+      }
+
 
       //create 3 graves
       for(i = 0; i < 3; i++){
@@ -250,13 +256,12 @@
       this.game.add.existing(this.pacman);
     },
 
-    spawnMonsters: function(types) {
-      for (var i = 0; i < types.length; i++) {
-        //pick random col and row
-        var pos = this.pickRandomSquare();
-        var p = this.toWorldPosition(pos.row, pos.col, 6, 7);
-        this.createMonster(p.x, p.y, types[i]);
-      }
+    spawnMonsters: function(monsters) {
+      var that = this;
+      monsters.forEach(function(m){
+          var p = that.toWorldPosition(m.row, m.col, m.x, m.y);
+          that.createMonster(p.x, p.y, m.type);
+      });
     },
 
     createMonster: function(x, y, type) {
