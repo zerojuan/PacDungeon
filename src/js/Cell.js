@@ -105,6 +105,8 @@
     this.parseMonsters();
     this.revive(); //check where '7' is, and revive our dot sprites there
 
+    this.main.spawnMonsters(this.monsters);
+    this.monsters = [];
     this.main.createCellData(this.x, this.y, this.data);
     this.main.explodeCell(this);
   };

@@ -137,6 +137,8 @@
         for(j = 0; j < this.cells[i].length; j++){
           var cell1 = this.cells[j][i];
           this.spawnMonsters(cell1.monsters);
+          //empty monsters array immediately
+          cell1.monsters = [];
         }
       }
 
