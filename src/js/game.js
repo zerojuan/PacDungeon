@@ -6,6 +6,7 @@
 
   function Game() {
     that = this;
+    this.debug = true;
     this.livesLeft = 3;
     this.offset = new Phaser.Point(-30,-30);
     this.map = null;
@@ -158,7 +159,11 @@
       this.cursors = this.input.keyboard.createCursorKeys();
 
       this.input.keyboard.onUpCallback = function(event) {
-        that.pacman.processInput(event);
+        if (event.keyCode === Phaser.Keyboard.Z){
+          that.toggleDebug();
+        }else{
+          that.pacman.processInput(event);
+        }
       };
 
       this.pacman.move(Phaser.LEFT);
@@ -184,6 +189,8 @@
       this.scoreTxt.align = 'left';
       this.scoreTxt.x = 0;
       this.scoreTxt.y = -40;
+
+      this.toggleDebug();
     },
 
     updateLives: function(){
@@ -629,10 +636,14 @@
 
     },
     toggleDebug: function(){
-      this.monsters.forEach(function(m){
-        m.debug = !m.debug;
-      });
-      this.pacman.debug = !this.pacman.debug;
+      this.debug = !this.debug;
+      if(this.monsters){
+        this.monsters.forEach(function(m){
+          m.debug = that.debug;
+        });
+      }
+
+      this.pacman.debug = this.debug;
       this.game.debug.reset();
     }
 

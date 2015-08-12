@@ -67,8 +67,6 @@
       this.main.updateResurrectZone(Phaser.LEFT);
     } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
       this.main.updateResurrectZone(Phaser.RIGHT);
-    } else if (event.keyCode === Phaser.Keyboard.Z){
-      this.main.toggleDebug();
     }
   };
 
@@ -83,8 +81,6 @@
       this.main.updateTeleportZone(Phaser.LEFT);
     } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
       this.main.updateTeleportZone(Phaser.RIGHT);
-    } else if (event.keyCode === Phaser.Keyboard.Z){
-      this.main.toggleDebug();
     }
   };
 
