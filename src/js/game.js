@@ -75,9 +75,9 @@
 
       //initialize cells based on this format
       var initialLevel = [
-        [0,1,0],
+        [0,1,2],
         [1,2,1],
-        [0,1,0]
+        [2,1,0]
       ];
       var i = 0, j = 0;
       for (i = 0; i < this.squareSize; i++) {

@@ -38,7 +38,7 @@
         },
         ondead: function(event, from, to, context){
           context.disappear();
-          this.executeInput = null;
+          context.executeInput = null;
         },
         onalive: function(event, from, to, context){
           context.executeInput = context.moveAlive;
