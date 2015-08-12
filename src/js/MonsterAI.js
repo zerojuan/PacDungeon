@@ -33,7 +33,8 @@
 
     this.fsm = StateMachine.create({
       events: [
-        { name: 'startup', from: 'none', to: 'wander'},
+        { name: 'startup', from: 'none', to: 'baby'},
+        { name: 'timerExpires', from: 'baby', to: 'wander'},
         { name: 'timerExpires', from: 'flee', to: 'fleeblink'},
         { name: 'timerExpires', from: 'fleeblink', to: 'wander'},
         { name: 'timerExpires', from: 'wander', to: 'chase'},
@@ -41,6 +42,7 @@
         { name: 'wanderExpires', from: 'wander', to: 'chase'},
         { name: 'exploded', from: ['chase', 'wander'], to: 'flee'  },
         { name: 'exploded', from: 'flee', to: 'die'},
+        { name: 'exploded', from: 'baby', to: 'baby'},
         { name: 'explodeExpired', from: 'flee', to: 'wander'  },
         { name: 'eaten', from: ['flee', 'fleeblink'], to: 'die'}
       ],
@@ -49,9 +51,16 @@
           context.seekTime = 3000;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
+        onbaby: function(event, from, to, context){
+          context.seekTime = 3000;
+          context.nextDirectionFinder = context.strategy.getWanderDirection;
+          context.speed = context.main.speed * 0.2;
+          context.scale.setTo(0.5, 0.5);
+        },
         onwander: function(event, from, to, context){
           context.seekTime = 3000;
           context.setTint();
+          context.scale.setTo(1, 1);
           context.speed = context.main.speed * 0.90;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
@@ -65,7 +74,7 @@
         onflee: function(event, from, to, context){
           context.seekTime = 2000;
           context.tint = BLUE;
-          context.ghostEyes.frame = 4;          
+          context.ghostEyes.frame = 4;
           context.speed = context.main.speed * 0.30;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
