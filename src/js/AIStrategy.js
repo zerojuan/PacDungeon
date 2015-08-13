@@ -146,14 +146,19 @@
   AIStrategy.prototype.getWanderDirection = function(directions, current, context){
     var isValid = false;
     var t;
+    var tries = 0;
     do{
       //generate a random direction until it's valid
-      t = Math.floor((Math.random() * 5)) + 1;
+      t = Math.floor((Math.random() * 4)) + 1;
+      console.log(t);
       if(!directions[t]){
         continue;
       }
       if(t === context.opposites[current]){
         //ghost can't move back yo
+        if(tries > 5){
+          break;
+        }
         continue;
       }
 
@@ -164,9 +169,13 @@
         directions[t].index === ns.DungeonGenerator.LEFTWALL){
 
         if(!context.isAtEdge(directions[t].index)){
+          isValid = true;
           break;
         }
       }
+
+      tries++;
+
     }while(!isValid);
 
     return t;
