@@ -23,7 +23,7 @@
   var ns = window['pacdungeon'];
   function MonsterAI(main, x, y, type){
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
-    this.debug = true;
+    this.debug = main.debug;
     this.main = main;
     this.killCount = 0;
     this.speed = this.main.speed * 0.90;
