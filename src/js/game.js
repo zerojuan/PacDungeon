@@ -83,7 +83,7 @@
       var i = 0, j = 0;
       for (i = 0; i < this.squareSize; i++) {
         for (j = 0; j < this.squareSize; j++) {
-          var level = this.DungeonGenerator.loadLevel(initialLevel[i][j]);
+          var level = this.DungeonGenerator.loadLevel(initialLevel[j][i]);
           this.cells[i][j] = new ns.Cell(i,j,level, this.timerContainer, this);
         }
       }
@@ -270,7 +270,7 @@
     spawnMonsters: function(monsters) {
       var that = this;
       monsters.forEach(function(m){
-          var p = that.toWorldPosition(m.row, m.col, m.x, m.y);
+          var p = that.toWorldPosition(m.col, m.row, m.x, m.y);
           that.createMonster(p.x, p.y, m.type);
       });
     },
