@@ -146,7 +146,10 @@
   AIStrategy.prototype.getWanderDirection = function(directions, current, context){
     //get where pacman is facing
     // var nextDirection = null;
-    for(var t = 1; t < 5; t++){
+    var isValid = false;
+    var t;
+    do{
+      t = Math.floor((Math.random() * 5)) + 1;
       if(!directions[t]){
         continue;
       }
@@ -162,15 +165,11 @@
         directions[t].index === ns.DungeonGenerator.LEFTWALL){
 
         if(!context.isAtEdge(directions[t].index)){
-          //which of the directions is closer to the pacman?
-          console.log('You are not at edge?');
           break;
-        }else{
-          console.log('Are you at the edge?');
         }
       }
-    }
-    console.log('T is ', t, Phaser.UP);
+    }while(!isValid);
+
     return t;
   };
 
