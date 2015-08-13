@@ -76,9 +76,9 @@
 
       //initialize cells based on this format
       var initialLevel = [
-        [0,1,2],
-        [1,2,1],
-        [2,1,0]
+        [0,0,0],
+        [0,0,0],
+        [0,1,0]
       ];
       var i = 0, j = 0;
       for (i = 0; i < this.squareSize; i++) {
@@ -190,6 +190,8 @@
       this.scoreTxt.x = 0;
       this.scoreTxt.y = -40;
 
+      //double toggle so that the initialization is normalized
+      this.toggleDebug();
       this.toggleDebug();
     },
 
@@ -283,7 +285,6 @@
       //add it to the group immediately
       monster.body.setSize(16, 16, 0, 0);
       monster.anchor.set(0.5);
-      monster.move(Phaser.DOWN);
       this.monsters.add(monster);
 
       return monster;

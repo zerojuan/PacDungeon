@@ -145,6 +145,7 @@
 
   AIStrategy.prototype.getWanderDirection = function(directions, current, context){
     //get where pacman is facing
+    // var nextDirection = null;
     for(var t = 1; t < 5; t++){
       if(!directions[t]){
         continue;
@@ -154,19 +155,31 @@
         continue;
       }
 
-      if(directions[t].index === context.safetile){
-        break;
+      if(directions[t].index === context.safetile ||
+        directions[t].index === ns.DungeonGenerator.TOPWALL ||
+        directions[t].index === ns.DungeonGenerator.RIGHTWALL ||
+        directions[t].index === ns.DungeonGenerator.BOTTOMWALL ||
+        directions[t].index === ns.DungeonGenerator.LEFTWALL){
+
+        if(!context.isAtEdge(directions[t].index)){
+          //which of the directions is closer to the pacman?
+          console.log('You are not at edge?');
+          break;
+        }else{
+          console.log('Are you at the edge?');
+        }
       }
     }
+    console.log('T is ', t, Phaser.UP);
     return t;
   };
 
   AIStrategy.prototype.isAtEdge = function(tile){
+    console.log('Ghost Marker: ', this.ghost.forwardMarker.x, this.ghost.forwardMarker.y === 28);
     if(tile === ns.DungeonGenerator.TOPWALL){
 
       return this.ghost.forwardMarker.y === 1;
     }else if(tile === ns.DungeonGenerator.RIGHTWALL){
-      console.log('Ghost Marker: ', this.ghost.forwardMarker.x, this.ghost.forwardMarker.x === 38);
       return this.ghost.forwardMarker.x === 28;
     }else if(tile === ns.DungeonGenerator.BOTTOMWALL){
       return this.ghost.forwardMarker.y === 28;

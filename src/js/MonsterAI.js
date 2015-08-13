@@ -95,7 +95,7 @@
     this.marker = new Phaser.Point(0,0);
     this.forwardMarker = new Phaser.Point(0,0);
 
-    this.current = Phaser.DOWN;
+    this.current = Phaser.NONE;
     this.nextDirection = Phaser.NONE;
     this.turnPoint = new Phaser.Point();
     this.futurePoint = new Phaser.Point();
