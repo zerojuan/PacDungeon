@@ -144,11 +144,10 @@
   };
 
   AIStrategy.prototype.getWanderDirection = function(directions, current, context){
-    //get where pacman is facing
-    // var nextDirection = null;
     var isValid = false;
     var t;
     do{
+      //generate a random direction until it's valid
       t = Math.floor((Math.random() * 5)) + 1;
       if(!directions[t]){
         continue;
@@ -174,9 +173,7 @@
   };
 
   AIStrategy.prototype.isAtEdge = function(tile){
-    console.log('Ghost Marker: ', this.ghost.forwardMarker.x, this.ghost.forwardMarker.y === 28);
     if(tile === ns.DungeonGenerator.TOPWALL){
-
       return this.ghost.forwardMarker.y === 1;
     }else if(tile === ns.DungeonGenerator.RIGHTWALL){
       return this.ghost.forwardMarker.x === 28;
