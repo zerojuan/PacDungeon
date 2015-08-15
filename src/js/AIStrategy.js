@@ -148,6 +148,7 @@
     var t;
     var tries = 0;
     do{
+      tries++;
       //generate a random direction until it's valid
       t = Math.floor((Math.random() * 4)) + 1;
       console.log(t);
@@ -173,8 +174,6 @@
           break;
         }
       }
-
-      tries++;
 
     }while(!isValid);
 
