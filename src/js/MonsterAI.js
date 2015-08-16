@@ -34,7 +34,8 @@
     this.fsm = StateMachine.create({
       events: [
         { name: 'startup', from: 'none', to: 'baby'},
-        { name: 'timerExpires', from: 'baby', to: 'wander'},
+        { name: 'timerExpires', from: 'baby', to: 'babyblink'},
+        { name: 'timerExpires', from: 'babyblink', to: 'wander'},
         { name: 'timerExpires', from: 'flee', to: 'fleeblink'},
         { name: 'timerExpires', from: 'fleeblink', to: 'wander'},
         { name: 'timerExpires', from: 'wander', to: 'chase'},
@@ -44,8 +45,9 @@
         { name: 'exploded', from: ['chase', 'wander'], to: 'flee'  },
         { name: 'exploded', from: 'flee', to: 'die'},
         { name: 'exploded', from: 'baby', to: 'baby'},
+        { name: 'exploded', from: 'babyblink', to: 'baby'},
         { name: 'explodeExpired', from: 'flee', to: 'wander'  },
-        { name: 'eaten', from: ['flee', 'fleeblink', 'baby'], to: 'die'}
+        { name: 'eaten', from: ['flee', 'fleeblink', 'baby', 'babyblink'], to: 'die'}
       ],
       callbacks: {
         onstartup: function(event, from, to, context){
@@ -57,6 +59,9 @@
           context.nextDirectionFinder = context.strategy.getWanderDirection;
           context.speed = context.main.speed * 0.2;
           context.scale.setTo(0.5, 0.5);
+        },
+        onbabyblink: function(event, from, to, context){
+          context.seekTime = 3000;
         },
         onwander: function(event, from, to, context){
           context.seekTime = 3000;
@@ -253,6 +258,15 @@
     }
   };
 
+  MonsterAI.prototype.growingAnimation = function(){
+    if(this.scale.x === 1){
+      this.scale.setTo(0.5, 0.5);
+    }else{
+      this.scale.setTo(1,1);
+    }
+
+  }
+
   MonsterAI.prototype.updateTimers = function(time){
     if(this.seekTime < 0){
       return;
@@ -269,6 +283,10 @@
 
     if(this.fsm.current === 'fleeblink'){
       this.blinkingAnimation();
+    }
+
+    if(this.fsm.current === 'babyblink'){
+      this.growingAnimation();
     }
 
     //look for next direction if you don't have any

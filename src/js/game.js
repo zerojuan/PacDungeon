@@ -511,7 +511,7 @@
         if(monster.fsm.current === 'flee'){
           this.updateScore(100);
           monster.die();
-        }else if(monster.fsm.current === 'baby'){
+        }else if(monster.fsm.current === 'baby' || monster.fsm.current === 'babyblink'){
           this.updateScore(200);
           monster.die();
         }else{
