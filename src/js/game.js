@@ -484,12 +484,17 @@
       }
     },
 
+    updateScore: function(increment){
+      this.score += increment;
+      this.scoreTxt.text = this.score;
+    },
+
     eatDot: function(pacman, dot) {
 
       dot.kill();
 
-      this.score += 10;
-      this.scoreTxt.text = this.score;
+      this.updateScore(10);
+
 
       //get dots in this area
       this.isCellCleared(dot);
@@ -504,9 +509,11 @@
     touchMonsters: function(pacman, monster) {
       if(this.pacman.fsm.current !== 'limbo' || this.pacman.fsm.current !== 'dead'){
         if(monster.fsm.current === 'flee'){
+          this.updateScore(100);
           monster.die();
         }else if(monster.fsm.current === 'baby'){
-
+          this.updateScore(200);
+          monster.die();
         }else{
           monster.addKill(1);
           //put a grave here

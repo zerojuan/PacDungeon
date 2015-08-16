@@ -39,12 +39,13 @@
         { name: 'timerExpires', from: 'fleeblink', to: 'wander'},
         { name: 'timerExpires', from: 'wander', to: 'chase'},
         { name: 'timerExpires', from: 'chase', to: 'wander'},
+        { name: 'timerExpires', from: 'die', to: 'die'},
         { name: 'wanderExpires', from: 'wander', to: 'chase'},
         { name: 'exploded', from: ['chase', 'wander'], to: 'flee'  },
         { name: 'exploded', from: 'flee', to: 'die'},
         { name: 'exploded', from: 'baby', to: 'baby'},
         { name: 'explodeExpired', from: 'flee', to: 'wander'  },
-        { name: 'eaten', from: ['flee', 'fleeblink'], to: 'die'}
+        { name: 'eaten', from: ['flee', 'fleeblink', 'baby'], to: 'die'}
       ],
       callbacks: {
         onstartup: function(event, from, to, context){
