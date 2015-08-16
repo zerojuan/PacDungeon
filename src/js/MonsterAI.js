@@ -23,6 +23,7 @@
   var ns = window['pacdungeon'];
   function MonsterAI(main, x, y, type){
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
+    this.targetFSM = main.pacman.fsm;
     this.debug = main.debug;
     this.main = main;
     this.killCount = 0;
@@ -30,6 +31,12 @@
     this.type = type || types[Math.floor(Math.random() * 4)];
     this.directions = [ null, null, null, null, null ];
     this.setTint();
+
+    this.growTween = this.game.add.tween(this.scale)
+      .to({
+        x: 1,
+        y: 1
+      }, 100, Phaser.Easing.Linear.None, false, 0, 20, true);
 
     this.fsm = StateMachine.create({
       events: [
@@ -62,10 +69,14 @@
         },
         onbabyblink: function(event, from, to, context){
           context.seekTime = 3000;
+
+          // let the earthquake begins
+          context.growTween.start();
         },
         onwander: function(event, from, to, context){
           context.seekTime = 3000;
           context.setTint();
+          context.growTween.stop();
           context.scale.setTo(1, 1);
           context.speed = context.main.speed * 0.90;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
@@ -74,7 +85,13 @@
           context.seekTime = 1000;
         },
         onchase: function(event, from, to, context){
-          context.seekTime = 10000;
+          //immediately move to wander if pacman is dead
+          if(context.targetFSM.current === 'alive'){
+            context.seekTime = 10000;
+          }else{
+            context.seekTime = 10;
+          }
+
           context.nextDirectionFinder = context.strategy.getNextDirection;
         },
         onflee: function(event, from, to, context){
@@ -259,11 +276,11 @@
   };
 
   MonsterAI.prototype.growingAnimation = function(){
-    if(this.scale.x === 1){
-      this.scale.setTo(0.5, 0.5);
-    }else{
-      this.scale.setTo(1,1);
-    }
+    // if(this.scale.x === 1){
+    //   this.scale.setTo(0.5, 0.5);
+    // }else{
+    //   this.scale.setTo(1,1);
+    // }
 
   }
 
