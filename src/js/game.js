@@ -608,22 +608,24 @@
       if(this.pacman.fsm.current === 'limbo'){
         //move resurrect point
         this.updateResurrectPoint();
-      }
+      }else{
+        if (this.pacman.marker.x < 0 || this.pacman.marker.y < 0) {
+          return;
+        }
+        //  Update our grid sensors
+        var index = this.map.getLayer(this.layer);
+        this.pacman.directions[1] = this.map.getTileLeft(index, this.pacman.marker.x, this.pacman.marker.y);
+        this.pacman.directions[2] = this.map.getTileRight(index, this.pacman.marker.x, this.pacman.marker.y);
+        this.pacman.directions[3] = this.map.getTileAbove(index, this.pacman.marker.x, this.pacman.marker.y);
+        this.pacman.directions[4] = this.map.getTileBelow(index, this.pacman.marker.x, this.pacman.marker.y);
 
-      if (this.pacman.marker.x < 0 || this.pacman.marker.y < 0) {
-        return;
-      }
-      //  Update our grid sensors
-      var index = this.map.getLayer(this.layer);
-      this.pacman.directions[1] = this.map.getTileLeft(index, this.pacman.marker.x, this.pacman.marker.y);
-      this.pacman.directions[2] = this.map.getTileRight(index, this.pacman.marker.x, this.pacman.marker.y);
-      this.pacman.directions[3] = this.map.getTileAbove(index, this.pacman.marker.x, this.pacman.marker.y);
-      this.pacman.directions[4] = this.map.getTileBelow(index, this.pacman.marker.x, this.pacman.marker.y);
+        this.checkKeys();
 
-      this.checkKeys();
+        if (this.pacman.turning !== Phaser.NONE) {
+          this.pacman.turn();
+        }
 
-      if (this.pacman.turning !== Phaser.NONE) {
-        this.pacman.turn();
+        this.drawTeleportPath();
       }
 
       for(var i = 0; i < this.cells.length; i++){
@@ -631,10 +633,6 @@
           this.cells[i][j].update(game.time);
         }
       }
-
-
-      this.drawTeleportPath();
-
       this.shakeScreen();
     },
     render: function() {
