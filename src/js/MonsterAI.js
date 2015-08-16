@@ -72,14 +72,14 @@
           context.nextDirectionFinder = context.strategy.getNextDirection;
         },
         onflee: function(event, from, to, context){
-          context.seekTime = 2000;
+          context.seekTime = 90000;
           context.tint = BLUE;
           context.ghostEyes.frame = 4;
           context.speed = context.main.speed * 0.30;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
-        ondie: function(){
-
+        ondie: function(event, from, to, context){
+          context.kill();
         }
       }
       });
@@ -117,6 +117,10 @@
 
   MonsterAI.prototype.explode = function(){
     this.fsm.exploded(this);
+  };
+
+  MonsterAI.prototype.die = function(){
+    this.fsm.eaten(this);
   };
 
   MonsterAI.prototype.setTint = function(){

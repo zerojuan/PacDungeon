@@ -503,27 +503,32 @@
 
     touchMonsters: function(pacman, monster) {
       if(this.pacman.fsm.current !== 'limbo' || this.pacman.fsm.current !== 'dead'){
-        monster.addKill(1);
-        //put a grave here
-        var grave = this.graves.getFirstDead();
-        if(grave){
-          grave.revive();
-          grave.play('die').setFrame(0);
-          grave.x = pacman.x;
-          grave.y = pacman.y;
-          //pacman is in limbo
-          pacman.gotoLimbo(this.livesLeft);
-          this.graphics.clear();
-          this.resurrectCell.x = this.activeZone.x;
-          this.resurrectCell.y = this.activeZone.y;
-          this.resurrectPoint.x = 1;
-          this.resurrectPoint.y = 1;
-        }else{
-          //TODO: Gameover screen!
-          //TODO: show pacman dying
-          this.graphics.clear();
-        }
+        if(monster.fsm.current === 'flee'){
+          monster.die();
+        }else if(monster.fsm.current === 'baby'){
 
+        }else{
+          monster.addKill(1);
+          //put a grave here
+          var grave = this.graves.getFirstDead();
+          if(grave){
+            grave.revive();
+            grave.play('die').setFrame(0);
+            grave.x = pacman.x;
+            grave.y = pacman.y;
+            //pacman is in limbo
+            pacman.gotoLimbo(this.livesLeft);
+            this.graphics.clear();
+            this.resurrectCell.x = this.activeZone.x;
+            this.resurrectCell.y = this.activeZone.y;
+            this.resurrectPoint.x = 1;
+            this.resurrectPoint.y = 1;
+          }else{
+            //TODO: Gameover screen!
+            //TODO: show pacman dying
+            this.graphics.clear();
+          }
+        }
       }
     },
 
