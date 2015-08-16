@@ -38,6 +38,11 @@
         y: 1
       }, 100, Phaser.Easing.Linear.None, false, 0, 20, true);
 
+    this.tintTween = this.game.add.tween(this)
+      .to({
+        tint: this.tint
+      }, 100, Phaser.Easing.Linear.None, false, 0, 20, true);
+
     this.fsm = StateMachine.create({
       events: [
         { name: 'startup', from: 'none', to: 'baby'},
@@ -83,6 +88,10 @@
         },
         onfleeblink: function(event, from, to, context){
           context.seekTime = 1000;
+          context.tintTween.start();
+        },
+        onleavefleeblink: function(event, from, to, context){
+          context.tintTween.stop();
         },
         onchase: function(event, from, to, context){
           //immediately move to wander if pacman is dead
@@ -95,7 +104,7 @@
           context.nextDirectionFinder = context.strategy.getNextDirection;
         },
         onflee: function(event, from, to, context){
-          context.seekTime = 90000;
+          context.seekTime = 1000;
           context.tint = BLUE;
           context.ghostEyes.frame = 4;
           context.speed = context.main.speed * 0.30;
@@ -267,23 +276,6 @@
     return false;
   };
 
-  MonsterAI.prototype.blinkingAnimation = function(){
-    if(this.tint === BLUE){
-      this.setTint();
-    }else{
-      this.tint = BLUE;
-    }
-  };
-
-  MonsterAI.prototype.growingAnimation = function(){
-    // if(this.scale.x === 1){
-    //   this.scale.setTo(0.5, 0.5);
-    // }else{
-    //   this.scale.setTo(1,1);
-    // }
-
-  }
-
   MonsterAI.prototype.updateTimers = function(time){
     if(this.seekTime < 0){
       return;
@@ -297,14 +289,6 @@
 
   MonsterAI.prototype.update = function(){
     this.updateTimers(this.main.game.time);
-
-    if(this.fsm.current === 'fleeblink'){
-      this.blinkingAnimation();
-    }
-
-    if(this.fsm.current === 'babyblink'){
-      this.growingAnimation();
-    }
 
     //look for next direction if you don't have any
     if(!this.targetFound){
