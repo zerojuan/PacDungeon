@@ -21,6 +21,7 @@
     this.dots = [];
     var pos = main.toWorldPosition(this.x, this.y, 0, 0);
     this.countdown = new Phaser.BitmapText(main.game, pos.x,pos.y, 'minecraftia', '0');
+    this.countdown.alpha = 0;
     timerContainer.add(this.countdown);
 
     this.CELLREFRESHTIME = 3000;
@@ -37,6 +38,7 @@
     }
 
     this.cellRefresh = this.CELLREFRESHTIME;
+    this.countdown.alpha = 0.3;
     return true;
   };
 
@@ -100,6 +102,7 @@
 
   Cell.prototype.nextLevel = function(){
     //load a different level data
+    this.countdown.alpha = 0;
     this.level++;
     this.data = this.main.DungeonGenerator.loadLevel(this.level);
     this.parseMonsters();
