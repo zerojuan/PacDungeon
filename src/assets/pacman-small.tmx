@@ -5,7 +5,7 @@
  </tileset>
  <layer name="Pacman" width="30" height="30">
   <data encoding="base64" compression="zlib">
-   eJztVcsOwjAM25CgwGDAxuuIGP//jRQpkSKTNBQ6uHCwgOLFdZp6dVVVEwfTiLowbxbROliOzGsiVgJr4AXirOl7gDXJY/QRHayh7tzZ3+OZTcQO6vAa86TWgurKPeT2JYi1W8RAny34OEacFF1eR13pwdLFs+DzCNXz/lDX6vMrfvksevrsRF3U7an/G+JhX3L7zB635H9n6B6J11B/P9VtycOKNLFeoLNnbdYcBG8fcXBwHoFXOody8io40PKgFA9zRf6WPMweq542JxpP3nXMJc+Htr8W/rd0c/qHHizdDp5J6WK/H74viu6g1M71K7W03A+OX0/X8mtpsf+r0hdtvt6Zq2/cIzkH/7war88Wj+fdmoPUO6tUHljzhxztfZ5TL0cX72RKN5UbWo9Tul2mrpUbY/rFMyl1vt5cebn27Xv0q7y6A5lkJU0=
+   eJztlbEOwjAMRFskiNShQwQS6lr+/xvpQCTrdOfEbQoLg0VFr35xcnbGYRgulbhuMXbW3baYKzF9dAt5t5iYgvns95jP6pLQYr4EmvJc/kdugkCuZaEG6yga9sx0dm2sjrLGF+wxW5/9ZXXs4c7wnBq5aYjvs10Xy43rY8G4EV95+dBP6K2o71UfsXpXol0N977FoxLPE3S951BkXqGf0FtTgy7t1KleQ11uzKe8rLi2TvSf4mXBte89LuthxsUaFDfDN955sP6dCXcluaP1qjvGzkuv3hpX1Ysc9BZylb+ivlLnyu6FI31kffCfV33mUERX/K584N1ZR7gtcw012eG25ItwsSc9rjc32B573BzkqrlxZr14Jr3Ot+ar2lz7dh/9al69ATcbKL8=
   </data>
  </layer>
 </map>
