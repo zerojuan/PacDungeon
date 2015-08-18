@@ -508,10 +508,10 @@
 
     touchMonsters: function(pacman, monster) {
       if(this.pacman.fsm.current !== 'limbo' || this.pacman.fsm.current !== 'dead'){
-        if(monster.fsm.current === 'flee' || monster.fsm.current === 'fleeblink'){
+        if(monster.fsm.current.startsWith('flee')){
           this.updateScore(100);
           monster.die();
-        }else if(monster.fsm.current === 'baby' || monster.fsm.current === 'babyblink'){
+        }else if(monster.fsm.current.startsWith('baby')){
           this.updateScore(200);
           monster.die();
         }else{
