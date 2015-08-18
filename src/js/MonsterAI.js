@@ -104,7 +104,7 @@
           context.nextDirectionFinder = context.strategy.getNextDirection;
         },
         onflee: function(event, from, to, context){
-          context.seekTime = 1000;
+          context.seekTime = 10000;
           context.tint = BLUE;
           context.ghostEyes.frame = 4;
           context.speed = context.main.speed * 0.30;
