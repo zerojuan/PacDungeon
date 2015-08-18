@@ -351,23 +351,6 @@
 
     },
 
-    checkKeys: function() {
-
-      if (this.cursors.left.isDown && this.pacman.current !== Phaser.LEFT) {
-        this.pacman.checkDirection(Phaser.LEFT);
-      } else if (this.cursors.right.isDown && this.pacman.current !== Phaser.RIGHT) {
-        this.pacman.checkDirection(Phaser.RIGHT);
-      } else if (this.cursors.up.isDown && this.pacman.current !== Phaser.UP) {
-        this.pacman.checkDirection(Phaser.UP);
-      } else if (this.cursors.down.isDown && this.pacman.current !== Phaser.DOWN) {
-        this.pacman.checkDirection(Phaser.DOWN);
-      } else {
-        //  This forces them to hold the key down to turn the corner
-        this.pacman.turning = Phaser.NONE;
-      }
-
-    },
-
     updateResurrectPoint: function(){
       this.resurrectTimer++;
       var moveToNextTile = function(){
@@ -619,7 +602,7 @@
         this.pacman.directions[3] = this.map.getTileAbove(index, this.pacman.marker.x, this.pacman.marker.y);
         this.pacman.directions[4] = this.map.getTileBelow(index, this.pacman.marker.x, this.pacman.marker.y);
 
-        this.checkKeys();
+        this.pacman.checkKeys(this.cursors);
 
         if (this.pacman.turning !== Phaser.NONE) {
           this.pacman.turn();

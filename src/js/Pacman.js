@@ -50,6 +50,21 @@
   Pacman.prototype = Object.create(Phaser.Sprite.prototype);
   Pacman.prototype.constructor = Pacman;
 
+  Pacman.prototype.checkKeys = function(cursors){
+    if (cursors.left.isDown && this.current !== Phaser.LEFT) {
+      this.checkDirection(Phaser.LEFT);
+    } else if (cursors.right.isDown && this.current !== Phaser.RIGHT) {
+      this.checkDirection(Phaser.RIGHT);
+    } else if (cursors.up.isDown && this.current !== Phaser.UP) {
+      this.checkDirection(Phaser.UP);
+    } else if (cursors.down.isDown && this.current !== Phaser.DOWN) {
+      this.checkDirection(Phaser.DOWN);
+    } else {
+      //  This forces them to hold the key down to turn the corner
+      this.turning = Phaser.NONE;
+    }
+  };
+
   Pacman.prototype.processInput = function(event){
     if(this.executeInput){ //because some states disables inputs
       this.executeInput(event);
