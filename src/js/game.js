@@ -7,7 +7,7 @@
   function Game() {
     that = this;
     this.debug = true;
-    this.livesLeft = 3;
+    this.livesLeft = 1;
     this.offset = new Phaser.Point(-30,-30);
     this.map = null;
     this.layers = [];
@@ -166,7 +166,7 @@
         if (event.keyCode === Phaser.Keyboard.Z){
           that.toggleDebug();
         }else if(event.keyCode === Phaser.Keyboard.X){
-          that.game.scale.startFullScreen(false);
+          that.game.scale.startFullScreen(true);
         }else{
           that.pacman.processInput(event);
         }
@@ -200,11 +200,21 @@
       this.toggleDebug();
       this.toggleDebug();
 
+      this.rectangle = this.game.add.graphics(0,0);
+      this.rectangle.beginFill(0x000000);
+      this.rectangle.lineStyle(10, 0xffd900, 1);
+      this.rectangle.drawRect(this.offset.x,this.offset.y, this.game.width, this.game.height);
+      this.rectangle.endFill();
+      this.rectangle.alpha = 0;
       // this.alpha = 0.5;
-      // this.fadeOutTween = this.game.add.tween(rectangle)
-      //   .to({
-      //     alpha: 0
-      //   }, 100, Phaser.Easing.Linear.None, false, 0, 20, true);
+      this.fadeOutTween = this.game.add.tween(this.rectangle)
+        .to({
+          alpha: 1
+        }, 10000, Phaser.Easing.Linear.None, false, 0, 0, false);
+
+      this.fadeOutTween.onComplete.addOnce(function(){
+        this.game.state.start('menu');
+      }, this);
     },
 
     updateLives: function(){
@@ -528,11 +538,17 @@
           }else{
             //TODO: Gameover screen!
             //TODO: show pacman dying
-            this.state = 'GameOver';
+
             this.graphics.clear();
           }
         }
       }
+    },
+
+    gotoGameOver: function(){
+      console.log('Game over?');
+      this.state = 'GameOver';
+      this.fadeOutTween.start();
     },
 
     //called by Cell

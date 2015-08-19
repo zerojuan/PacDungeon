@@ -38,6 +38,7 @@
         },
         ondead: function(event, from, to, context){
           context.disappear();
+          context.executeDeath();
           context.executeInput = null;
         },
         onalive: function(event, from, to, context){
@@ -63,6 +64,10 @@
       //  This forces them to hold the key down to turn the corner
       this.turning = Phaser.NONE;
     }
+  };
+
+  Pacman.prototype.executeDeath = function(){
+    this.main.gotoGameOver();
   };
 
   Pacman.prototype.processInput = function(event){
