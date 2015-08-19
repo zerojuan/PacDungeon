@@ -53,12 +53,16 @@
 
     this.c1 = new Phaser.Point();
     this.c2 = new Phaser.Point();
+    this.state = 'Game';
   }
 
   Game.prototype = {
 
     create: function() {
+      this.state = 'Game';
       this.game.world.setBounds(this.offset.x, this.offset.y, this.game.width, this.game.height); // normalize after shake?
+
+      this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.NO_SCALE;
 
       this.stage.backgroundColor = '#2d2d2d';
 
@@ -161,6 +165,8 @@
       this.input.keyboard.onUpCallback = function(event) {
         if (event.keyCode === Phaser.Keyboard.Z){
           that.toggleDebug();
+        }else if(event.keyCode === Phaser.Keyboard.X){
+          that.game.scale.startFullScreen(false);
         }else{
           that.pacman.processInput(event);
         }
@@ -193,6 +199,12 @@
       //double toggle so that the initialization is normalized
       this.toggleDebug();
       this.toggleDebug();
+
+      // this.alpha = 0.5;
+      // this.fadeOutTween = this.game.add.tween(rectangle)
+      //   .to({
+      //     alpha: 0
+      //   }, 100, Phaser.Easing.Linear.None, false, 0, 20, true);
     },
 
     updateLives: function(){
@@ -381,7 +393,7 @@
 
     updateResurrectZone: function(direction){
       var next = new Phaser.Point(this.resurrectCell.x, this.resurrectCell.y);
-      console.log('Updating resurrect zone');
+
       if(direction === Phaser.LEFT){
         next.x--;
       } else if(direction === Phaser.RIGHT){
@@ -516,6 +528,7 @@
           }else{
             //TODO: Gameover screen!
             //TODO: show pacman dying
+            this.state = 'GameOver';
             this.graphics.clear();
           }
         }
