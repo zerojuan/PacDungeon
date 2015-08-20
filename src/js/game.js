@@ -210,10 +210,10 @@
       this.fadeOutTween = this.game.add.tween(this.rectangle)
         .to({
           alpha: 1
-        }, 10000, Phaser.Easing.Linear.None, false, 0, 0, false);
+        }, 300, Phaser.Easing.Linear.None, false, 0, 0, false);
 
       this.fadeOutTween.onComplete.addOnce(function(){
-        this.game.state.start('menu');
+        this.game.state.start('gameover', true, false, this.score);
       }, this);
     },
 
