@@ -23,6 +23,10 @@
       this.titleTxt.x = this.game.width / 2 - this.titleTxt.textWidth / 2;
 
       this.input.onDown.add(this.onDown, this);
+      this.input.keyboard.callbackContext = this;
+      this.input.keyboard.onUpCallback = function() {
+        this.onDown();
+      };
     },
 
     update: function(game) {
