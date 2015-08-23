@@ -9,8 +9,7 @@
   }
 
   GameOver.prototype = {
-    init: function(score){
-      console.log('This is the score', score);
+    init: function(score){      
       this.score = score;
     },
     create: function() {
