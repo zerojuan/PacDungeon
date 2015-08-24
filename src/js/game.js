@@ -200,13 +200,13 @@
       this.toggleDebug();
       this.toggleDebug();
 
+      //For fading out
       this.rectangle = this.game.add.graphics(0,0);
       this.rectangle.beginFill(0x000000);
-      this.rectangle.lineStyle(10, 0xffd900, 1);
       this.rectangle.drawRect(this.offset.x,this.offset.y, this.game.width, this.game.height);
       this.rectangle.endFill();
       this.rectangle.alpha = 0;
-      // this.alpha = 0.5;
+
       this.fadeOutTween = this.game.add.tween(this.rectangle)
         .to({
           alpha: 1
@@ -333,19 +333,52 @@
       return marker;
     },
 
+    getNextVacantPosition: function(teleportZone, marker, direction){
+      marker.x = marker.x % 10;
+      marker.y = marker.y % 10;
+      var targetPosition = this.toWorldPosition(teleportZone.x, teleportZone.y, marker.x % 10, marker.y % 10);
+      var targetGridPosition = this.toGridPosition(targetPosition.x, targetPosition.y);
+
+      var tile = this.map.getTile(targetGridPosition.x, targetGridPosition.y);
+      // console.log(tile.index);
+      if(!tile){
+        return null;
+      }
+      this.game.debug.geom(new Phaser.Rectangle(targetPosition.x - (this.gridsize/2), targetPosition.y-(this.gridsize/2), this.gridsize,
+      this.gridsize),  'rgba(120,120,120,0.5)', true);
+      if(tile.index !== this.safetile){
+        var next = new Phaser.Point();
+        next.x = marker.x;
+        next.y = marker.y;
+        console.log(marker.x, marker.y);
+        switch(direction){
+          case Phaser.LEFT: next.x -= 1; //1
+                            break;
+          case Phaser.RIGHT: next.x += 1; //2
+                            break;
+          case Phaser.UP: next.y -= 1; //3
+                            break;
+          case Phaser.DOWN: next.y += 1; //4
+                            break;
+        }
+        if(next.y < 0){
+          next.y = 9;
+        }
+        if(next.x < 0){
+          next.x = 9;
+        }
+        console.log(next.x, next.y, 'Direction: ', direction);
+        return this.getNextVacantPosition(teleportZone, next, direction);
+      }else{
+        return targetPosition;
+      }
+
+    },
 
     getJumpTargetPosition: function() {
       var marker = this.pacman.getGridPosition();
-      var targetPosition = this.toWorldPosition(this.teleportZone.x, this.teleportZone.y, marker.x % 10, marker.y % 10);
-      var targetGridPosition = this.toGridPosition(targetPosition.x, targetPosition.y);
-      //target position is not clear,
-      //something
-      var tile = this.map.getTile(targetGridPosition.x, targetGridPosition.y, 0);
-      if(tile.index !== this.safetile && this.pacman.previousTarget){
-        targetPosition = this.pacman.previousTarget;
-      }else{
-        this.pacman.previousTarget = targetPosition;
-      }
+      var targetPosition = this.getNextVacantPosition(this.teleportZone, marker, this.pacman.facing);
+
       return targetPosition;
     },
 

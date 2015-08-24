@@ -14,7 +14,9 @@
     this.marker = new Phaser.Point();
     this.turnPoint = new Phaser.Point();
 
+
     this.current = Phaser.NONE;
+    this.facing = Phaser.RIGHT;
     this.turning = Phaser.NONE;
 
     this.directions = [null, null, null, null, null];
@@ -166,6 +168,8 @@
     } else if (direction === Phaser.DOWN) {
       this.angle = 90;
     }
+
+    this.facing = direction;
 
     this.current = direction;
   };

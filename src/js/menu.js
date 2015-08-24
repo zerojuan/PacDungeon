@@ -12,7 +12,7 @@
       var x = this.game.width / 2
         , y = this.game.height / 2;
 
-
+        
       this.titleTxt = this.add.bitmapText(x, y, 'minecraftia', 'Yo, Pacman with a Teleporter!' );
       this.titleTxt.align = 'center';
       this.titleTxt.x = this.game.width / 2 - this.titleTxt.textWidth / 2;
