@@ -66,6 +66,8 @@
 
       this.stage.backgroundColor = '#2d2d2d';
 
+      this.livesLeft = 1;
+
       this.map = this.add.tilemap();
       this.map.addTilesetImage('tiles', 'tiles', 16, 16, 0, 0, 1);
       this.layer = this.map.create('main', this.size * 4, this.size * 4, 16, 16);
@@ -267,6 +269,9 @@
     resurrect: function(){
       this.livesLeft -= 1;
       this.updateLives();
+      if(this.livesLeft < 0){
+        return;
+      }
       this.moveToSquare(this.resurrectCell.x, this.resurrectCell.y);
       var targetPosition = this.toWorldPosition(this.resurrectCell.x, this.resurrectCell.y, this.resurrectPoint.x, this.resurrectPoint.y);
       this.pacman.x = targetPosition.x;
