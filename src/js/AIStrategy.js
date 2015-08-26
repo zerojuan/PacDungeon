@@ -143,6 +143,23 @@
     }
   };
 
+  AIStrategy.prototype.getFleeDirection = function(directions, current, context){
+    for(var t = 1; t < 5; t++){
+      if(!directions[t]){
+        continue;
+      }
+      if(t === context.opposites[current]){
+        //ghost can't move back yo
+        continue;
+      }
+
+      if(directions[t].index === context.safetile){
+        break;
+      }
+    }
+    return t;
+  };
+
   AIStrategy.prototype.getWanderDirection = function(directions, current, context){
     var isValid = false;
     var t;
@@ -150,7 +167,7 @@
     do{
       tries++;
       //generate a random direction until it's valid
-      t = Math.floor((Math.random() * 4)) + 1;      
+      t = Math.floor((Math.random() * 4)) + 1;
       if(!directions[t]){
         continue;
       }
