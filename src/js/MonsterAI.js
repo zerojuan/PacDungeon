@@ -253,6 +253,12 @@
     this.nextDirection = this.nextDirectionFinder(this.directions, this.current, this.strategy);
 
     this.targetFound = true;
+
+    if(this.directions[0].index !== this.main.safetile){
+      this.alpha = 0.5;
+    }else{
+      this.alpha = 1;
+    }
   };
 
   MonsterAI.prototype.turn = function(){
