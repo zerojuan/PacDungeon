@@ -17,6 +17,12 @@
     var t = 0;
     var min = 1000;
     var nextDirection = Phaser.NONE;
+
+    //if ghost is crossing planes, continue direction
+    if(directions[0].index !== context.safetile){
+      return current;
+    }
+
     //stalks pacman everywhere
     for(t = 5; t > 0; t--){
       if(!directions[t]){
@@ -54,6 +60,11 @@
     var t = 0;
     var min = 1000;
     var nextDirection = Phaser.NONE;
+
+    //if ghost is crossing planes, continue direction
+    if(directions[0].index !== context.safetile){
+      return current;
+    }
 
     //look forward four squares
     for(t = 1; t < 5; t++){
@@ -144,6 +155,11 @@
   };
 
   AIStrategy.prototype.getFleeDirection = function(directions, current, context){
+    //if ghost is crossing planes, continue direction
+    if(directions[0].index !== context.safetile){
+      return current;
+    }
+
     for(var t = 1; t < 5; t++){
       if(!directions[t]){
         continue;
@@ -164,6 +180,11 @@
     var isValid = false;
     var t;
     var tries = 0;
+
+    if(directions[0].index !== context.safetile){
+      return current;
+    }
+
     do{
       tries++;
       //generate a random direction until it's valid
