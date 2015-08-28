@@ -10,6 +10,13 @@
     this.opposites = opposites;
   }
 
+  function isTransitioning(tile, context){
+    return (tile.index === ns.DungeonGenerator.TOPWALL ||
+          tile.index === ns.DungeonGenerator.RIGHTWALL ||
+          tile.index === ns.DungeonGenerator.BOTTOMWALL ||
+          tile.index === ns.DungeonGenerator.LEFTWALL);
+  }
+
   function doShadow(directions, current, context){
     /*jshint validthis:true */
 
@@ -19,7 +26,7 @@
     var nextDirection = Phaser.NONE;
 
     //if ghost is crossing planes, continue direction
-    if(directions[0].index !== context.safetile){
+    if(isTransitioning(directions[0], context)){
       return current;
     }
 
@@ -62,7 +69,7 @@
     var nextDirection = Phaser.NONE;
 
     //if ghost is crossing planes, continue direction
-    if(directions[0].index !== context.safetile){
+    if(isTransitioning(directions[0], context)){
       return current;
     }
 
@@ -156,7 +163,7 @@
 
   AIStrategy.prototype.getFleeDirection = function(directions, current, context){
     //if ghost is crossing planes, continue direction
-    if(directions[0].index !== context.safetile){
+    if(isTransitioning(directions[0], context)){
       return current;
     }
 
@@ -181,7 +188,7 @@
     var t;
     var tries = 0;
 
-    if(directions[0].index !== context.safetile){
+    if(isTransitioning(directions[0], context)){
       return current;
     }
 
