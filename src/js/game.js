@@ -175,6 +175,13 @@
         }
       };
 
+      this.input.keyboard.onDownCallback = function(event){
+        if(event.keyCode === Phaser.Keyboard.SPACEBAR){
+          that.pacman.processInput(event);
+        }
+
+      };
+
       this.pacman.move(Phaser.LEFT);
 
       this.teleportEmitter = this.add.emitter();

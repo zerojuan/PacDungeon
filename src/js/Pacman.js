@@ -54,6 +54,10 @@
   Pacman.prototype.constructor = Pacman;
 
   Pacman.prototype.checkKeys = function(cursors){
+    if(this.isTeleportDown){
+      this.turning = Phaser.NONE;
+      return;
+    }
     if (cursors.left.isDown && this.current !== Phaser.LEFT) {
       this.checkDirection(Phaser.LEFT);
     } else if (cursors.right.isDown && this.current !== Phaser.RIGHT) {
@@ -94,7 +98,13 @@
 
   Pacman.prototype.moveAlive = function(event){
     if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
-      this.main.teleport();
+      if(event.type === 'keydown'){
+        this.isTeleportDown = true;
+        console.log('Teleport Down');
+      }else{
+        this.isTeleportDown = false;
+        this.main.teleport();
+      }
     } else if (event.keyCode === Phaser.Keyboard.UP) {
       this.main.updateTeleportZone(Phaser.UP);
     } else if (event.keyCode === Phaser.Keyboard.DOWN) {
