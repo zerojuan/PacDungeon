@@ -179,7 +179,6 @@
         if(event.keyCode === Phaser.Keyboard.SPACEBAR){
           that.pacman.processInput(event);
         }
-
       };
 
       this.pacman.move(Phaser.LEFT);
