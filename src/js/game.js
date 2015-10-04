@@ -66,7 +66,7 @@
 
       this.stage.backgroundColor = '#2d2d2d';
 
-      this.livesLeft = 1;
+      this.livesLeft = 3;
       this.score = 0;
 
       this.map = this.add.tilemap();
