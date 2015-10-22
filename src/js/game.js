@@ -181,6 +181,10 @@
         }
       };
 
+      this.game.input.gamepad.pad1.onUpCallback = function(event){
+        that.pacman.processInput(event);
+      };
+
       this.pacman.move(Phaser.LEFT);
 
       this.teleportEmitter = this.add.emitter();

@@ -6,11 +6,12 @@
   Boot.prototype = {
 
     preload: function () {
-      this.load.image('preloader', 'assets/preloader.gif');      
+      this.load.image('preloader', 'assets/preloader.gif');
     },
 
     create: function () {
       this.game.input.maxPointers = 1;
+      this.game.input.gamepad.start();
 
       if (this.game.device.desktop) {
         this.game.scale.pageAlignHorizontally = true;

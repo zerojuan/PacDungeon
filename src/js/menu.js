@@ -31,6 +31,13 @@
       this.input.keyboard.onUpCallback = function() {
         this.onDown();
       };
+
+      this.pad = this.game.input.gamepad.pad1;
+
+      var that = this;
+      this.pad.onUpCallback = function(){
+        that.onDown();
+      };
     },
 
     update: function () {
@@ -47,6 +54,7 @@
       }, this);
 
       tween.start();
+      this.pad.onUpCallback = null;
     }
   };
 

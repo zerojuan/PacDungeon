@@ -97,6 +97,7 @@
   };
 
   Pacman.prototype.moveAlive = function(event){
+    console.log(event);
     if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
       if(event.type === 'keydown'){
         this.isTeleportDown = true;
