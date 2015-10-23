@@ -82,23 +82,38 @@
     }
   };
 
+  Pacman.prototype.isDirection = function(event, direction){
+    switch(direction){
+      case 'spacebar':
+        return (event.keyCode === Phaser.Keyboard.SPACEBAR);
+      case 'up':
+        return (event.keyCode === Phaser.Keyboard.UP);
+      case 'down':
+        return (event.keyCode === Phaser.Keyboard.DOWN);
+      case 'right':
+        return (event.keyCode === Phaser.Keyboard.RIGHT);
+      case 'left':
+        return (event.keyCode === Phaser.Keyboard.LEFT);
+    }
+  };
+
   Pacman.prototype.moveLimbo = function(event){
-    if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
+    if (this.isDirection(event, 'spacebar')) {
       this.main.resurrect();
-    } else if (event.keyCode === Phaser.Keyboard.UP) {
+    } else if (this.isDirection(event, 'up')) {
       this.main.updateResurrectZone(Phaser.UP);
-    } else if (event.keyCode === Phaser.Keyboard.DOWN) {
+    } else if (this.isDirection(event, 'down')) {
       this.main.updateResurrectZone(Phaser.DOWN);
-    } else if (event.keyCode === Phaser.Keyboard.LEFT) {
+    } else if (this.isDirection(event, 'left')) {
       this.main.updateResurrectZone(Phaser.LEFT);
-    } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
+    } else if (this.isDirection(event, 'right')) {
       this.main.updateResurrectZone(Phaser.RIGHT);
     }
   };
 
   Pacman.prototype.moveAlive = function(event){
     console.log(event);
-    if (event.keyCode === Phaser.Keyboard.SPACEBAR) {
+    if (this.isDirection(event, 'spacebar')) {
       if(event.type === 'keydown'){
         this.isTeleportDown = true;
         console.log('Teleport Down');
@@ -106,13 +121,13 @@
         this.isTeleportDown = false;
         this.main.teleport();
       }
-    } else if (event.keyCode === Phaser.Keyboard.UP) {
+    } else if (this.isDirection(event, 'up')) {
       this.main.updateTeleportZone(Phaser.UP);
-    } else if (event.keyCode === Phaser.Keyboard.DOWN) {
+    } else if (this.isDirection(event, 'down')) {
       this.main.updateTeleportZone(Phaser.DOWN);
-    } else if (event.keyCode === Phaser.Keyboard.LEFT) {
+    } else if (this.isDirection(event, 'left')) {
       this.main.updateTeleportZone(Phaser.LEFT);
-    } else if (event.keyCode === Phaser.Keyboard.RIGHT) {
+    } else if (this.isDirection(event, 'right')) {
       this.main.updateTeleportZone(Phaser.RIGHT);
     }
   };
