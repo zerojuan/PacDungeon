@@ -19,6 +19,7 @@
     this.resurrectCell = new Phaser.Point(0,0);
     this.monsters = null;
     this.graves = null;
+    this.scoreFxs = null;
     this.safetile = 14;
     this.gridsize = 16;
 
@@ -77,6 +78,8 @@
       this.timerContainer = this.add.group();
 
       this.graves = this.add.group();
+
+      this.scoreFxs = this.add.group();
 
       var levelTilemap = this.game.add.tilemap('levels');
       this.DungeonGenerator = new ns.DungeonGenerator(this.size, levelTilemap);
@@ -158,6 +161,12 @@
         this.graves.add(grave);
       }
 
+      for(i = 0; i < 5; i++){
+        var scoreFX = new ns.ScoreFX(this, i*30, 160*3);
+        scoreFX.kill();
+        this.scoreFxs.add(scoreFX);
+      }
+
       this.physics.arcade.enable(this.pacman);
       this.pacman.body.setSize(16, 16, 0, 0);
       // this.jumpToSquare(0, 0);
@@ -208,9 +217,6 @@
       this.scoreTxt.align = 'left';
       this.scoreTxt.x = 0;
       this.scoreTxt.y = -40;
-
-      this.scoreFX = new ns.ScoreFX(this, 90, 90);
-      this.game.add.existing(this.scoreFX);
 
       //double toggle so that the initialization is normalized
       this.toggleDebug();
@@ -563,13 +569,21 @@
       this.cells[cellPosition.x][cellPosition.y].isCleared();
     },
 
+    showScoreOnEat: function(sc){
+      var score = this.scoreFxs.getFirstDead();
+      score.setText(sc.toString());
+      score.revive();
+    },
+
     touchMonsters: function(pacman, monster) {
       if(this.pacman.fsm.current !== 'limbo' || this.pacman.fsm.current !== 'dead'){
         if(monster.fsm.current.startsWith('flee')){
           this.updateScore(100);
+          this.showScoreOnEat(100);
           monster.die();
         }else if(monster.fsm.current.startsWith('baby')){
           this.updateScore(200);
+          this.showScoreOnEat(200);
           monster.die();
         }else{
           monster.addKill(1);
