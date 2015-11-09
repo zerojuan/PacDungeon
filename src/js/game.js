@@ -571,6 +571,8 @@
 
     showScoreOnEat: function(sc){
       var score = this.scoreFxs.getFirstDead();
+      score.x = this.pacman.x;
+      score.y = this.pacman.y;
       score.setText(sc.toString());
       score.revive();
     },
