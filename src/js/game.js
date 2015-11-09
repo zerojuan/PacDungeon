@@ -209,6 +209,8 @@
       this.scoreTxt.x = 0;
       this.scoreTxt.y = -40;
 
+      this.scoreFX = new ns.ScoreFX(this.game);
+    
       //double toggle so that the initialization is normalized
       this.toggleDebug();
       this.toggleDebug();
