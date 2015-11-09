@@ -2,15 +2,19 @@
 'use strict';
 
 function ScoreFX(main, x, y){
-  Phaser.Sprite.call(this, main.game, x, y);
+  Phaser.Group.call(this, main.game, null);
 
+  this.x = x;
+  this.y = y;
 
-  this.titleTxt = this.add.bitmapText(0, 0, 'minecraftia', 'Yo, Pacman with a Teleporter!' );
+  this.titleTxt = new Phaser.BitmapText(main.game, 0,0 , 'minecraftia', '0');
   this.titleTxt.align = 'center';
-  this.titleTxt.x = main.game.width / 2;
+  this.titleTxt.x = 0;
+
+  this.addChild(this.titleTxt);
 }
 
-ScoreFX.prototype = Object.create(Phaser.Sprite.prototype);
+ScoreFX.prototype = Object.create(Phaser.Group.prototype);
 ScoreFX.prototype.constructor = ScoreFX;
 
 window['pacdungeon'] = window['pacdungeon'] || {};
