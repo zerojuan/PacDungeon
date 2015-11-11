@@ -12,6 +12,8 @@ function ScoreFX(main, x, y){
   this.titleTxt.x = 0;
   this.alive = false;
 
+  this.tween = main.game.add.tween(this.alpha).to(0, 200, Phaser.Easing.Linear.In);
+
   this.addChild(this.titleTxt);
 }
 
@@ -30,6 +32,8 @@ ScoreFX.prototype.kill = function(){
 ScoreFX.prototype.revive = function(){
   this.alive = true;
   this.alpha = 1;
+
+  this.tween.start();
 }
 
 window['pacdungeon'] = window['pacdungeon'] || {};
