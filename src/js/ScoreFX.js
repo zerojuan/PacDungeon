@@ -10,9 +10,15 @@ function ScoreFX(main, x, y){
   this.titleTxt = new Phaser.BitmapText(main.game, 0, 0 , 'minecraftia', '0');
   this.titleTxt.align = 'center';
   this.titleTxt.x = 0;
+  this.titleTxt.scale.x = .5;
+  this.titleTxt.scale.y = .5;
   this.alive = false;
 
-  this.tween = main.game.add.tween(this).to({alpha: 0}, 200, Phaser.Easing.Linear.In);
+  this.tween = main.game.add.tween(this).to({alpha: 0}, 800, Phaser.Easing.Exponential.In);
+
+  this.tween.onComplete.add(function(){
+    this.kill();
+  }, this);
 
   this.addChild(this.titleTxt);
 }
