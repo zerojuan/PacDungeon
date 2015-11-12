@@ -20,6 +20,8 @@
     'pokey'
   ];
 
+  var SAFETY_PERIOD = 10000;
+
   var ns = window['pacdungeon'];
   function MonsterAI(main, x, y, type){
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
@@ -67,13 +69,13 @@
           context.nextDirectionFinder = context.strategy.getWanderDirection;
         },
         onbaby: function(event, from, to, context){
-          context.seekTime = 3000;
+          context.seekTime = SAFETY_PERIOD;
           context.nextDirectionFinder = context.strategy.getWanderDirection;
           context.speed = context.main.speed * 0.2;
           context.scale.setTo(0.5, 0.5);
         },
         onbabyblink: function(event, from, to, context){
-          context.seekTime = 3000;
+          context.seekTime = SAFETY_PERIOD;
 
           // let the earthquake begins
           context.growTween.start();
@@ -96,7 +98,7 @@
         onchase: function(event, from, to, context){
           //immediately move to wander if pacman is dead
           if(context.targetFSM.current === 'alive'){
-            context.seekTime = 10000;
+            context.seekTime = SAFETY_PERIOD;
           }else{
             context.seekTime = 10;
           }
@@ -104,7 +106,7 @@
           context.nextDirectionFinder = context.strategy.getNextDirection;
         },
         onflee: function(event, from, to, context){
-          context.seekTime = 10000;
+          context.seekTime = SAFETY_PERIOD;
           context.tint = BLUE;
           context.ghostEyes.frame = 4;
           context.speed = context.main.speed * 0.30;
