@@ -569,10 +569,10 @@
       this.cells[cellPosition.x][cellPosition.y].isCleared();
     },
 
-    showScoreOnEat: function(sc){
+    showScoreOnEat: function(sc, monster){
       var score = this.scoreFxs.getFirstDead();
-      score.x = this.pacman.x;
-      score.y = this.pacman.y;
+      score.x = monster.x - 16;
+      score.y = monster.y - 16;
       score.setText(sc.toString());
       score.revive();
     },
@@ -581,11 +581,11 @@
       if(this.pacman.fsm.current !== 'limbo' || this.pacman.fsm.current !== 'dead'){
         if(monster.fsm.current.startsWith('flee')){
           this.updateScore(100);
-          this.showScoreOnEat(100);
+          this.showScoreOnEat(100, monster);
           monster.die();
         }else if(monster.fsm.current.startsWith('baby')){
           this.updateScore(200);
-          this.showScoreOnEat(200);
+          this.showScoreOnEat(200, monster);
           monster.die();
         }else{
           monster.addKill(1);
