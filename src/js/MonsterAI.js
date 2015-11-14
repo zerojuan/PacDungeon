@@ -157,6 +157,13 @@
     this.fsm.eaten(this);
   };
 
+  MonsterAI.prototype.applyStatus = function(type){
+    if(type === 'slow'){
+      console.log('Speed is getting slow');
+      this.speed = this.main.speed * 0.10;
+    }
+  }
+
   MonsterAI.prototype.setTint = function(){
     switch(this.type){
       case 'shadow':

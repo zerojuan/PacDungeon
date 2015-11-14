@@ -67,6 +67,8 @@
 
       this.stage.backgroundColor = '#2d2d2d';
 
+      this.onPowerUp = new Phaser.Signal();
+
       this.livesLeft = 3;
       this.score = 0;
 
@@ -179,6 +181,9 @@
           that.toggleDebug();
         }else if(event.keyCode === Phaser.Keyboard.X){
           that.game.scale.startFullScreen(true);
+        }else if(event.keyCode === Phaser.Keyboard.A){
+          // Show slowdown powerup
+          that.onPowerUp.dispatch('slow');
         }else{
           that.pacman.processInput(event);
         }
@@ -193,6 +198,13 @@
       this.game.input.gamepad.pad1.onUpCallback = function(event){
         that.pacman.processInput(event);
       };
+
+      this.onPowerUp.add(function(type){
+        if(type === 'slow'){
+          // slow down all monsters
+          this.monsters.callAll('applyStatus', null, type);
+        }
+      }, this);
 
       this.pacman.move(Phaser.LEFT);
 
@@ -557,7 +569,6 @@
       dot.kill();
 
       this.updateScore(10);
-
 
       //get dots in this area
       this.isCellCleared(dot);
