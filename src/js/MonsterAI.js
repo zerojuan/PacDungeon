@@ -143,11 +143,17 @@
 
     this.changeDirection = false;
 
+    this.effects = [];
+
     this.fsm.startup(this);
   }
 
   MonsterAI.prototype = Object.create(Phaser.Sprite.prototype);
   MonsterAI.prototype.constructor = MonsterAI;
+
+  MonsterAI.prototype.addEffect = function( effect ) {
+    this.effects.push(effect);
+  }
 
   MonsterAI.prototype.explode = function(){
     this.fsm.exploded(this);
@@ -156,13 +162,6 @@
   MonsterAI.prototype.die = function(){
     this.fsm.eaten(this);
   };
-
-  MonsterAI.prototype.applyStatus = function(type){
-    if(type === 'slow'){
-      console.log('Speed is getting slow');
-      this.speed = this.main.speed * 0.10;
-    }
-  }
 
   MonsterAI.prototype.setTint = function(){
     switch(this.type){
@@ -305,6 +304,12 @@
   MonsterAI.prototype.update = function(){
     this.updateTimers(this.main.game.time);
 
+    // TODO: update the effects
+    var _this = this;
+    this.effects.forEach( function( effect ) {
+      effect.update( _this );
+    });
+
     //look for next direction if you don't have any
     if(!this.targetFound){
       this.feelForward();
@@ -317,6 +322,11 @@
       this.turn();
       this.current = this.nextDirection;
     }
+
+    // TODO: clean up the effects
+    this.effects = this.effects.filter(function( effect ){
+      return !effect.isDone;
+    });
   };
 
   MonsterAI.prototype.render = function(){

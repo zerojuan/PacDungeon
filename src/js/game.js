@@ -203,6 +203,11 @@
         if(type === 'slow'){
           // slow down all monsters
           this.monsters.callAll('applyStatus', null, type);
+          // add this effect to all monsters
+          var pUp = new ns.Powerup('freeze');
+          this.monsters.forEachAlive( function( monster ) {
+            monster.addEffect(pUp.makeEffect());
+          });
         }
       }, this);
 
