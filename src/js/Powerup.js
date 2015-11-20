@@ -12,7 +12,8 @@
 
   FreezeEffect.prototype.update = function( entity ){
     console.log('Entity is now Frozen', this.game.time);
-    this.isDone = true;
+    entity.speed = 0;
+    // this.isDone = true;
   };
 
 
