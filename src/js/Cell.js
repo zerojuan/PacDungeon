@@ -5,7 +5,10 @@
       PINK = 36,
       CYAN = 37,
       ORANGE = 38,
-      BLUE = 39;
+      BLUE = 39,
+      POWERUP = 39,
+      BLANK = 14,
+      DOT = 7;
 
   function Cell(x,y,data, timerContainer, main){
     this.level = 0;
@@ -14,6 +17,7 @@
     this.y = y;
     this.data = data;
     this.monsters = [];
+    this.powerups = [];
     this.parseObjects();
     this.main = main;
     this.timerContainer = timerContainer;
@@ -43,33 +47,42 @@
   };
 
   Cell.prototype.parseObjects = function(){
-    //loop through the data and see if there are spawn points
-    function putMonster( context, type, x, y, i, j ) {
-      context.monsters.push({
+
+    function putObject( context, type, container, x, y, i, j ) {
+      context[container].push({
         type: type,
         row: y,
         col: x,
         x: i,
         y: j
       });
-      context.data[i][j] = 7;
     }
 
+
+    //loop through the data and see if there are spawn points
     for(var i = 0; i < this.data.length; i++){
       for(var j = 0; j < this.data[i].length; j++){
         var t = this.data[i][j];
         switch(t){
           case RED:
-            putMonster( this, 'shadow', this.x, this.y, i, j );
+            putObject( this, 'shadow', 'monsters', this.x, this.y, i, j );
+            this.data[i][j] = DOT;
             break;
           case PINK:
-            putMonster( this, 'speedy', this.x, this.y, i, j );
+            putObject( this, 'speedy', 'monsters', this.x, this.y, i, j );
+            this.data[i][j] = DOT;
             break;
           case CYAN:
-            putMonster( this, 'bashful', this.x, this.y, i, j );
+            putObject( this, 'bashful', 'monsters', this.x, this.y, i, j );
+            this.data[i][j] = DOT;
             break;
           case ORANGE:
-            putMonster( this, 'pokey', this.x, this.y, i, j );
+            putObject( this, 'pokey', 'monsters', this.x, this.y, i, j );
+            this.data[i][j] = DOT;
+            break;
+          case POWERUP:
+            putObject( this, 'normal', 'powerups', this.x, this.y, i, j );
+            this.data[i][j] = BLANK;
             break;
         }
       }
@@ -108,8 +121,10 @@
     this.parseObjects();
     this.revive(); //check where '7' is, and revive our dot sprites there
 
-    this.main.spawnMonsters(this.monsters);
+    this.main.spawnObjects(this.monsters, 'createMonster');
+    this.main.spawnObjects(this.powerups, 'createPowerup');
     this.monsters = [];
+    this.powerups = [];
     this.main.createCellData(this.x, this.y, this.data);
     this.main.explodeCell(this);
   };

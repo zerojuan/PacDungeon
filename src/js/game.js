@@ -18,6 +18,7 @@
     this.resurrectPoint = new Phaser.Point(0,0);
     this.resurrectCell = new Phaser.Point(0,0);
     this.monsters = null;
+    this.powerups = null;
     this.graves = null;
     this.scoreFxs = null;
     this.safetile = 14;
@@ -139,6 +140,7 @@
       this.graphics = this.add.graphics(0, 0);
 
       this.monsters = this.add.group();
+      this.powerups = this.add.group();
 
       this.createPacman((this.squareSize * 16) + 8, (this.squareSize * 16) + 8);
 
@@ -149,9 +151,11 @@
       for(i = 0; i < this.cells.length; i++){
         for(j = 0; j < this.cells[i].length; j++){
           var cell1 = this.cells[j][i];
-          this.spawnMonsters(cell1.monsters);
+          this.spawnObjects( cell1.monsters, 'createMonster' );
+          this.spawnObjects( cell1.powerups, 'createPowerup' );
           //empty monsters array immediately
           cell1.monsters = [];
+          cell1.powerups = [];
         }
       }
 
@@ -200,7 +204,8 @@
       };
 
       this.onPowerUp.add(function(type){
-        if(type === 'slow'){
+        console.log('Powerup happened!');
+        if(type === 'normal'){
           // slow down all monsters
           this.monsters.callAll('applyStatus', null, type);
         }
@@ -326,11 +331,11 @@
       this.game.add.existing(this.pacman);
     },
 
-    spawnMonsters: function(monsters) {
+    spawnObjects: function( objects, createAction ) {
       var that = this;
-      monsters.forEach(function(m){
+      objects.forEach(function(m){
           var p = that.toWorldPosition(m.col, m.row, m.x, m.y);
-          that.createMonster(p.x, p.y, m.type);
+          that[createAction](p.x, p.y, m.type);
       });
     },
 
@@ -347,6 +352,16 @@
       this.monsters.add(monster);
 
       return monster;
+    },
+
+    createPowerup: function( x, y, type ) {
+      var powerup = new ns.Powerup(this, x, y, type );
+      this.physics.arcade.enable( powerup );
+      powerup.body.setSize( 16, 16, 0, 0 );
+      powerup.anchor.set( 0.5 );
+      this.powerups.add( powerup );
+
+      return powerup;
     },
 
     toWorldPosition: function(cellRow, cellCol, row, col) {
@@ -564,6 +579,12 @@
       this.scoreTxt.text = this.score;
     },
 
+    eatPowerup: function( pacman, powerup ) {
+      powerup.kill();
+
+      this.onPowerUp.dispatch('normal');
+    },
+
     eatDot: function(pacman, dot) {
 
       dot.kill();
@@ -690,6 +711,7 @@
       this.physics.arcade.collide(this.monsters, this.ghostLayer);
       this.physics.arcade.collide(this.pacman, this.layer);
       this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
+      this.physics.arcade.overlap(this.pacman, this.powerups, this.eatPowerup, null, this);
       if(this.pacman.alive){
         this.physics.arcade.overlap(this.pacman, this.monsters, this.touchMonsters, null, this);
       }

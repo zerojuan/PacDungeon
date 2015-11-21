@@ -60,6 +60,7 @@
         { name: 'exploded', from: 'flee', to: 'die'},
         { name: 'exploded', from: 'baby', to: 'baby'},
         { name: 'exploded', from: 'babyblink', to: 'baby'},
+        { name: 'exploded', from: 'die', to: 'die' },
         { name: 'explodeExpired', from: 'flee', to: 'wander'  },
         { name: 'eaten', from: ['flee', 'fleeblink', 'baby', 'babyblink'], to: 'die'}
       ],
@@ -151,9 +152,13 @@
   MonsterAI.prototype = Object.create(Phaser.Sprite.prototype);
   MonsterAI.prototype.constructor = MonsterAI;
 
-  MonsterAI.prototype.addEffect = function( effect ) {
-    this.effects.push(effect);
-  }
+  MonsterAI.prototype.applyStatus = function(type){
+    console.log(' Normal!');
+    if( type === 'normal') {
+      this.fsm.exploded(this);
+    }
+
+  };
 
   MonsterAI.prototype.explode = function(){
     this.fsm.exploded(this);

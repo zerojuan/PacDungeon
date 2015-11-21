@@ -4,9 +4,10 @@
   /**
   * Takes a gameobject and applies effects on it for a defined period
   */
-  function Powerup( main, x, y ) {
+  function Powerup( main, x, y, type ) {
     Phaser.Sprite.call(this, main.game, x, y, 'powerup');
     this.main = main;
+    this.type = type;
 
     this.animations.add('glow', [0, 1, 2], 20, true);
     this.animations.play('glow');
