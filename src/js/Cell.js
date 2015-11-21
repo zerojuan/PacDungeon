@@ -14,7 +14,7 @@
     this.y = y;
     this.data = data;
     this.monsters = [];
-    this.parseMonsters();
+    this.parseObjects();
     this.main = main;
     this.timerContainer = timerContainer;
 
@@ -42,35 +42,35 @@
     return true;
   };
 
-  Cell.prototype.parseMonsters = function(){
+  Cell.prototype.parseObjects = function(){
     //loop through the data and see if there are spawn points
+    function putMonster( context, type, x, y, i, j ) {
+      context.monsters.push({
+        type: type,
+        row: y,
+        col: x,
+        x: i,
+        y: j
+      });
+      context.data[i][j] = 7;
+    }
+
     for(var i = 0; i < this.data.length; i++){
       for(var j = 0; j < this.data[i].length; j++){
         var t = this.data[i][j];
-        var type = 'none';
         switch(t){
           case RED:
-            type = 'shadow';
+            putMonster( this, 'shadow', this.x, this.y, i, j );
             break;
           case PINK:
-            type = 'speedy';
+            putMonster( this, 'speedy', this.x, this.y, i, j );
             break;
           case CYAN:
-            type = 'bashful';
+            putMonster( this, 'bashful', this.x, this.y, i, j );
             break;
           case ORANGE:
-            type = 'pokey';
+            putMonster( this, 'pokey', this.x, this.y, i, j );
             break;
-        }
-        if(type !== 'none'){
-          this.monsters.push({
-            type: type,
-            row: this.y,
-            col: this.x,
-            x: i,
-            y: j
-          });
-          this.data[i][j] = 7;
         }
       }
     }
@@ -105,7 +105,7 @@
     this.countdown.alpha = 0;
     this.level++;
     this.data = this.main.DungeonGenerator.loadLevel(this.level);
-    this.parseMonsters();
+    this.parseObjects();
     this.revive(); //check where '7' is, and revive our dot sprites there
 
     this.main.spawnMonsters(this.monsters);
