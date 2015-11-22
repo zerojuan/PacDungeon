@@ -191,6 +191,7 @@
         }else{
           that.pacman.processInput(event);
         }
+
       };
 
       this.input.keyboard.onDownCallback = function(event){
@@ -200,11 +201,11 @@
       };
 
       this.game.input.gamepad.pad1.onUpCallback = function(event){
+        console.log('Up callback...');
         that.pacman.processInput(event);
       };
 
       this.onPowerUp.add(function(type){
-        console.log('Powerup happened!');
         if(type === 'normal'){
           // slow down all monsters
           this.monsters.callAll('applyStatus', null, type);

@@ -78,6 +78,7 @@
 
   Pacman.prototype.processInput = function(event){
     if(this.executeInput){ //because some states disables inputs
+      console.log('Processing input...');
       this.executeInput(event);
     }
   };
@@ -99,7 +100,11 @@
 
   Pacman.prototype.moveLimbo = function(event){
     if (this.isDirection(event, 'spacebar')) {
-      this.main.resurrect();
+      // we are only interested with keydown events if we're alive
+      if(event.type === 'keydown'){
+        return;
+      }
+      return this.main.resurrect();
     } else if (this.isDirection(event, 'up')) {
       this.main.updateResurrectZone(Phaser.UP);
     } else if (this.isDirection(event, 'down')) {
@@ -115,8 +120,8 @@
     console.log(event);
     if (this.isDirection(event, 'spacebar')) {
       if(event.type === 'keydown'){
+        // Controlled teleporting
         this.isTeleportDown = true;
-        console.log('Teleport Down');
       }else{
         this.isTeleportDown = false;
         this.main.teleport();
