@@ -402,7 +402,7 @@
         var next = new Phaser.Point();
         next.x = marker.x;
         next.y = marker.y;
-        console.log(marker.x, marker.y);
+
         switch(direction){
           case Phaser.LEFT: next.x -= 1; //1
                             break;
@@ -419,7 +419,6 @@
         if(next.x < 0){
           next.x = 9;
         }
-        console.log(next.x, next.y, 'Direction: ', direction);
         return this.getNextVacantPosition(teleportZone, next, direction);
       }else{
         return targetPosition;
@@ -663,6 +662,18 @@
           monster.explode();
         }
       }, this);
+
+      //search for powerups in the cell
+      console.log('Powerup: ', this.powerups);
+      this.powerups.forEachAlive(function(powerup){
+        var gridPos = this.toGridPosition( powerup.x, powerup.y );
+        var cellPos = this.toCellPosition( gridPos.x, gridPos.y );
+        console.log('FOrEach');
+        if ( cell.x === cellPos.x && cell.y === cellPos.y ) {
+          console.log( 'Powerupping me...' );
+          powerup.kill();
+        }
+      }, this)
 
       //TODO: Show explosion graphics
 

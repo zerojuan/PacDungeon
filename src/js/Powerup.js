@@ -9,6 +9,8 @@
     this.main = main;
     this.type = type;
 
+    this.alive = true;
+
     this.animations.add('glow', [0, 1, 2], 20, true);
     this.animations.play('glow');
   }
@@ -16,7 +18,10 @@
   Powerup.prototype = Object.create(Phaser.Sprite.prototype);
   Powerup.prototype.constructor = Powerup;
 
-
+  Powerup.prototype.kill = function(){
+    this.alive = false;
+    this.alpha = 0;
+  }
 
   window['pacdungeon'] = window['pacdungeon'] || {};
   window['pacdungeon'].Powerup = Powerup;
