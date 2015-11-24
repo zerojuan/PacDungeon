@@ -251,34 +251,31 @@
     // TODO: Empty update function
   };
 
-  Pacman.prototype.render = function(){
-    if(this.debug){
-      for (var t = 1; t < 5; t++)
-      {
-          if (this.directions[t] === null)
-          {
+  Pacman.prototype.render = function() {
+    if ( this.debug ) {
+      for ( var t = 1; t < 5; t++ ) {
+          if ( this.directions[ t ] === null ) {
               continue;
           }
 
           var color = 'rgba(0,255,0,0.3)';
 
-          if (this.directions[t].index !== this.main.safetile)
-          {
+          if ( this.directions[ t ].index !== this.main.safetile ) {
               color = 'rgba(255,0,0,0.3)';
-              // console.log('Tile is: ', this.directions[t].index);
           }
 
-          if (t === this.current)
-          {
+          if ( t === this.current ) {
               color = 'rgba(255,255,255,0.3)';
           }
-          this.main.game.debug.body(this);
-          // this.main.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX, this.directions[t].worldY, this.main.gridsize, this.main.gridsize), color, true);
+
+          this.main.game.debug.body( this );
+          // this.main.game.debug.geom(new Phaser.Rectangle(this.directions[t].worldX,
+          // this.directions[t].worldY, this.main.gridsize, this.main.gridsize), color, true);
       }
     }
   };
 
 
-  window['pac_dungeon'] = window['pac_dungeon'] || {};
-  window['pac_dungeon'].Pacman = Pacman;
+  window[ 'pac_dungeon' ] = window[ 'pac_dungeon' ] || {};
+  window[ 'pac_dungeon' ].Pacman = Pacman;
 }());
