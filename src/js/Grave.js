@@ -11,6 +11,6 @@
   Grave.prototype.constructor = Grave;
 
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Grave = Grave;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Grave = Grave;
 }());

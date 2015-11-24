@@ -1,0 +1,6 @@
+{
+    "preset": "idiomatic",
+    "validateQuoteMarks": "'",
+    "validateLineBreaks": null,
+    "requireDotNotation": { "allExcept": [ "snake_case" ] }
+}

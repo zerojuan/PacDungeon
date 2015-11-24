@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var ns = window['pacdungeon'];
+  var ns = window['pac_dungeon'];
   var that;
 
   function GameOver() {
@@ -50,7 +50,7 @@
 
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].GameOver = GameOver;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].GameOver = GameOver;
 
 }());

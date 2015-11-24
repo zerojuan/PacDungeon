@@ -142,6 +142,6 @@
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Cell = Cell;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Cell = Cell;
 }());

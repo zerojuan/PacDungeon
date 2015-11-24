@@ -2,7 +2,7 @@ window.onload = function () {
   'use strict';
 
   var game
-    , ns = window['pacdungeon'];
+    , ns = window['pac_dungeon'];
 
   game = new Phaser.Game(640, 640, Phaser.AUTO, 'pacdungeon-game');
   game.state.add('boot', ns.Boot);

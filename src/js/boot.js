@@ -29,7 +29,7 @@
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Boot = Boot;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Boot = Boot;
 
 }());

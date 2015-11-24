@@ -58,7 +58,7 @@
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Menu = Menu;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Menu = Menu;
 
 }());

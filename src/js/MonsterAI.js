@@ -22,7 +22,7 @@
 
   var SAFETY_PERIOD = 10000;
 
-  var ns = window['pacdungeon'];
+  var ns = window['pac_dungeon'];
   function MonsterAI(main, x, y, type){
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
     this.targetFSM = main.pacman.fsm;
@@ -368,6 +368,6 @@
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].MonsterAI = MonsterAI;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].MonsterAI = MonsterAI;
 }());

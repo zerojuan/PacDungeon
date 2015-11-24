@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  var ns = window['pacdungeon'];
+  var ns = window['pac_dungeon'];
 
   function AIStrategy(pacman, ghost, safetile, opposites){
     this.pacman = pacman;
@@ -239,6 +239,6 @@
 
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].AIStrategy = AIStrategy;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].AIStrategy = AIStrategy;
 }());

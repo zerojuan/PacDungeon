@@ -77,6 +77,6 @@
       }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].DungeonGenerator = DungeonGenerator;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].DungeonGenerator = DungeonGenerator;
 }());

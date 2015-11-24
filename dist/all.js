@@ -3,7 +3,7 @@
 (function () {
   'use strict';
 
-  var ns = window['pacdungeon'];
+  var ns = window['pac_dungeon'];
 
   function AIStrategy(pacman, ghost, safetile, opposites) {
     this.pacman = pacman;
@@ -152,8 +152,8 @@
     return false;
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].AIStrategy = AIStrategy;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].AIStrategy = AIStrategy;
 })();
 'use strict';
 
@@ -244,8 +244,8 @@
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Cell = Cell;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Cell = Cell;
 })();
 'use strict';
 
@@ -329,8 +329,8 @@
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].DungeonGenerator = DungeonGenerator;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].DungeonGenerator = DungeonGenerator;
 })();
 'use strict';
 
@@ -346,8 +346,8 @@
   Grave.prototype = Object.create(Phaser.Sprite.prototype);
   Grave.prototype.constructor = Grave;
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Grave = Grave;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Grave = Grave;
 })();
 'use strict';
 
@@ -366,7 +366,7 @@
 
   var types = ['shadow', 'speedy', 'bashful', 'pokey'];
 
-  var ns = window['pacdungeon'];
+  var ns = window['pac_dungeon'];
   function MonsterAI(main, x, y, type) {
     Phaser.Sprite.call(this, main.game, x, y, 'ghost');
     this.debug = true;
@@ -557,8 +557,8 @@
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].MonsterAI = MonsterAI;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].MonsterAI = MonsterAI;
 })();
 'use strict';
 
@@ -716,8 +716,8 @@
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Pacman = Pacman;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Pacman = Pacman;
 })();
 'use strict';
 
@@ -751,15 +751,15 @@
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Boot = Boot;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Boot = Boot;
 })();
 'use strict';
 
 (function () {
   'use strict';
 
-  var ns = window['pacdungeon'];
+  var ns = window['pac_dungeon'];
   var that;
 
   function Game() {
@@ -1382,8 +1382,8 @@
 
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Game = Game;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Game = Game;
 })();
 'use strict';
 
@@ -1391,7 +1391,7 @@ window.onload = function () {
   'use strict';
 
   var game,
-      ns = window['pacdungeon'];
+      ns = window['pac_dungeon'];
 
   game = new Phaser.Game(640, 640, Phaser.AUTO, 'pacdungeon-game');
   game.state.add('boot', ns.Boot);
@@ -1444,8 +1444,8 @@ window.onload = function () {
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Menu = Menu;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Menu = Menu;
 })();
 'use strict';
 
@@ -1495,7 +1495,7 @@ window.onload = function () {
     }
   };
 
-  window['pacdungeon'] = window['pacdungeon'] || {};
-  window['pacdungeon'].Preloader = Preloader;
+  window['pac_dungeon'] = window['pac_dungeon'] || {};
+  window['pac_dungeon'].Preloader = Preloader;
 })();
 //# sourceMappingURL=all.js.map
