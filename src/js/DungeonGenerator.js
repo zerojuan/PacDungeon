@@ -1,9 +1,9 @@
-(function(){
+(function() {
   'use strict';
 
-  function DungeonGenerator(size, tilemap){
+  function DungeonGenerator( size, tilemap ) {
     this.tilemap = tilemap;
-    console.log('tilemap?', tilemap);
+    console.log( 'tilemap?', tilemap );
     this.size = size || 10;
     this.TOPLEFTCORNER = 1;
     this.TOPWALL = 2;
@@ -26,57 +26,57 @@
   DungeonGenerator.BOTTOMWALL = 21;
 
   DungeonGenerator.prototype = {
-      createSquare : function(){
+      createSquare: function() {
           var data = [];
-          for(var i = 0; i < this.size; i++){
+          for ( var i = 0; i < this.size; i++ ) {
             data.push([]);
-            for(var j = 0; j < this.size; j++){
-              //TOP WALL
-              if(i === 0){
-                if(j === 0){
-                  data[j][i] = this.TOPLEFTCORNER;
-                }else if(j === this.size -1){
-                  data[i][j] = this.BOTTOMLEFTCORNER;
-                }else{
-                  data[i][j] = this.LEFTWALL;
+            for ( var j = 0; j < this.size; j++ ) {
+              // TOP WALL
+              if ( i === 0 ) {
+                if ( j === 0 ) {
+                  data[ j ][ i ] = this.TOPLEFTCORNER;
+                } else if ( j === this.size - 1 ) {
+                  data[ i ][ j ] = this.BOTTOMLEFTCORNER;
+                } else {
+                  data[ i ][ j ] = this.LEFTWALL;
                 }
-              }else if(i === this.size -1){
-                if(j === 0){
-                  data[i][j] = this.TOPRIGHTCORNER;
-                }else if(j === this.size -1){
-                  data[i][j] = this.BOTTOMRIGHTCORNER;
-                }else{
-                  data[i][j] = this.RIGHTWALL;
+              } else if ( i === this.size - 1 ) {
+                if ( j === 0 ) {
+                  data[ i ][ j ] = this.TOPRIGHTCORNER;
+                } else if ( j === this.size - 1 ) {
+                  data[ i ][ j ] = this.BOTTOMRIGHTCORNER;
+                } else {
+                  data[ i ][ j ] = this.RIGHTWALL;
                 }
-              }else{
-                if(j === 0){
-                  data[i][j] = this.TOPWALL;
-                }else if(j === this.size -1){
-                  data[i][j] = this.BOTTOMWALL;
-                }else{
-                  data[i][j] = this.SAFE;
+              } else {
+                if ( j === 0 ) {
+                  data[ i ][ j ] = this.TOPWALL;
+                }else if ( j === this.size - 1 ) {
+                  data[ i ][ j ] = this.BOTTOMWALL;
+                } else {
+                  data[ i ][ j ] = this.SAFE;
                 }
               }
             }
           }
           return data;
       },
-      loadLevel: function(level){
+      loadLevel: function( level ) {
         var row = level % 3;
-        var col = Math.floor(level / 3);
+        var col = Math.floor( level / 3 );
         var data = [];
-        for(var i = 0; i < this.size; i++){
+        for ( var i = 0; i < this.size; i++ ) {
           data.push([]);
-          for(var j = 0; j < this.size; j++){
+          for ( var j = 0; j < this.size; j++ ) {
             var x = (row * 10) + i;
             var y = (col * 10) + j;
-            data[i][j] = this.tilemap.getTile(x,y,0).index;
+            data[ i ][ j ] = this.tilemap.getTile( x, y, 0 ).index;
           }
         }
         return data;
       }
   };
 
-  window['pac_dungeon'] = window['pac_dungeon'] || {};
-  window['pac_dungeon'].DungeonGenerator = DungeonGenerator;
+  window[ 'pac_dungeon' ] = window[ 'pac_dungeon' ] || {};
+  window[ 'pac_dungeon' ].DungeonGenerator = DungeonGenerator;
 }());
