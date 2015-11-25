@@ -124,11 +124,14 @@
     this.revive();
 
     this.main.spawnObjects( this.monsters, 'createMonster' );
-    this.main.spawnObjects( this.powerups, 'createPowerup' );
+
     this.monsters = [];
-    this.powerups = [];
+
     this.main.createCellData( this.x, this.y, this.data );
     this.main.explodeCell( this );
+
+    this.main.spawnObjects( this.powerups, 'createPowerup' );
+    this.powerups = [];
   };
 
   Cell.prototype.update = function( time ) {
