@@ -2,10 +2,11 @@ window.onload = function() {
   'use strict';
 
   var game,
+      Boot = require( './boot.js' ),
       ns = window[ 'pac_dungeon' ];
 
   game = new Phaser.Game( 640, 640, Phaser.AUTO, 'pacdungeon-game' );
-  game.state.add( 'boot', ns.Boot );
+  game.state.add( 'boot', Boot );
   game.state.add( 'preloader', ns.Preloader );
   game.state.add( 'menu', ns.Menu );
   game.state.add( 'game', ns.Game );

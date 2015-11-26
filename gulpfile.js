@@ -11,6 +11,9 @@ var gulp = require( 'gulp' ),
   connect = require( 'gulp-connect' ),
   babel = require( 'gulp-babel' ),
   sourcemaps = require( 'gulp-sourcemaps' ),
+  webpack = require( 'webpack' ),
+  WebpackDevServer = require( 'webpack-dev-server' ),
+  webpackConfig = require( './webpack.config.js' ),
   paths;
 
 paths = {
@@ -99,6 +102,26 @@ gulp.task( 'watch', function() {
   gulp.watch([ './src/index.html', paths.css, paths.js ], [ 'html' ]);
 });
 
-gulp.task( 'default', [ 'connect', 'watch' ]);
+gulp.task( 'webpack-dev-server', function( callback ) {
+	// modify some webpack config options
+	var myConfig = Object.create( webpackConfig );
+	myConfig.devtool = 'eval';
+	myConfig.debug = true;
+
+	// Start a webpack-dev-server
+	new WebpackDevServer( webpack( myConfig ), {
+		publicPath: '/' + myConfig.output.publicPath,
+		stats: {
+			colors: true
+		}
+	}).listen(8080, 'localhost', function(err) {
+		if(err) throw new gutil.PluginError('webpack-dev-server', err);
+		gutil.log( '[webpack-dev-server]', 'http://localhost:8080/webpack-dev-server/index.html' );
+	});
+});
+
+
+// The development server (the recommended option for development)
+gulp.task( 'default', [ 'webpack-dev-server' ]);
 gulp.task( 'build', [ 'copy-assets', 'copy-vendor', 'uglify',
   'minifycss', 'processhtml', 'minifyhtml' ]);
