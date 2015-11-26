@@ -23,6 +23,12 @@ module.exports = {
 			{ test: /\.eot$/,    loader: 'file-loader?prefix=font/' },
 			{ test: /\.svg$/,    loader: 'file-loader?prefix=font/' },
 
+			{ test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192' },
+
+			{ test: /\.xml$/, loader: 'xml-loader' },
+
+			{ test: /\.json$/, loader: 'json' },
+
 			{ test: /pixi.js/, loader: 'script' },
       { test: /phaser.js/, loader: 'script' }
 		]

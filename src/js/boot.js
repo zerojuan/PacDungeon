@@ -1,11 +1,13 @@
 'use strict';
 
+require( './assets/preloader.gif' );
+
 function Boot() {}
 
 Boot.prototype = {
 
   preload: function() {
-    this.load.image( 'preloader', 'assets/preloader.gif' );
+    this.load.image( 'preloader', 'dist/assets/preloader.gif' );
   },
 
   create: function() {

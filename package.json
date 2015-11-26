@@ -12,6 +12,7 @@
   "devDependencies": {
     "bower": "*",
     "del": "*",
+    "file-loader": "^0.8.5",
     "gulp": "*",
     "gulp-babel": "^5.2.0",
     "gulp-concat": "*",
@@ -26,8 +27,11 @@
     "gulp-uglify": "*",
     "gulp-util": "*",
     "gulp-watch": "*",
+    "json-loader": "^0.5.4",
     "script-loader": "^0.6.1",
-    "tiny-lr": "*"
+    "tiny-lr": "*",
+    "url-loader": "^0.5.7",
+    "xml-loader": "^1.0.0"
   },
   "scripts": {
     "post-install": "node ./node_modules/bower/bin/bower install",
