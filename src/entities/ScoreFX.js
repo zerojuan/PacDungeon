@@ -1,4 +1,4 @@
-(function() {
+
 'use strict';
 
 function ScoreFX( main, x, y ) {
@@ -42,6 +42,4 @@ ScoreFX.prototype.revive = function() {
   this.tween.start();
 };
 
-window[ 'pac_dungeon' ] = window[ 'pac_dungeon' ] || {};
-window[ 'pac_dungeon' ].ScoreFX = ScoreFX;
-}());
+module.exports = ScoreFX;

@@ -4,7 +4,7 @@ var webpack = require( 'webpack' );
 module.exports = {
 	cache: true,
 	entry: {
-		main: './src/js/index.js'
+		main: './src/index.js'
 	},
 	output: {
 		path: path.join( __dirname, 'dist' ),
@@ -27,7 +27,7 @@ module.exports = {
 
 			{ test: /\.xml$/, loader: 'xml-loader' },
 
-			{ test: /\.json$/, loader: 'json' },
+			{ test: /\.json$/, loader: 'file-loader' },
 
 			{ test: /pixi.js/, loader: 'script' },
       { test: /phaser.js/, loader: 'script' }

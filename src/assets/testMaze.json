@@ -32,6 +32,7 @@
 
             },
          "spacing":0,
+         "tilecount":48,
          "tileheight":16,
          "tilewidth":16
         }],

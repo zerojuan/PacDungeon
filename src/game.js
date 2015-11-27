@@ -1,10 +1,12 @@
 
-var ns = window[ 'pac_dungeon' ];
-var that;
-
-var DungeonGenerator = require( './DungeonGenerator.js' );
-var Pacman = require( './Pacman.js' );
-var MonsterAI = require( './MonsterAI.js' );
+var that,
+    DungeonGenerator = require( './entities' ).DungeonGenerator,
+    Pacman = require( './entities' ).Pacman,
+    MonsterAI = require( './entities' ).MonsterAI,
+    Cell = require( './entities' ).Cell,
+    ScoreFX = require( './entities' ).ScoreFX,
+    Powerup = require( './entities' ).Powerup,
+    Grave = require( './entities' ).Grave;
 
 function Game() {
   that = this;
@@ -91,7 +93,7 @@ Game.prototype = {
     this.scoreFxs = this.add.group();
 
     var levelTilemap = this.game.add.tilemap( 'levels' );
-    this.DungeonGenerator = new ns.DungeonGenerator( this.size, levelTilemap );
+    this.DungeonGenerator = new DungeonGenerator( this.size, levelTilemap );
 
     // initialize cells based on this format
     var initialLevel = [
@@ -103,7 +105,7 @@ Game.prototype = {
     for ( i = 0; i < this.squareSize; i++ ) {
       for ( j = 0; j < this.squareSize; j++ ) {
         var level = this.DungeonGenerator.loadLevel( initialLevel[ j ][ i ] );
-        this.cells[ i ][ j ] = new ns.Cell( i, j, level, this.timerContainer, this );
+        this.cells[ i ][ j ] = new Cell( i, j, level, this.timerContainer, this );
       }
     }
 
@@ -169,13 +171,13 @@ Game.prototype = {
 
     // create 3 graves
     for ( i = 0; i < 3; i++ ) {
-      var grave = new ns.Grave( this, i * 30, 160 * 3 );
+      var grave = new Grave( this, i * 30, 160 * 3 );
       grave.kill();
       this.graves.add( grave );
     }
 
     for ( i = 0; i < 5; i++ ) {
-      var scoreFX = new ns.ScoreFX( this, i * 30, 160 * 3 );
+      var scoreFX = new ScoreFX( this, i * 30, 160 * 3 );
       scoreFX.kill();
       this.scoreFxs.add( scoreFX );
     }
@@ -267,7 +269,7 @@ Game.prototype = {
     // remove all sprites
     this.livesGroup.removeAll();
     for ( var i = 0; i < this.livesLeft; i++ ) {
-      var spr = new ns.Pacman( this, i * 30, 160 * 3 );
+      var spr = new Pacman( this, i * 30, 160 * 3 );
       spr.play( 'idle' );
       this.livesGroup.add( spr );
     }
@@ -336,7 +338,7 @@ Game.prototype = {
   },
 
   createPacman: function( x, y ) {
-    this.pacman = new ns.Pacman( this, x, y );
+    this.pacman = new Pacman( this, x, y );
     this.game.add.existing( this.pacman );
   },
 
@@ -349,7 +351,7 @@ Game.prototype = {
   },
 
   createMonster: function( x, y, type ) {
-    var monster = new ns.MonsterAI( this, x, y, type );
+    var monster = new MonsterAI( this, x, y, type );
     monster.player = this.pacman;
     monster.layer = this.layer;
     monster.gridsize = this.gridsize;
@@ -364,7 +366,7 @@ Game.prototype = {
   },
 
   createPowerup: function( x, y, type ) {
-    var powerup = new ns.Powerup( this, x, y, type );
+    var powerup = new Powerup( this, x, y, type );
     this.physics.arcade.enable( powerup );
     powerup.body.setSize( 16, 16, 0, 0 );
     powerup.anchor.set( 0.5 );

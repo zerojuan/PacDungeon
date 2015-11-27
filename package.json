@@ -27,6 +27,7 @@
     "gulp-uglify": "*",
     "gulp-util": "*",
     "gulp-watch": "*",
+    "image-webpack-loader": "^1.6.2",
     "json-loader": "^0.5.4",
     "script-loader": "^0.6.1",
     "tiny-lr": "*",
