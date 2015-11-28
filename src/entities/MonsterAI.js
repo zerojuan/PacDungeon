@@ -58,6 +58,8 @@ function MonsterAI( main, x, y, type ) {
       { name: 'timerExpires', from: 'chase', to: 'wander' },
       { name: 'timerExpires', from: 'die', to: 'die' },
       { name: 'wanderExpires', from: 'wander', to: 'chase' },
+      { name: 'powerEaten', from: [ 'chase', 'wander', 'baby', 'babyblink', 'flee' ], to: 'flee' },
+      { name: 'powerEaten', from: 'die', to: 'die' },
       { name: 'exploded', from: [ 'chase', 'wander' ], to: 'flee' },
       { name: 'exploded', from: 'flee', to: 'die' },
       { name: 'exploded', from: 'baby', to: 'baby' },
@@ -157,7 +159,8 @@ MonsterAI.prototype.constructor = MonsterAI;
 MonsterAI.prototype.applyStatus = function( type ) {
   console.log( ' Normal!' );
   if ( type === 'normal' ) {
-    this.fsm.exploded( this );
+    console.log( 'Explode!' );
+    this.fsm.powerEaten( this );
   }
 
 };
