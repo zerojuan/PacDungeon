@@ -4,10 +4,15 @@
   "readme": "README.md",
   "repository": "https://github.com/zerojuan/PacDungeon",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "phaser": "^2.4.4",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
+  },
   "devDependencies": {
     "bower": "*",
     "del": "*",
+    "file-loader": "^0.8.5",
     "gulp": "*",
     "gulp-babel": "^5.2.0",
     "gulp-concat": "*",
@@ -22,7 +27,12 @@
     "gulp-uglify": "*",
     "gulp-util": "*",
     "gulp-watch": "*",
-    "tiny-lr": "*"
+    "image-webpack-loader": "^1.6.2",
+    "json-loader": "^0.5.4",
+    "script-loader": "^0.6.1",
+    "tiny-lr": "*",
+    "url-loader": "^0.5.7",
+    "xml-loader": "^1.0.0"
   },
   "scripts": {
     "post-install": "node ./node_modules/bower/bin/bower install",
