@@ -47,7 +47,7 @@ Preloader.prototype = {
     this.load.spritesheet( 'grave', grave, 32, 32 );
     // this.load.tilemap( 'map', pacmanSmall, null, Phaser.Tilemap.TILED_JSON );
     this.load.tilemap( 'levels', testMaze, null, Phaser.Tilemap.TILED_JSON );
-    this.load.spritesheet( 'powerup', powerup, 32, 32 );
+    this.load.spritesheet( 'powerup-normal', powerup, 32, 32 );
   },
 
   create: function() {

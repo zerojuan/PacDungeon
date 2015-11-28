@@ -105,24 +105,36 @@ function doSpeedy( directions, current, context ) {
   return nextDirection;
 }
 
-function doBashful( directions, current ) {
+function doBashful( directions, current, context ) {
   /*jshint validthis:true */
+  var pacmanPos = context.pacman.getForwardPosition( 2 );
+  var t = 0;
+  var min = 1000;
+  var nextDirection = Phaser.NONE;
+
 
   // two tiles forward, but consider shadow's position
   for ( var t = 1; t < 5; t++ ) {
     if ( !directions[ t ] ) {
       continue;
     }
-    if ( t === this.opposites[ current ] ) {
+    if ( t === context.opposites[ current ] ) {
       // ghost can't move back yo
       continue;
     }
 
-    if ( directions[ t ].index === this.safetile ) {
-      break;
+    if ( directions[ t ].index === context.safetile ) {
+        // which of the directions is closer to the pacman?
+        var distance = Phaser.Math.distance(
+          pacmanPos.x, pacmanPos.y, directions[ t ].x, directions[ t ].y );
+        if ( distance < min ) {
+          nextDirection = t;
+          min = distance;
+        }
+
     }
   }
-  return t;
+  return nextDirection;
 }
 
 function doPokey( directions, current ) {
@@ -155,7 +167,9 @@ AIStrategy.prototype.setStrategy = function( strategy ) {
       this.getNextDirection = doSpeedy;
       break;
     case 'bashful':
+      // bashful can't apparate outside it's walls anytime
       this.getNextDirection = doBashful;
+      this.getWanderDirection = doBashful;
       break;
     case 'pokey':
       this.getNextDirection = doPokey;

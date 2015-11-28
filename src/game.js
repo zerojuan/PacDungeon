@@ -216,7 +216,7 @@ Game.prototype = {
       console.log( 'Powerup happened!' );
       if ( type === 'normal' ) {
         // slow down all monsters
-        this.monsters.callAll( 'applyStatus', null, type );
+        this.monsters.callAllExists( 'applyStatus', null, type );
       }
     }, this );
 
