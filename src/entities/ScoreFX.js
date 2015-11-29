@@ -1,4 +1,3 @@
-
 'use strict';
 
 function ScoreFX( main, x, y ) {

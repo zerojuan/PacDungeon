@@ -1,16 +1,7 @@
+'use strict';
+
 var gulp = require( 'gulp' ),
   gutil = require( 'gulp-util' ),
-  del = require( 'del' ),
-  concat = require( 'gulp-concat' ),
-  rename = require( 'gulp-rename' ),
-  minifycss = require( 'gulp-minify-css' ),
-  minifyhtml = require( 'gulp-minify-html' ),
-  processhtml = require( 'gulp-processhtml' ),
-  jshint = require( 'gulp-jshint' ),
-  uglify = require( 'gulp-uglify' ),
-  connect = require( 'gulp-connect' ),
-  babel = require( 'gulp-babel' ),
-  sourcemaps = require( 'gulp-sourcemaps' ),
   webpack = require( 'webpack' ),
   WebpackDevServer = require( 'webpack-dev-server' ),
   webpackConfig = require( './webpack.config.js' );
@@ -46,7 +37,7 @@ gulp.task( 'webpack:build', function( callback ) {
 	});
 });
 
-gulp.task( 'webpack-dev-server', function( callback ) {
+gulp.task( 'webpack-dev-server', function( ) {
 	// modify some webpack config options
 	var myConfig = Object.create( webpackConfig );
   console.log( myConfig );

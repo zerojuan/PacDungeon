@@ -18,6 +18,8 @@
   "browser": true,
   "sub": true,
   "debug": true,
+  "node": true,
+  "strict": "global",
   "globals": {
     "Phaser": false,
     "require": false,
