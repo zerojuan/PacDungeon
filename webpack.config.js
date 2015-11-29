@@ -32,5 +32,6 @@ module.exports = {
 			{ test: /pixi.js/, loader: 'script' },
       { test: /phaser.js/, loader: 'script' }
 		]
-	}
+	},
+	plugins: []
 };
