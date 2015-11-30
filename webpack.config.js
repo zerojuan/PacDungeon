@@ -25,9 +25,7 @@ module.exports = {
 
 			{ test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192' },
 
-			{ test: /\.xml$/, loader: 'xml-loader' },
-
-			{ test: /\.json$/, loader: 'file-loader' },
+			{ test: /\.(json|xml)$/, loader: 'file-loader' },
 
 			{ test: /pixi.js/, loader: 'script' },
       { test: /phaser.js/, loader: 'script' }
