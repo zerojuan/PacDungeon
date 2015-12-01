@@ -160,11 +160,11 @@ Game.prototype = {
     for ( i = 0; i < this.cells.length; i++ ) {
       for ( j = 0; j < this.cells[ i ].length; j++ ) {
         var cell1 = this.cells[ j ][ i ];
-        this.spawnObjects( cell1.monsters, 'createMonster' );
-        this.spawnObjects( cell1.powerups, 'createPowerup' );
+        this.spawnObjects( cell1.monstersData, 'createMonster' );
+        this.spawnObjects( cell1.powerupsData, 'createPowerup' );
         // empty monsters array immediately
-        cell1.monsters = [];
-        cell1.powerups = [];
+        cell1.monstersData = [];
+        cell1.powerupsData = [];
       }
     }
 

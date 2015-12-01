@@ -278,8 +278,12 @@ MonsterAI.prototype.feelForward = function() {
   this.targetFound = true;
 
   if ( this.directions[ 0 ].index !== this.main.safetile ) {
+    // transitioning
     this.alpha = 0.5;
   } else {
+    if ( this.alpha === 0.5 ) {
+      // TODO: new cell! record which cell I am
+    }
     this.alpha = 1;
   }
 };
