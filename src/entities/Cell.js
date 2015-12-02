@@ -39,12 +39,14 @@ Cell.prototype.enterMonster = function( monster ) {
   if ( this.monsters.indexOf( monster ) >= 0 ) {
     return;
   }
+  console.log( 'The monster has entered', monster );
   this.monsters.push( monster );
 };
 
 Cell.prototype.leaveMonster = function( monster ) {
   var index = this.monsters.indexOf( monster );
   this.monsters.splice( index, 1 );
+  monster.cell = null;
 };
 
 Cell.prototype.isCleared = function() {
@@ -136,14 +138,14 @@ Cell.prototype.nextLevel = function() {
   // check where '7' is, and revive our dot sprites there
   this.revive();
 
-  this.main.spawnObjects( this.monstersData, 'createMonster' );
+  this.main.spawnObjects( this.monstersData, 'createMonster', this );
 
   this.monstersData = [];
 
   this.main.createCellData( this.x, this.y, this.data );
   this.main.explodeCell( this );
 
-  this.main.spawnObjects( this.powerupsData, 'createPowerup' );
+  this.main.spawnObjects( this.powerupsData, 'createPowerup', this );
   this.powerupsData = [];
 };
 

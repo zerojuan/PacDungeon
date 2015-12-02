@@ -160,8 +160,8 @@ Game.prototype = {
     for ( i = 0; i < this.cells.length; i++ ) {
       for ( j = 0; j < this.cells[ i ].length; j++ ) {
         var cell1 = this.cells[ j ][ i ];
-        this.spawnObjects( cell1.monstersData, 'createMonster' );
-        this.spawnObjects( cell1.powerupsData, 'createPowerup' );
+        this.spawnObjects( cell1.monstersData, 'createMonster', cell1 );
+        this.spawnObjects( cell1.powerupsData, 'createPowerup', cell1 );
         // empty monsters array immediately
         cell1.monstersData = [];
         cell1.powerupsData = [];
@@ -266,6 +266,27 @@ Game.prototype = {
     }, this );
   },
 
+  leaveCell: function( monster ) {
+    monster.cell.leaveMonster( monster );
+  },
+
+  enterCell: function( monster ) {
+    // get cell from where I'm standing
+    var gridPos = this.toGridPosition( monster.x, monster.y );
+    var cellPos = this.toCellPosition( gridPos.x, gridPos.y );
+
+
+    for ( i = 0; i < this.cells.length; i++ ) {
+      for ( j = 0; j < this.cells[ i ].length; j++ ) {
+        var cell = this.cells[ j ][ i ];
+        if ( cell.x === cellPos.x && cell.y === cellPos.y ) {
+          monster.cell = cell;
+          monster.cell.enterMonster( monster );
+        }
+      }
+    }
+  },
+
   updateLives: function() {
     // remove all sprites
     this.livesGroup.removeAll();
@@ -343,15 +364,15 @@ Game.prototype = {
     this.game.add.existing( this.pacman );
   },
 
-  spawnObjects: function( objects, createAction ) {
+  spawnObjects: function( objects, createAction, cell ) {
     var that = this;
     objects.forEach(function( m ) {
         var p = that.toWorldPosition( m.col, m.row, m.x, m.y );
-        that[ createAction ]( p.x, p.y, m.type );
+        that[ createAction ]( p.x, p.y, m.type, cell );
     });
   },
 
-  createMonster: function( x, y, type ) {
+  createMonster: function( x, y, type, cell ) {
     var monster = new MonsterAI( this, x, y, type );
     monster.player = this.pacman;
     monster.layer = this.layer;
@@ -362,11 +383,13 @@ Game.prototype = {
     monster.body.setSize( 16, 16, 0, 0 );
     monster.anchor.set( 0.5 );
     this.monsters.add( monster );
+    monster.cell = cell;
+    monster.cell.enterMonster( monster );
 
     return monster;
   },
 
-  createPowerup: function( x, y, type ) {
+  createPowerup: function( x, y, type, cell ) {
     var powerup = new Powerup( this, x, y, type );
     this.physics.arcade.enable( powerup );
     powerup.body.setSize( 16, 16, 0, 0 );
@@ -676,14 +699,14 @@ Game.prototype = {
   // called by Cell
   explodeCell: function( cell ) {
     // search for ghosts who are in this cell and make them explode
-    this.monsters.forEachAlive(function( monster ) {
-      // am i inside the cell?
-      var gridPos = this.toGridPosition( monster.x, monster.y );
-      var cellPos = this.toCellPosition( gridPos.x, gridPos.y );
-
-      if ( cell.x === cellPos.x && cell.y === cellPos.y ) {
-        monster.explode();
+    console.log( cell.monsters );
+    cell.monsters.forEach(function( monster ) {
+      console.log( 'I am a monster', monster );
+      if ( !monster.alive ) {
+        return;
       }
+
+      monster.explode();
     }, this );
 
     // search for powerups in the cell

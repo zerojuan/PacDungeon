@@ -20,7 +20,7 @@ var types = [
   'pokey'
 ];
 
-var SAFETY_PERIOD = 300;
+var SAFETY_PERIOD = 3000;
 
 var StateMachine = require( '../lib/StateMachine.js' );
 var AIStrategy = require( './AIStrategy.js' );
@@ -280,6 +280,9 @@ MonsterAI.prototype.feelForward = function() {
 
   if ( this.directions[ 0 ].index !== this.main.safetile ) {
     // transitioning
+    if ( this.alpha === 1 ) {
+      console.log( 'In transition' );
+    }
     this.alpha = 0.5;
   } else {
     if ( this.alpha === 0.5 ) {
