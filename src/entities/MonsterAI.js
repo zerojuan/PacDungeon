@@ -20,7 +20,7 @@ var types = [
   'pokey'
 ];
 
-var SAFETY_PERIOD = 10000;
+var SAFETY_PERIOD = 300;
 
 var StateMachine = require( '../lib/StateMachine.js' );
 var AIStrategy = require( './AIStrategy.js' );
@@ -58,7 +58,8 @@ function MonsterAI( main, x, y, type ) {
       { name: 'timerExpires', from: 'chase', to: 'wander' },
       { name: 'timerExpires', from: 'die', to: 'die' },
       { name: 'wanderExpires', from: 'wander', to: 'chase' },
-      { name: 'powerEaten', from: [ 'chase', 'wander', 'baby', 'babyblink', 'flee' ], to: 'flee' },
+      { name: 'powerEaten', from: [ 'chase', 'wander', 'baby', 'babyblink',
+            'flee', 'fleeblink' ], to: 'flee' },
       { name: 'powerEaten', from: 'die', to: 'die' },
       { name: 'exploded', from: [ 'chase', 'wander' ], to: 'flee' },
       { name: 'exploded', from: 'flee', to: 'die' },
@@ -283,6 +284,7 @@ MonsterAI.prototype.feelForward = function() {
   } else {
     if ( this.alpha === 0.5 ) {
       // TODO: new cell! record which cell I am
+      console.log( 'Changed my cell...' );
     }
     this.alpha = 1;
   }
