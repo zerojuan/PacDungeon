@@ -712,14 +712,12 @@ Game.prototype = {
 
     // search for powerups in the cell
     console.log( 'Powerup: ', this.powerups );
-    this.powerups.forEachAlive(function( powerup ) {
-      var gridPos = this.toGridPosition( powerup.x, powerup.y );
-      var cellPos = this.toCellPosition( gridPos.x, gridPos.y );
-      console.log( 'FOrEach' );
-      if ( cell.x === cellPos.x && cell.y === cellPos.y ) {
-        console.log( 'Powerupping me...' );
-        powerup.kill();
+    cell.powerups.forEach(function( powerup ) {
+      if ( !powerup.alive ) {
+        return;
       }
+
+      powerup.kill();
     }, this );
 
     // TODO: Show explosion graphics
