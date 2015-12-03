@@ -35,18 +35,33 @@ function Cell( x, y, data, timerContainer, main ) {
   this.main.createCellData( this.x, this.y, this.data );
 }
 
-Cell.prototype.enterMonster = function( monster ) {
-  if ( this.monsters.indexOf( monster ) >= 0 ) {
+Cell.prototype.enterObject = function( array, object ) {
+  if ( array.indexOf( object ) >= 0 ) {
     return;
   }
-  console.log( 'The monster has entered', monster );
-  this.monsters.push( monster );
+  array.push( object );
+};
+
+Cell.prototype.leaveObject = function( array, object ) {
+  var index = array.indexOf( object );
+  array.splice( index, 1 );
+  object.cell = null;
+};
+
+Cell.prototype.enterMonster = function( monster ) {
+  this.enterObject( this.monsters, monster );
 };
 
 Cell.prototype.leaveMonster = function( monster ) {
-  var index = this.monsters.indexOf( monster );
-  this.monsters.splice( index, 1 );
-  monster.cell = null;
+  this.leaveObject( this.monsters, monster );
+};
+
+Cell.prototype.enterPowerup = function( powerup ) {
+  this.enterObject( this.powerups, powerup );
+};
+
+Cell.prototype.leavePowerup = function( powerup ) {
+  this.leaveObject( this.powerups, powerup );
 };
 
 Cell.prototype.isCleared = function() {
