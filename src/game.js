@@ -395,7 +395,8 @@ Game.prototype = {
     powerup.body.setSize( 16, 16, 0, 0 );
     powerup.anchor.set( 0.5 );
     this.powerups.add( powerup );
-
+    powerup.cell = cell;
+    powerup.cell.enterPowerup( powerup );
     return powerup;
   },
 

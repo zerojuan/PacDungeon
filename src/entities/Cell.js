@@ -19,6 +19,7 @@ function Cell( x, y, data, timerContainer, main ) {
   this.monstersData = [];
   this.powerupsData = [];
   this.monsters = [];
+  this.powerups = [];
   this.parseObjects();
   this.main = main;
   this.timerContainer = timerContainer;

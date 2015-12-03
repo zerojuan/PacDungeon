@@ -282,12 +282,13 @@ MonsterAI.prototype.feelForward = function() {
     // transitioning
     if ( this.alpha === 1 ) {
       console.log( 'In transition' );
+      this.main.leaveCell( this );
     }
     this.alpha = 0.5;
   } else {
     if ( this.alpha === 0.5 ) {
-      // TODO: new cell! record which cell I am
       console.log( 'Changed my cell...' );
+      this.main.enterCell( this );
     }
     this.alpha = 1;
   }
