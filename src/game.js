@@ -700,9 +700,8 @@ Game.prototype = {
   // called by Cell
   explodeCell: function( cell ) {
     // search for ghosts who are in this cell and make them explode
-    console.log( cell.monsters );
+    console.info( 'Killing monsters:', cell.monsters.length );
     cell.monsters.forEach(function( monster ) {
-      console.log( 'I am a monster', monster );
       if ( !monster.alive ) {
         return;
       }
@@ -711,7 +710,7 @@ Game.prototype = {
     }, this );
 
     // search for powerups in the cell
-    console.log( 'Powerup: ', this.powerups );
+    console.info( 'Removing powerups: ', cell.powerups.length );
     cell.powerups.forEach(function( powerup ) {
       if ( !powerup.alive ) {
         return;
