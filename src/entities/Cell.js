@@ -51,6 +51,9 @@ Cell.prototype.leaveObject = function( array, object ) {
 
 Cell.prototype.enterMonster = function( monster ) {
   this.enterObject( this.monsters, monster );
+  // TODO: set monster based on cell level
+  monster.cellSpeed = 1;
+  // TODO: set monster sprite based on cell level
 };
 
 Cell.prototype.leaveMonster = function( monster ) {

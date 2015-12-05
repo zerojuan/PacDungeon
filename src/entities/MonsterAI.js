@@ -21,6 +21,9 @@ var types = [
 ];
 
 var SAFETY_PERIOD = 3000;
+var BABY_SPEED = 0.2;
+var WANDER_SPEED = 0.9;
+var FLEE_SPEED = 0.3;
 
 var StateMachine = require( '../lib/StateMachine.js' );
 var AIStrategy = require( './AIStrategy.js' );
@@ -31,7 +34,8 @@ function MonsterAI( main, x, y, type ) {
   this.debug = main.debug;
   this.main = main;
   this.killCount = 0;
-  this.speed = this.main.speed * 0.90;
+  this.speed = this.main.speed * WANDER_SPEED;
+  this.cellSpeed = 1;
   this.type = type || types[ Math.floor( Math.random() * 4 ) ];
   this.directions = [ null, null, null, null, null ];
   this.setTint();
@@ -77,7 +81,7 @@ function MonsterAI( main, x, y, type ) {
       onbaby: function( event, from, to, context ) {
         context.seekTime = SAFETY_PERIOD;
         context.nextDirectionFinder = context.strategy.getWanderDirection;
-        context.speed = context.main.speed * 0.2;
+        context.speed = context.main.speed * context.cellSpeed * BABY_SPEED;
         context.scale.setTo( 0.5, 0.5 );
       },
       onbabyblink: function( event, from, to, context ) {
@@ -91,7 +95,7 @@ function MonsterAI( main, x, y, type ) {
         context.setTint();
         context.growTween.stop();
         context.scale.setTo( 1, 1 );
-        context.speed = context.main.speed * 0.90;
+        context.speed = context.main.speed * context.cellSpeed * WANDER_SPEED;
         context.nextDirectionFinder = context.strategy.getWanderDirection;
       },
       onfleeblink: function( event, from, to, context ) {
@@ -115,7 +119,7 @@ function MonsterAI( main, x, y, type ) {
         context.seekTime = SAFETY_PERIOD;
         context.tint = BLUE;
         context.ghostEyes.frame = 4;
-        context.speed = context.main.speed * 0.30;
+        context.speed = context.main.speed * context.cellSpeed * FLEE_SPEED;
         context.nextDirectionFinder = context.strategy.getFleeDirection;
       },
       ondie: function( event, from, to, context ) {
