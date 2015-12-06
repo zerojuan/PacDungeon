@@ -6,7 +6,7 @@ var pacmanMaze = require( './assets/pacman-maze.json' );
 // require( './assets/pacman-small.json' );
 var testMaze = require( './assets/testMaze.json' );
 var pacmanSmall = 'dist/assets/pacman-small.json';
-var minecraftiaXML = require( './assets/minecraftia.xml' ); //'dist/assets/minecraftia.xml';
+var minecraftiaXML = require( './assets/minecraftia.xml' );
 
 var minecraftia = require( './assets/minecraftia.png' );
 var ghosts = require( './assets/ghosts.png' );
