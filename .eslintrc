@@ -1,0 +1,6 @@
+{
+    "extends": "idiomatic",
+    "rules": {
+        "one-var": 0
+    }
+}
