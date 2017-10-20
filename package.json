@@ -12,6 +12,8 @@
   "devDependencies": {
     "bower": "*",
     "del": "*",
+    "eslint": "^4.9.0",
+    "eslint-config-idiomatic": "^4.0.0",
     "file-loader": "^0.8.5",
     "gulp": "*",
     "gulp-babel": "^5.2.0",
@@ -39,5 +41,6 @@
     "start": "node ./node_modules/gulp/bin/gulp.js",
     "build": "node ./node_modules/gulp/bin/gulp.js build",
     "lint": "node ./node_modules/gulp/bin/gulp.js lint"
-  }
+  },
+  "private": true
 }
