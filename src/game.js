@@ -64,7 +64,7 @@ function Game() {
 
 Game.prototype = {
 
-  create: () => {
+  create: function create() {
     this.state = 'Game';
 
     // normalize after shake?
@@ -266,7 +266,7 @@ Game.prototype = {
     }, this );
   },
 
-  updateLives: () => {
+  updateLives: function updateLives() {
     // remove all sprites
     this.livesGroup.removeAll();
     for ( let i = 0; i < this.livesLeft; i++ ) {
@@ -276,13 +276,13 @@ Game.prototype = {
     }
   },
 
-  createDot: () => {
+  createDot: function createDot() {
     var dot = this.add.sprite( 0, 0, 'dot', this.dots );
     this.dots.add( dot );
     return dot;
   },
 
-  createCellData: ( row, col, level ) => {
+  createCellData: function createCellData( row, col, level ) {
     for ( let i = 0; i < this.size; i++ ) {
       for ( let j = 0; j < this.size; j++ ) {
         this.map.putTile( level[ j ][ i ],
@@ -292,7 +292,7 @@ Game.prototype = {
     return level;
   },
 
-  createGhostPrison: () => {
+  createGhostPrison: function createGhostPrison() {
     var width = this.size * 3,
       height = this.size * 3;
     for ( let i = 0; i < width; i++ ) {
@@ -305,7 +305,7 @@ Game.prototype = {
     }
   },
 
-  pickRandomSquare: () => {
+  pickRandomSquare: function pickRandomSquare() {
     var row = Math.floor( Math.random() * ( this.squareSize ));
     var col = Math.floor( Math.random() * ( this.squareSize ));
     return {
@@ -314,7 +314,7 @@ Game.prototype = {
     };
   },
 
-  resurrect: () => {
+  resurrect: function resurrect() {
     this.livesLeft -= 1;
     this.updateLives();
     if ( this.livesLeft < 0 ) {
@@ -328,7 +328,7 @@ Game.prototype = {
     this.pacman.resurrect();
   },
 
-  teleport: () => {
+  teleport: function teleport() {
     this.teleportEmitter.x = this.pacman.x;
     this.teleportEmitter.y = this.pacman.y;
     this.teleportEmitter.start( true, 250, null, 20 );
@@ -338,12 +338,12 @@ Game.prototype = {
     this.appearEmitter.start( true, 250, null, 20 );
   },
 
-  createPacman: ( x, y ) => {
+  createPacman: function createPacman( x, y ) {
     this.pacman = new Pacman( this, x, y );
     this.game.add.existing( this.pacman );
   },
 
-  spawnObjects: ( objects, createAction ) => {
+  spawnObjects: function spawnObjects( objects, createAction ) {
     var that = this;
     objects.forEach(( m ) => {
       var p = that.toWorldPosition( m.col, m.row, m.x, m.y );
@@ -351,7 +351,7 @@ Game.prototype = {
     });
   },
 
-  createMonster: ( x, y, type ) => {
+  createMonster: function createMonster( x, y, type ) {
     var monster = new MonsterAI( this, x, y, type );
     monster.player = this.pacman;
     monster.layer = this.layer;
@@ -366,7 +366,7 @@ Game.prototype = {
     return monster;
   },
 
-  createPowerup: ( x, y, type ) => {
+  createPowerup: function createPowerup( x, y, type ) {
     var powerup = new Powerup( this, x, y, type );
     this.physics.arcade.enable( powerup );
     powerup.body.setSize( 16, 16, 0, 0 );
@@ -376,28 +376,28 @@ Game.prototype = {
     return powerup;
   },
 
-  toWorldPosition: ( cellRow, cellCol, row, col ) => {
+  toWorldPosition: function toWorldPosition( cellRow, cellCol, row, col ) {
     // +8 is the offset
     return new Phaser.Point(
       ( 16 * ( row )) + 8 + ( cellRow * this.size * this.gridsize ),
       ( 16 * ( col )) + 8 + ( cellCol * this.size * this.gridsize ));
   },
 
-  toGridPosition: ( x, y ) => {
+  toGridPosition: function toGridPosition( x, y ) {
     var marker = new Phaser.Point();
     marker.x = this.math.snapToFloor( Math.floor( x ), this.gridsize ) / this.gridsize;
     marker.y = this.math.snapToFloor( Math.floor( y ), this.gridsize ) / this.gridsize;
     return marker;
   },
 
-  toCellPosition: ( gridX, gridY ) => {
+  toCellPosition: function toCellPosition( gridX, gridY ) {
     var marker = new Phaser.Point();
     marker.x = Math.floor( gridX / this.size );
     marker.y = Math.floor( gridY / this.size );
     return marker;
   },
 
-  getNextVacantPosition: ( teleportZone, marker, direction ) => {
+  getNextVacantPosition: function getNextVacantPosition( teleportZone, marker, direction ) {
     marker.x = marker.x % 10;
     marker.y = marker.y % 10;
     const targetPosition = this.toWorldPosition(
@@ -448,7 +448,7 @@ Game.prototype = {
 
   },
 
-  getJumpTargetPosition: () => {
+  getJumpTargetPosition: function getJumpTargetPosition() {
     var marker = this.pacman.getGridPosition();
     var targetPosition = this.getNextVacantPosition(
       this.teleportZone, marker, this.pacman.facing );
@@ -456,7 +456,7 @@ Game.prototype = {
     return targetPosition;
   },
 
-  jumpToSquare: ( row, col ) => {
+  jumpToSquare: function jumpToSquare( row, col ) {
     //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
     var targetPosition = this.getJumpTargetPosition();
     this.pacman.x = targetPosition.x;
@@ -465,7 +465,7 @@ Game.prototype = {
     this.moveToSquare( row, col );
   },
 
-  moveToSquare: ( row, col ) => {
+  moveToSquare: function moveToSquare( row, col ) {
     this.teleportZone.x = this.activeZone.x;
     this.teleportZone.y = this.activeZone.y;
     this.activeZone.x = row;
@@ -479,7 +479,7 @@ Game.prototype = {
     this.pacman.current = Phaser.NONE;
   },
 
-  updateResurrectPoint: () => {
+  updateResurrectPoint: function updateResurrectPoint() {
     this.resurrectTimer++;
     function moveToNextTile() {
       this.resurrectPoint.x++;
@@ -509,7 +509,7 @@ Game.prototype = {
     }
   },
 
-  updateResurrectZone: ( direction ) => {
+  updateResurrectZone: function updateResurrectZone( direction ) {
     const next = new Phaser.Point( this.resurrectCell.x, this.resurrectCell.y );
 
     if ( direction === Phaser.LEFT ) {
@@ -537,7 +537,7 @@ Game.prototype = {
     this.resurrectCell.y = next.y;
   },
 
-  updateTeleportZone: ( direction ) => {
+  updateTeleportZone: function updateTeleportZone( direction ) {
     // if freshjump, the next zone should be relative to the active zone
     if ( this.isFreshJump ) {
       this.teleportZone.x = this.activeZone.x;
@@ -582,7 +582,7 @@ Game.prototype = {
     this.clipTeleportZone();
   },
 
-  clipTeleportZone: () => {
+  clipTeleportZone: function clipTeleportZone() {
     if ( this.teleportZone.x < 0 ) {
       this.teleportZone.x = 0;
     } else if ( this.teleportZone.x > this.squareSize - 1 ) {
@@ -596,18 +596,18 @@ Game.prototype = {
     }
   },
 
-  updateScore: ( increment ) => {
+  updateScore: function updateScore( increment ) {
     this.score += increment;
     this.scoreTxt.text = this.score;
   },
 
-  eatPowerup: ( pacman, powerup ) => {
+  eatPowerup: function eatPowerup( pacman, powerup ) {
     powerup.kill();
 
     this.onPowerUp.dispatch( 'normal' );
   },
 
-  eatDot: ( pacman, dot ) => {
+  eatDot: function eatDot( pacman, dot ) {
     dot.kill();
 
     this.updateScore( 10 );
@@ -616,13 +616,13 @@ Game.prototype = {
     this.isCellCleared( dot );
   },
 
-  isCellCleared: ( dot ) => {
+  isCellCleared: function isCellCleared( dot ) {
     const position = this.toGridPosition( dot.x, dot.y );
     const cellPosition = this.toCellPosition( position.x, position.y );
     this.cells[ cellPosition.x ][ cellPosition.y ].isCleared();
   },
 
-  showScoreOnEat: ( sc, monster ) => {
+  showScoreOnEat: function showScoreOnEat( sc, monster ) {
     var score = this.scoreFxs.getFirstDead();
     score.x = monster.x - 16;
     score.y = monster.y - 16;
@@ -630,7 +630,7 @@ Game.prototype = {
     score.revive();
   },
 
-  touchMonsters: ( pacman, monster ) => {
+  touchMonsters: function touchMonsters( pacman, monster ) {
     if ( this.pacman.fsm.current !== 'limbo' || this.pacman.fsm.current !== 'dead' ) {
       if ( monster.fsm.current.startsWith( 'flee' )) {
         this.updateScore( 100 );
@@ -666,14 +666,14 @@ Game.prototype = {
     }
   },
 
-  gotoGameOver: () => {
+  gotoGameOver: function gotoGameOver() {
     console.log( 'Game over?' );
     this.state = 'GameOver';
     this.fadeOutTween.start();
   },
 
   // called by Cell
-  explodeCell: ( cell ) => {
+  explodeCell: function explodeCell( cell ) {
     // search for ghosts who are in this cell and make them explode
     this.monsters.forEachAlive(( monster ) => {
       // am i inside the cell?
@@ -703,7 +703,7 @@ Game.prototype = {
     this.shakeWorld = 30;
   },
 
-  shakeScreen: () => {
+  shakeScreen: function shakeScreen() {
     if ( this.shakeWorld > 0 ) {
       const rand1 = this.rnd.integerInRange( this.offset.x - 5, this.offset.x + 5 );
       const rand2 = this.rnd.integerInRange( this.offset.y - 5, this.offset.y + 5 );
@@ -718,7 +718,7 @@ Game.prototype = {
     }
   },
 
-  drawTeleportPath: () => {
+  drawTeleportPath: function drawTeleportPath() {
     // set a fill and line style again
     this.graphics.clear();
     this.graphics.lineStyle( 1, 0xFF0000, 0.8 );
@@ -746,7 +746,7 @@ Game.prototype = {
       targetPosition.x, targetPosition.y );
   },
 
-  update: ( game ) => {
+  update: function update( game ) {
     this.physics.arcade.collide( this.monsters, this.ghostLayer );
     this.physics.arcade.collide( this.pacman, this.layer );
     this.physics.arcade.overlap( this.pacman, this.dots, this.eatDot, null, this );
@@ -784,15 +784,15 @@ Game.prototype = {
       this.drawTeleportPath();
     }
 
-    for ( const i = 0; i < this.cells.length; i++ ) {
-      for ( const j = 0; j < this.cells[ i ].length; j++ ) {
+    for ( let i = 0; i < this.cells.length; i++ ) {
+      for ( let j = 0; j < this.cells[ i ].length; j++ ) {
         this.cells[ i ][ j ].update( game.time );
       }
     }
     this.shakeScreen();
   },
 
-  render: () => {
+  render: function render() {
     this.monsters.callAll( 'render' );
     this.pacman.render();
 
@@ -806,7 +806,7 @@ Game.prototype = {
     }
   },
 
-  toggleDebug: () => {
+  toggleDebug: function toggleDebug() {
     this.debug = !this.debug;
     if ( this.monsters ) {
       this.monsters.forEach(( m ) => {

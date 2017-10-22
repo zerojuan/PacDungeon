@@ -1,22 +1,22 @@
 
 'use strict';
 
-var pacmanMaze = require( './assets/pacman-maze.json' );
 require( './assets/minecraftia.xml' );
 // require( './assets/pacman-small.json' );
-var testMaze = require( './assets/testMaze.json' );
-var pacmanSmall = 'dist/assets/pacman-small.json';
-var minecraftiaXML = 'dist/assets/minecraftia.xml';
+const pacmanMaze = require( './assets/pacman-maze.json' );
+const testMaze = require( './assets/testMaze.json' );
+const pacmanSmall = 'dist/assets/pacman-small.json';
+const minecraftiaXML = 'dist/assets/minecraftia.xml';
 
-var minecraftia = require( './assets/minecraftia.png' );
-var ghosts = require( './assets/ghosts.png' );
-var ghostEyes = require( './assets/ghost-eyes.png' );
-var title = require( './assets/title.png' );
-var dot = require( './assets/dot.png' );
-var pacmanTiles = require( './assets/pacman-tiles.png' );
-var pacman = require( './assets/pacman.png' );
-var grave = require( './assets/grave.png' );
-var powerup = require( './assets/powerup.png' );
+const minecraftia = require( './assets/minecraftia.png' );
+const ghosts = require( './assets/ghosts.png' );
+const ghostEyes = require( './assets/ghost-eyes.png' );
+const title = require( './assets/title.png' );
+const dot = require( './assets/dot.png' );
+const pacmanTiles = require( './assets/pacman-tiles.png' );
+const pacman = require( './assets/pacman.png' );
+const grave = require( './assets/grave.png' );
+const powerup = require( './assets/powerup.png' );
 
 function Preloader() {
   this.asset = null;
@@ -25,7 +25,7 @@ function Preloader() {
 
 Preloader.prototype = {
 
-  preload: function() {
+  preload: function preload() {
     this.asset = this.add.sprite( this.game.width * 0.5 - 110,
       this.game.height * 0.5 - 10, 'preloader' );
 
@@ -35,7 +35,7 @@ Preloader.prototype = {
     this.loadResources();
   },
 
-  loadResources: function() {
+  loadResources: function loadResources() {
     this.load.bitmapFont( 'minecraftia',
       minecraftia, minecraftiaXML );
     this.load.spritesheet( 'ghost', ghosts, 32, 32 );
@@ -50,17 +50,17 @@ Preloader.prototype = {
     this.load.spritesheet( 'powerup-normal', powerup, 32, 32 );
   },
 
-  create: function() {
+  create: function create() {
     this.asset.cropEnabled = false;
   },
 
-  update: function() {
+  update: function update() {
     if ( !!this.ready ) {
       this.game.state.start( 'menu' );
     }
   },
 
-  onLoadComplete: function() {
+  onLoadComplete: function onLoadComplete() {
     this.ready = true;
   }
 };

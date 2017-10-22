@@ -8,9 +8,10 @@ function Menu() {
 
 Menu.prototype = {
 
-  create: function() {
-    var x = this.game.width / 2,
-        y = this.game.height / 2;
+  create: function create() {
+    const that = this;
+    let x = this.game.width / 2;
+    let y = this.game.height / 2;
 
     this.game.world.setBounds( 0, 0, this.game.width, this.game.height );
 
@@ -28,28 +29,25 @@ Menu.prototype = {
     this.input.onDown.add( this.onDown, this );
 
     this.input.keyboard.callbackContext = this;
-    this.input.keyboard.onUpCallback = function() {
-      this.onDown();
+    this.input.keyboard.onUpCallback = () => {
+      that.onDown();
     };
 
     this.pad = this.game.input.gamepad.pad1;
 
-    var that = this;
-    this.pad.onUpCallback = function() {
+    this.pad.onUpCallback = () => {
       that.onDown();
     };
   },
 
-  update: function() {
-
+  update: function update() {
   },
 
-  onDown: function() {
+  onDown: function onDown() {
     var tween = this.game.add.tween( this.titleTxt );
     tween.to({ x: -900 }, 300 );
 
-
-    tween.onComplete.addOnce(function() {
+    tween.onComplete.addOnce(() => {
       this.game.state.start( 'game' );
     }, this );
 

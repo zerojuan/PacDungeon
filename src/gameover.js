@@ -1,18 +1,17 @@
 
 var ns = window[ 'pac_dungeon' ];
-var that;
 
 function GameOver() {
   this.score = 0;
 }
 
 GameOver.prototype = {
-  init: function( score ) {
+  init: function init( score ) {
     this.score = score;
   },
-  create: function() {
-    var x = this.game.width / 2,
-        y = this.game.height / 2;
+  create: function create() {
+    let x = this.game.width / 2;
+    let y = this.game.height / 2;
 
 
     this.titleTxt = this.add.bitmapText( x, y,
@@ -22,25 +21,25 @@ GameOver.prototype = {
 
     this.input.onDown.add( this.onDown, this );
     this.input.keyboard.callbackContext = this;
-    this.input.keyboard.onUpCallback = function() {
-      this.onDown();
+    const that = this;
+    this.input.keyboard.onUpCallback = () => {
+      that.onDown();
     };
   },
 
-  update: function( game ) {
-
-  },
-  render: function() {
-
+  update: function update( game ) {
   },
 
-  onDown: function() {
-    var tween = this.game.add.tween( this.titleTxt );
+  render: function render() {
+  },
+
+  onDown: function onDown() {
+    const tween = this.game.add.tween( this.titleTxt );
     tween.to({ x: -900 }, 300 );
 
-
-    tween.onComplete.addOnce(function() {
-      this.game.state.start( 'menu' );
+    const that = this;
+    tween.onComplete.addOnce(() => {
+      that.game.state.start( 'menu' );
     }, this );
 
     tween.start();
