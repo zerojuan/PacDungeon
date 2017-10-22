@@ -16,6 +16,8 @@ function Cell( x, y, data, timerContainer, main ) {
   this.x = x;
   this.y = y;
   this.data = data;
+  this.monstersData = [];
+  this.powerupsData = [];
   this.monsters = [];
   this.powerups = [];
   this.parseObjects();
@@ -33,6 +35,38 @@ function Cell( x, y, data, timerContainer, main ) {
 
   this.main.createCellData( this.x, this.y, this.data );
 }
+
+Cell.prototype.enterObject = function( array, object ) {
+  if ( array.indexOf( object ) >= 0 ) {
+    return;
+  }
+  array.push( object );
+};
+
+Cell.prototype.leaveObject = function( array, object ) {
+  var index = array.indexOf( object );
+  array.splice( index, 1 );
+  object.cell = null;
+};
+
+Cell.prototype.enterMonster = function( monster ) {
+  this.enterObject( this.monsters, monster );
+  // TODO: set monster based on cell level
+  monster.cellSpeed = 1;
+  // TODO: set monster sprite based on cell level
+};
+
+Cell.prototype.leaveMonster = function( monster ) {
+  this.leaveObject( this.monsters, monster );
+};
+
+Cell.prototype.enterPowerup = function( powerup ) {
+  this.enterObject( this.powerups, powerup );
+};
+
+Cell.prototype.leavePowerup = function( powerup ) {
+  this.leaveObject( this.powerups, powerup );
+};
 
 Cell.prototype.isCleared = function() {
   for ( var i in this.dots ) {
@@ -65,23 +99,23 @@ Cell.prototype.parseObjects = function() {
       var t = this.data[ i ][ j ];
       switch ( t ) {
         case RED:
-          putObject( this, 'shadow', 'monsters', this.x, this.y, i, j );
+          putObject( this, 'shadow', 'monstersData', this.x, this.y, i, j );
           this.data[ i ][ j ] = DOT;
           break;
         case PINK:
-          putObject( this, 'speedy', 'monsters', this.x, this.y, i, j );
+          putObject( this, 'speedy', 'monstersData', this.x, this.y, i, j );
           this.data[ i ][ j ] = DOT;
           break;
         case CYAN:
-          putObject( this, 'bashful', 'monsters', this.x, this.y, i, j );
+          putObject( this, 'bashful', 'monstersData', this.x, this.y, i, j );
           this.data[ i ][ j ] = DOT;
           break;
         case ORANGE:
-          putObject( this, 'pokey', 'monsters', this.x, this.y, i, j );
+          putObject( this, 'pokey', 'monstersData', this.x, this.y, i, j );
           this.data[ i ][ j ] = DOT;
           break;
         case POWERUP:
-          putObject( this, 'normal', 'powerups', this.x, this.y, i, j );
+          putObject( this, 'normal', 'powerupsData', this.x, this.y, i, j );
           this.data[ i ][ j ] = BLANK;
           break;
       }
@@ -123,15 +157,15 @@ Cell.prototype.nextLevel = function() {
   // check where '7' is, and revive our dot sprites there
   this.revive();
 
-  this.main.spawnObjects( this.monsters, 'createMonster' );
+  this.main.spawnObjects( this.monstersData, 'createMonster', this );
 
-  this.monsters = [];
+  this.monstersData = [];
 
   this.main.createCellData( this.x, this.y, this.data );
   this.main.explodeCell( this );
 
-  this.main.spawnObjects( this.powerups, 'createPowerup' );
-  this.powerups = [];
+  this.main.spawnObjects( this.powerupsData, 'createPowerup', this );
+  this.powerupsData = [];
 };
 
 Cell.prototype.update = function( time ) {

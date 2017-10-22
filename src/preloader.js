@@ -1,12 +1,12 @@
 
 'use strict';
 
-require( './assets/minecraftia.xml' );
-// require( './assets/pacman-small.json' );
 const pacmanMaze = require( './assets/pacman-maze.json' );
+//require( './assets/minecraftia.xml' );
+// require( './assets/pacman-small.json' );
 const testMaze = require( './assets/testMaze.json' );
 const pacmanSmall = 'dist/assets/pacman-small.json';
-const minecraftiaXML = 'dist/assets/minecraftia.xml';
+const minecraftiaXML = require( './assets/minecraftia.xml' );
 
 const minecraftia = require( './assets/minecraftia.png' );
 const ghosts = require( './assets/ghosts.png' );

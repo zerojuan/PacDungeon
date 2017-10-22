@@ -160,12 +160,12 @@ Game.prototype = {
     // spawn 2 monsters
     for ( i = 0; i < this.cells.length; i++ ) {
       for ( j = 0; j < this.cells[ i ].length; j++ ) {
-        let cell1 = this.cells[ j ][ i ];
-        this.spawnObjects( cell1.monsters, 'createMonster' );
-        this.spawnObjects( cell1.powerups, 'createPowerup' );
+        const cell1 = this.cells[ j ][ i ];
+        this.spawnObjects( cell1.monstersData, 'createMonster', cell1 );
+        this.spawnObjects( cell1.powerupsData, 'createPowerup', cell1 );
         // empty monsters array immediately
-        cell1.monsters = [];
-        cell1.powerups = [];
+        cell1.monstersData = [];
+        cell1.powerupsData = [];
       }
     }
 
@@ -266,6 +266,27 @@ Game.prototype = {
     }, this );
   },
 
+  leaveCell: function leaveCell( monster ) {
+    monster.cell.leaveMonster( monster );
+  },
+
+  enterCell: function enterCell( monster ) {
+    // get cell from where I'm standing
+    var gridPos = this.toGridPosition( monster.x, monster.y );
+    var cellPos = this.toCellPosition( gridPos.x, gridPos.y );
+
+
+    for ( let i = 0; i < this.cells.length; i++ ) {
+      for ( let j = 0; j < this.cells[ i ].length; j++ ) {
+        const cell = this.cells[ j ][ i ];
+        if ( cell.x === cellPos.x && cell.y === cellPos.y ) {
+          monster.cell = cell;
+          monster.cell.enterMonster( monster );
+        }
+      }
+    }
+  },
+
   updateLives: function updateLives() {
     // remove all sprites
     this.livesGroup.removeAll();
@@ -343,15 +364,15 @@ Game.prototype = {
     this.game.add.existing( this.pacman );
   },
 
-  spawnObjects: function spawnObjects( objects, createAction ) {
+  spawnObjects: function spawnObjects( objects, createAction, cell ) {
     var that = this;
     objects.forEach(( m ) => {
-      var p = that.toWorldPosition( m.col, m.row, m.x, m.y );
-      that[ createAction ]( p.x, p.y, m.type );
+      const p = that.toWorldPosition( m.col, m.row, m.x, m.y );
+      that[ createAction ]( p.x, p.y, m.type, cell );
     });
   },
 
-  createMonster: function createMonster( x, y, type ) {
+  createMonster: function createMonster( x, y, type, cell ) {
     var monster = new MonsterAI( this, x, y, type );
     monster.player = this.pacman;
     monster.layer = this.layer;
@@ -362,17 +383,20 @@ Game.prototype = {
     monster.body.setSize( 16, 16, 0, 0 );
     monster.anchor.set( 0.5 );
     this.monsters.add( monster );
+    monster.cell = cell;
+    monster.cell.enterMonster( monster );
 
     return monster;
   },
 
-  createPowerup: function createPowerup( x, y, type ) {
+  createPowerup: function createPowerup( x, y, type, cell ) {
     var powerup = new Powerup( this, x, y, type );
     this.physics.arcade.enable( powerup );
     powerup.body.setSize( 16, 16, 0, 0 );
     powerup.anchor.set( 0.5 );
     this.powerups.add( powerup );
-
+    powerup.cell = cell;
+    powerup.cell.enterPowerup( powerup );
     return powerup;
   },
 
@@ -675,26 +699,23 @@ Game.prototype = {
   // called by Cell
   explodeCell: function explodeCell( cell ) {
     // search for ghosts who are in this cell and make them explode
-    this.monsters.forEachAlive(( monster ) => {
-      // am i inside the cell?
-      var gridPos = this.toGridPosition( monster.x, monster.y );
-      var cellPos = this.toCellPosition( gridPos.x, gridPos.y );
-
-      if ( cell.x === cellPos.x && cell.y === cellPos.y ) {
-        monster.explode();
+    console.info( 'Killing monsters:', cell.monsters.length );
+    cell.monsters.forEach(( monster ) => {
+      if ( !monster.alive ) {
+        return;
       }
+
+      monster.explode();
     }, this );
 
     // search for powerups in the cell
-    console.log( 'Powerup: ', this.powerups );
-    this.powerups.forEachAlive(( powerup ) => {
-      var gridPos = this.toGridPosition( powerup.x, powerup.y );
-      var cellPos = this.toCellPosition( gridPos.x, gridPos.y );
-      console.log( 'FOrEach' );
-      if ( cell.x === cellPos.x && cell.y === cellPos.y ) {
-        console.log( 'Powerupping me...' );
-        powerup.kill();
+    console.info( 'Removing powerups: ', cell.powerups.length );
+    cell.powerups.forEach(( powerup ) => {
+      if ( !powerup.alive ) {
+        return;
       }
+
+      powerup.kill();
     }, this );
 
     // TODO: Show explosion graphics
